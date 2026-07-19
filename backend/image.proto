@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package converter;
+
+service ImageProcessor {
+  rpc ConvertImage (ConvertRequest) returns (ConvertResponse);
+}
+
+message ConvertRequest {
+  bytes image_data = 1;      // Raw binary of the image
+  string target_format = 2;   // "jpeg", "png", etc.
+  int32 quality = 3;
+}
+
+message ConvertResponse {
+  bytes converted_data = 1;  // Raw binary back
+  string file_name = 2;
+}
