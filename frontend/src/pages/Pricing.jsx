@@ -111,7 +111,7 @@ const Pricing = () => {
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-200/20 rounded-full blur-3xl" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="mb-3">
                     <BackLink />
                 </div>

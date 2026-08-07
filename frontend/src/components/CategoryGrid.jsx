@@ -82,7 +82,7 @@ const CategoryGrid = () => {
 
     return (
         <section id="tools" className="py-12 sm:py-16 lg:py-20 relative z-10 px-4 sm:px-6 bg-gray-50/50 dark:bg-gray-900/50 w-full">
-            <div className="max-w-7xl mx-auto w-full">
+            <div className="max-w-[96rem] mx-auto w-full">
 
                 {/* Header & Tabs */}
                 <div className="flex flex-col items-center mb-12">

@@ -65,7 +65,7 @@ const ESign = () => {
 
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-[96rem] mx-auto">
                 <div className="mb-6">
                     <BackLink />
                 </div>

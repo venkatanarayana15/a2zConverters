@@ -38,7 +38,7 @@ const Hero = () => {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full flex flex-col items-center justify-center h-full">
+            <div className="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full flex flex-col items-center justify-center h-full">
 
                 <motion.h1
                     custom={0}

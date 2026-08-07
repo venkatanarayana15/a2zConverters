@@ -87,7 +87,7 @@ const imageCategories = [
 const ToolsMegaMenu = ({ onClose, activeSection = 'pdf' }) => {
     return (
         <div className="w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl border-t border-gray-100 dark:border-gray-700 shadow-2xl overflow-y-auto max-h-[85vh]">
-            <div className="max-w-7xl mx-auto px-6 py-5">
+            <div className="max-w-[96rem] mx-auto px-6 py-5">
 
                 {/* PDF TOOLS SECTION */}
                 {activeSection === 'pdf' && (

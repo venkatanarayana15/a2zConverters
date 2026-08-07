@@ -45,7 +45,7 @@ const FooterColumn = ({ title, children }) => {
 const Footer = () => {
     return (
         <footer className="relative pt-4 md:pt-6 pb-6 md:pb-1 overflow-hidden border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-950/50 backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-12 mb-4 md:mb-6">
                     {/* Brand - Always visible */}
                     <div className="col-span-1 md:col-span-1 py-4 md:py-0">
