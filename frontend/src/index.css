@@ -1,7 +1,11 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-sans: "Inter", "sans-serif";
+  --font-serif: "Poppins", "sans-serif";
   --radius: 0.6rem;
 
   --color-background: var(--background);
@@ -59,18 +63,53 @@
   --radius: 0.75rem;
 }
 
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+
+  --card: 222.2 84% 8%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222.2 84% 6%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 199 89% 55%;
+  --primary-foreground: 222.2 84% 4.9%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 50.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 199 89% 55%;
+
+  --radius: 0.75rem;
+}
+
 @layer utilities {
   .glass {
     @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-sm;
+    @apply dark:bg-gray-900/70 dark:border-gray-700/20;
   }
 
   .glass-card {
     @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-lg transition-all duration-300;
+    @apply dark:bg-gray-900/60 dark:border-gray-700/40;
   }
 
   @media (hover: hover) {
     .glass-card {
       @apply hover:shadow-xl hover:bg-white/80;
+      @apply dark:hover:bg-gray-900/80;
     }
   }
 
@@ -84,6 +123,11 @@
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
+  }
+
+  .search-focus {
+    @apply focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary!;
+    @apply dark:focus-within:ring-primary/30;
   }
 
   @keyframes pulse-glow {
@@ -121,6 +165,7 @@
   html,
   body {
     @apply bg-gradient-to-br from-blue-50 via-white to-cyan-50 text-foreground antialiased min-h-screen selection:bg-cyan-200 selection:text-cyan-900 overflow-x-hidden;
+    @apply dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 dark:text-foreground;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

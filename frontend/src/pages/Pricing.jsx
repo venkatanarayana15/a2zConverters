@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import {
     Check, Zap, Star, Crown, ArrowRight, X,
     Shield, Clock, Cloud, Users, Sparkles,
     HelpCircle, Layout, FileText, BadgeCheck
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import BackLink from '../components/BackLink';
 
 const Pricing = () => {
-    const [billingCycle, setBillingCycle] = useState('monthly'); // Toggle if needed later
-
     const plans = [
         {
             id: 'day',
@@ -104,41 +104,49 @@ const Pricing = () => {
     ];
 
     return (
-        <div className="min-h-screen pt-24 pb-20 bg-gray-50/50 relative overflow-hidden">
+        <div className="min-h-screen pt-24 pb-20 bg-gray-50/50 dark:bg-gray-950/50 relative overflow-hidden">
             {/* Background Gradients */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-200/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-200/20 rounded-full blur-[120px]" />
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-200/20 rounded-full blur-3xl" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-200/20 rounded-full blur-3xl" />
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="mb-3">
+                    <BackLink />
+                </div>
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto mb-16 animate-in slide-in-from-bottom-5 duration-700 fade-in">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200 mb-6 shadow-sm">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mb-6 shadow-sm">
                         <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
-                        <span className="text-sm font-semibold text-gray-700">Unlock Full Potential</span>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Unlock Full Potential</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight mb-6">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight mb-6">
                         Simple Pricing. <br className="hidden md:block" />
                         <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-purple-600 to-pink-600">
                             Professional Features.
                         </span>
                     </h1>
-                    <p className="text-xl text-gray-600 leading-relaxed">
+                    <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
                         Choose the perfect plan for your needs. Whether it's a quick fix or a long-term project, we have you covered.
                     </p>
                 </div>
 
                 {/* Pricing Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24 relative z-10">
-                    {plans.map((plan) => (
-                        <div
+                    {plans.map((plan, i) => (
+                        <motion.div
                             key={plan.id}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            whileHover={{ y: -8 }}
+                            viewport={{ once: true, margin: '-50px' }}
+                            transition={{ duration: 0.5, delay: i * 0.15 }}
                             className={cn(
-                                "relative rounded-3xl bg-white border transition-all duration-300 flex flex-col hover:-translate-y-2",
+                                "relative rounded-3xl bg-white dark:bg-gray-900 border transition-[box-shadow] duration-300 flex flex-col",
                                 plan.popular
-                                    ? "border-purple-200 shadow-2xl shadow-purple-200/50 md:scale-105 z-10"
-                                    : "border-gray-100 shadow-xl hover:shadow-2xl hover:border-gray-200"
+                                    ? "border-purple-200 dark:border-purple-800 shadow-2xl shadow-purple-200/50 md:scale-105 z-10"
+                                    : "border-gray-100 dark:border-gray-800 shadow-xl hover:shadow-2xl hover:border-gray-200 dark:hover:border-gray-700"
                             )}
                         >
                             {plan.popular && (
@@ -157,21 +165,21 @@ const Pricing = () => {
                                     <plan.icon className="w-6 h-6" />
                                 </div>
 
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                                <p className="text-gray-500 mb-6 text-sm">{plan.description}</p>
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{plan.name}</h3>
+                                <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">{plan.description}</p>
 
                                 <div className="flex items-baseline mb-6">
-                                    <span className="text-4xl font-extrabold text-gray-900">{plan.price}</span>
-                                    <span className="text-gray-500 ml-2">{plan.period}</span>
+                                    <span className="text-4xl font-extrabold text-gray-900 dark:text-gray-100">{plan.price}</span>
+                                    <span className="text-gray-500 dark:text-gray-400 ml-2">{plan.period}</span>
                                 </div>
 
                                 <div className="space-y-4 mb-8">
                                     {plan.features.map((feature, idx) => (
                                         <div key={idx} className="flex items-start gap-3">
-                                            <div className="shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
-                                                <Check className="w-3 h-3 text-green-600" />
+                                            <div className="shrink-0 w-5 h-5 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mt-0.5">
+                                                <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
                                             </div>
-                                            <span className="text-gray-700 text-sm font-medium">{feature}</span>
+                                            <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">{feature}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -184,57 +192,57 @@ const Pricing = () => {
                                 )}>
                                     Get Started <ArrowRight className="w-4 h-4" />
                                 </button>
-                                <p className="text-center text-xs text-gray-400 mt-4 font-medium flex items-center justify-center gap-1">
+                                <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-4 font-medium flex items-center justify-center gap-1">
                                     <Shield className="w-3 h-3" /> Secure Payment
                                 </p>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
 
                 {/* Feature Comparison Table */}
-                <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-1000">
-                    <div className="p-8 md:p-10 border-b border-gray-100 bg-gray-50/50 text-center">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">Compare Plans</h2>
-                        <p className="text-gray-600">Detailed breakdown of features and limits</p>
+                <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-500">
+                    <div className="p-8 md:p-10 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 text-center">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Compare Plans</h2>
+                        <p className="text-gray-600 dark:text-gray-400">Detailed breakdown of features and limits</p>
                     </div>
 
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-white">
-                                    <th className="p-6 text-sm font-semibold text-gray-500 uppercase tracking-wider w-1/3">Features</th>
-                                    <th className="p-6 text-center text-gray-900 font-bold bg-blue-50/30 w-1/5">24h Pass</th>
-                                    <th className="p-6 text-center text-purple-600 font-bold bg-purple-50/30 w-1/5 border-x border-purple-100 relative">
+                                <tr className="bg-white dark:bg-gray-900">
+                                    <th className="p-6 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-1/3">Features</th>
+                                    <th className="p-6 text-center text-gray-900 dark:text-gray-100 font-bold bg-blue-50/30 dark:bg-blue-900/10 w-1/5">24h Pass</th>
+                                    <th className="p-6 text-center text-purple-600 dark:text-purple-400 font-bold bg-purple-50/30 dark:bg-purple-900/10 w-1/5 border-x border-purple-100 dark:border-purple-800 relative">
                                         Week Pro
                                         <div className="absolute top-0 left-0 w-full h-1 bg-purple-500"></div>
                                     </th>
-                                    <th className="p-6 text-center text-gray-900 font-bold bg-orange-50/30 w-1/5">Month Elite</th>
+                                    <th className="p-6 text-center text-gray-900 dark:text-gray-100 font-bold bg-orange-50/30 dark:bg-orange-900/10 w-1/5">Month Elite</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
+                            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                                 {comparisonFeatures.map((section, sIdx) => (
                                     <React.Fragment key={sIdx}>
-                                        <tr className="bg-gray-50/80">
-                                            <td colSpan={4} className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                        <tr className="bg-gray-50/80 dark:bg-gray-800/80">
+                                            <td colSpan={4} className="px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                                 {section.category}
                                             </td>
                                         </tr>
                                         {section.items.map((item, iIdx) => (
-                                            <tr key={iIdx} className="hover:bg-gray-50 transition-colors">
-                                                <td className="p-6 text-sm font-medium text-gray-700">
+                                            <tr key={iIdx} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                                <td className="p-6 text-sm font-medium text-gray-700 dark:text-gray-300">
                                                     <div className="flex items-center gap-2">
                                                         {item.name}
                                                         {item.name.includes('OCR') && <BadgeCheck className="w-4 h-4 text-blue-500" />}
                                                     </div>
                                                 </td>
-                                                <td className="p-6 text-center bg-blue-50/10">
+                                                <td className="p-6 text-center bg-blue-50/10 dark:bg-blue-900/5">
                                                     {renderFeatureValue(item.day)}
                                                 </td>
-                                                <td className="p-6 text-center bg-purple-50/10 border-x border-purple-50 font-medium">
+                                                <td className="p-6 text-center bg-purple-50/10 dark:bg-purple-900/5 border-x border-purple-50 dark:border-purple-900/20 font-medium">
                                                     {renderFeatureValue(item.week)}
                                                 </td>
-                                                <td className="p-6 text-center bg-orange-50/10">
+                                                <td className="p-6 text-center bg-orange-50/10 dark:bg-orange-900/5">
                                                     {renderFeatureValue(item.month)}
                                                 </td>
                                             </tr>
@@ -247,24 +255,30 @@ const Pricing = () => {
                 </div>
 
                 {/* FAQ Section (Optional enhancement) */}
-                <div className="mt-24 max-w-3xl mx-auto">
-                    <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Frequently Asked Questions</h2>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{ duration: 0.5 }}
+                    className="mt-24 max-w-3xl mx-auto"
+                >
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 text-center mb-12">Frequently Asked Questions</h2>
                     <div className="space-y-6">
                         {[
                             { q: "Can I cancel my subscription anytime?", a: "Yes! For the monthly plan, you can cancel anytime and you won't be charged for the next cycle. Day and Week passes expire automatically." },
                             { q: "Is my data secure?", a: "Absolutely. We use 256-bit SSL encryption and automatically delete your files from our servers after 1 hour of processing." },
                             { q: "Do you offer refunds?", a: "We offer a 7-day money-back guarantee if you're not satisfied with our service, applicable for the Monthly plan." }
                         ].map((faq, idx) => (
-                            <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                                    <HelpCircle className="w-5 h-5 text-gray-400" />
+                            <div key={idx} className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+                                    <HelpCircle className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                                     {faq.q}
                                 </h3>
-                                <p className="text-gray-600 ml-7">{faq.a}</p>
+                                <p className="text-gray-600 dark:text-gray-400 ml-7">{faq.a}</p>
                             </div>
                         ))}
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
@@ -272,10 +286,10 @@ const Pricing = () => {
 
 // Helper to render check/cross/text
 const renderFeatureValue = (value) => {
-    if (value === true) return <Check className="w-5 h-5 text-green-500 mx-auto" />;
-    if (value === false) return <X className="w-5 h-5 text-gray-300 mx-auto" />;
-    if (value === '-') return <span className="text-gray-300">-</span>;
-    return <span className="text-gray-700 font-medium text-sm">{value}</span>;
+    if (value === true) return <Check className="w-5 h-5 text-green-500 dark:text-green-400 mx-auto" />;
+    if (value === false) return <X className="w-5 h-5 text-gray-300 dark:text-gray-600 mx-auto" />;
+    if (value === '-') return <span className="text-gray-300 dark:text-gray-600">-</span>;
+    return <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">{value}</span>;
 };
 
 export default Pricing;

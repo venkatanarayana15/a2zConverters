@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Github, Twitter, Linkedin, Mail, ChevronDown } from 'lucide-react';
+import { Github, Twitter, Linkedin, Mail, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../lib/utils';
 
@@ -11,33 +11,32 @@ const FooterColumn = ({ title, children }) => {
         <div className="border-b border-gray-100 md:border-none last:border-0">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-between w-full py-4 md:py-0 md:mb-6 text-left group"
+                className="flex items-center justify-between w-full py-4 md:py-0 md:mb-3 text-left group"
             >
-                <h4 className="text-gray-900 font-semibold">{title}</h4>
+                <h4 className="text-gray-900 dark:text-gray-100 font-semibold">{title}</h4>
                 <ChevronDown
                     className={cn(
-                        "w-5 h-5 text-gray-400 transition-transform duration-300 md:hidden",
+                        "w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform duration-300 md:hidden",
                         isOpen && "rotate-180 text-primary"
                     )}
                 />
             </button>
+            {/* Desktop: always visible. Mobile: animated */}
+            <div className="hidden md:block pb-0">
+                {children}
+            </div>
             <AnimatePresence>
-                <div
-                    className={cn(
-                        "overflow-hidden md:h-auto md:block",
-                        !isOpen && "hidden md:block"
-                    )}
+            {isOpen && (
+                <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden md:hidden pb-4"
                 >
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="pb-4 md:pb-0"
-                    >
-                        {children}
-                    </motion.div>
-                </div>
+                    {children}
+                </motion.div>
+            )}
             </AnimatePresence>
         </div>
     );
@@ -45,11 +44,11 @@ const FooterColumn = ({ title, children }) => {
 
 const Footer = () => {
     return (
-        <footer className="relative pt-10 md:pt-20 pb-24 md:pb-10 overflow-hidden border-t border-gray-200 bg-white/50 backdrop-blur-sm">
+        <footer className="relative pt-4 md:pt-6 pb-6 md:pb-1 overflow-hidden border-t border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-950/50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-12 mb-8 md:mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-12 mb-4 md:mb-6">
                     {/* Brand - Always visible */}
-                    <div className="col-span-1 md:col-span-1 py-6 md:py-0">
+                    <div className="col-span-1 md:col-span-1 py-4 md:py-0">
                         <Link to="/" className="flex items-center space-x-2.5 mb-6 group select-none">
                             <div className="relative w-8 h-8">
                                 <div className={cn("absolute inset-0 bg-primary/20 rounded-full blur-md group-hover:blur-lg transition-all opacity-0 group-hover:opacity-100")} />
@@ -79,45 +78,46 @@ const Footer = () => {
                                     </defs>
                                 </svg>
                             </div>
-                            <span className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">a2zconverters</span>
+                            <span className="text-xl font-bold font-serif text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors">a2zconverters</span>
                         </Link>
-                        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 leading-relaxed">
                             The most advanced file conversion tool on the web. Secure, fast, and beautifully designed for professionals.
                         </p>
                         <div className="flex space-x-4">
-                            <a href="#" className={cn("text-gray-400 hover:text-gray-900 transition-colors")}><Github className="w-5 h-5" /></a>
-                            <a href="#" className={cn("text-gray-400 hover:text-blue-500 transition-colors")}><Twitter className="w-5 h-5" /></a>
-                            <a href="#" className={cn("text-gray-400 hover:text-blue-700 transition-colors")}><Linkedin className="w-5 h-5" /></a>
+                            <a href="#" className={cn("text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors")}><Github className="w-5 h-5" /></a>
+                            <a href="#" className={cn("text-gray-400 dark:text-gray-500 hover:text-blue-500 transition-colors")}><Twitter className="w-5 h-5" /></a>
+                            <a href="#" className={cn("text-gray-400 dark:text-gray-500 hover:text-blue-700 transition-colors")}><Linkedin className="w-5 h-5" /></a>
                         </div>
                     </div>
 
                     {/* Links Column 1 */}
                     <FooterColumn title="Products">
-                        <ul className="space-y-4 text-sm text-gray-500">
-                            <li><Link to="/merge-pdf" className={cn("hover:text-primary transition-colors")}>Merge PDF</Link></li>
-                            <li><Link to="/compress-pdf" className={cn("hover:text-primary transition-colors")}>Compress PDF</Link></li>
-                            <li><Link to="/gov-resizer" className={cn("hover:text-primary transition-colors flex items-center")}>Gov Resizer <span className="ml-2 text-[10px] bg-orange-500 text-white px-1.5 py-0.5 rounded-full">NEW</span></Link></li>
-                            <li><Link to="/web-to-pdf" className={cn("hover:text-primary transition-colors")}>Web to PDF</Link></li>
+                        <ul className="space-y-1 text-sm">
+                            <li><Link to="/merge-pdf" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-blue-700 transition-all duration-200 hover:translate-x-1">Merge PDF</Link></li>
+                            <li><Link to="/compress-pdf" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-blue-700 transition-all duration-200 hover:translate-x-1">Compress PDF</Link></li>
+                            <li><Link to="/gov-resizer" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-blue-700 transition-all duration-200 hover:translate-x-1 flex items-center">Govt. Resizer <span className="ml-2 text-[10px] bg-orange-500 text-white px-1.5 py-0.5 rounded-full">NEW</span></Link></li>
+                            <li><Link to="/html-to-pdf" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-blue-700 transition-all duration-200 hover:translate-x-1">HTML to PDF</Link></li>
                         </ul>
                     </FooterColumn>
 
                     {/* Links Column 2 */}
                     <FooterColumn title="Company">
-                        <ul className="space-y-4 text-sm text-gray-500">
-                            <li><Link to="/about" className={cn("hover:text-gray-900 transition-colors")}>About Us</Link></li>
-                            <li><Link to="/features" className={cn("hover:text-gray-900 transition-colors")}>Features</Link></li>
-                            <li><Link to="/pricing" className={cn("hover:text-gray-900 transition-colors")}>Pricing</Link></li>
-                            <li><Link to="/contact" className={cn("hover:text-gray-900 transition-colors")}>Contact</Link></li>
+                        <ul className="space-y-1 text-sm">
+                            <li><Link to="/about" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-teal-700 transition-all duration-200 hover:translate-x-1">About Us</Link></li>
+                            <li><Link to="/features" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-teal-700 transition-all duration-200 hover:translate-x-1">Features</Link></li>
+                            <li><Link to="/pricing" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-teal-700 transition-all duration-200 hover:translate-x-1">Pricing</Link></li>
+                            <li><Link to="/contact" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-teal-700 transition-all duration-200 hover:translate-x-1">Contact</Link></li>
                         </ul>
                     </FooterColumn>
 
                     {/* Contact/Support */}
                     <FooterColumn title="Support">
-                        <ul className="space-y-4 text-sm text-gray-500">
-                            <li><a href="#" className={cn("hover:text-gray-900 transition-colors")}>Help Center</a></li>
-                            <li><a href="#" className={cn("hover:text-gray-900 transition-colors")}>Privacy Policy</a></li>
-                            <li><a href="#" className={cn("hover:text-gray-900 transition-colors")}>Terms of Service</a></li>
-                            <li className="flex items-center pt-2">
+                        <ul className="space-y-1 text-sm">
+                            <li><Link to="/help" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-green-700 transition-all duration-200 hover:translate-x-1">Help Center</Link></li>
+                            <li><Link to="/faq" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-green-700 transition-all duration-200 hover:translate-x-1">FAQ</Link></li>
+                            <li><Link to="/privacy" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-green-700 transition-all duration-200 hover:translate-x-1">Privacy Policy</Link></li>
+                            <li><Link to="/terms" className="block px-3 py-1 -mx-3 rounded-lg text-gray-900 dark:text-gray-300 hover:text-green-700 transition-all duration-200 hover:translate-x-1">Terms of Service</Link></li>
+                            <li className="flex items-center pt-2 px-3 text-gray-500 dark:text-gray-400">
                                 <Mail className="w-4 h-4 mr-2" />
                                 <span>support@convertpro.com</span>
                             </li>
@@ -125,15 +125,13 @@ const Footer = () => {
                     </FooterColumn>
                 </div>
 
-                <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between">
-                    <p className="text-gray-500 text-sm">
+                <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-1.5">
+                    <p className="text-gray-400 dark:text-gray-500 text-xs">
                         © {new Date().getFullYear()} ConvertPro. All rights reserved.
                     </p>
-                    <div className="flex items-center space-x-6 mt-4 md:mt-0">
-                        <div className="flex items-center space-x-2 text-sm text-gray-500">
-                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                            <span>Systems Operational</span>
-                        </div>
+                    <div className="flex items-center space-x-2 text-xs text-gray-400 dark:text-gray-500">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                        <span>Systems Operational</span>
                     </div>
                 </div>
             </div>

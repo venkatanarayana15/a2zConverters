@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" rx="22" fill="white"/>
+  <path d="M50 20C66.5685 20 80 33.4315 80 50C80 55.6 78.5 60.8 75.8 65.3C83.5 59.8 88.5 50.8 88.5 40.5C88.5 23.655 74.845 10 58 10C48.5 10 40 14.2 34.2 20.8C39 20.3 44.4 20 50 20Z" fill="url(#fav0)"/>
+  <path d="M80 50C80 66.5685 66.5685 80 50 80C44.4 80 39.2 78.5 34.7 75.8C40.2 83.5 49.2 88.5 59.5 88.5C76.345 88.5 90 74.845 90 58C90 48.5 85.8 40 79.2 34.2C79.7 39 80 44.4 80 50Z" fill="url(#fav1)"/>
+  <path d="M50 80C33.4315 80 20 66.5685 20 50C20 44.4 21.5 39.2 24.2 34.7C16.5 40.2 11.5 49.2 11.5 59.5C11.5 76.345 25.155 90 42 90C51.5 90 60 85.8 65.8 79.2C61 79.7 55.6 80 50 80Z" fill="url(#fav2)"/>
+  <path d="M50 28C62.15 28 72 37.85 72 50C72 52.8 71.3 55.4 70.1 57.8C75.2 53.5 78.5 47.1 78.5 40C78.5 25.36 66.64 13.5 52 13.5C44.8 13.5 38.3 16.3 33.5 20.8C38.2 25.3 43.8 28 50 28Z" fill="#00897B"/>
+  <path d="M72 50C72 62.15 62.15 72 50 72C47.2 72 44.6 71.3 42.2 70.1C46.5 75.2 52.9 78.5 60 78.5C74.64 78.5 86.5 66.64 86.5 52C86.5 44.8 83.7 38.3 79.2 33.5C74.7 38.2 72 43.8 72 50Z" fill="#00695C"/>
+  <path d="M50 72C37.85 72 28 62.15 28 50C28 47.2 28.7 44.6 29.9 42.2C24.8 46.5 21.5 52.9 21.5 60C21.5 74.64 33.36 86.5 48 86.5C55.2 86.5 61.7 83.7 66.5 79.2C61.8 74.7 56.2 72 50 72Z" fill="#004D40"/>
+  <defs>
+    <linearGradient id="fav0" x1="34" y1="20" x2="88" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#26A69A"/>
+      <stop offset="1" stopColor="#00897B"/>
+    </linearGradient>
+    <linearGradient id="fav1" x1="80" y1="34" x2="60" y2="88" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#00897B"/>
+      <stop offset="1" stopColor="#00695C"/>
+    </linearGradient>
+    <linearGradient id="fav2" x1="66" y1="80" x2="12" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#00695C"/>
+      <stop offset="1" stopColor="#004D40"/>
+    </linearGradient>
+  </defs>
+</svg>

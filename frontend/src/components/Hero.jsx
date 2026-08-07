@@ -1,10 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { ArrowRight, FileCheck, Image as ImageIcon } from 'lucide-react';
 import Interactive3DBackground from './Interactive3DBackground';
 import PhysicsButton from './PhysicsButton';
 import ModernBackground from './ModernBackground';
 import { cn } from '../lib/utils';
+
+const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.6, delay: i * 0.15, ease: 'easeOut' },
+    }),
+};
 
 const Hero = () => {
     return (
@@ -30,19 +40,37 @@ const Hero = () => {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full flex flex-col items-center justify-center h-full">
 
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 md:mb-6 text-gray-900 w-full">
+                <motion.h1
+                    custom={0}
+                    variants={fadeUp}
+                    initial="hidden"
+                    animate="visible"
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-serif tracking-tight mb-4 md:mb-6 text-gray-900 w-full dark:text-gray-100"
+                >
                     <span className="block mb-1 md:mb-2">Perfect Photos for</span>
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 to-blue-600">
-                        Gov Exams & PDFs
+                        Govt. Exams & PDFs
                     </span>
-                </h1>
+                </motion.h1>
 
-                <p className="mt-3 md:mt-4 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8 md:mb-10 w-full px-2">
-                    Resize images to exact government exam dimensions (SSC, UPSC, IBPS) in seconds.
-                    Plus, the ultimate PDF toolkit for all your conversion needs.
-                </p>
+                <motion.p
+                    custom={1}
+                    variants={fadeUp}
+                    initial="hidden"
+                    animate="visible"
+                    className="mt-3 md:mt-4 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8 md:mb-10 w-full px-2 dark:text-gray-400"
+                >
+                    Resize your photos to exact government exam dimensions (SSC, UPSC, IBPS) instantly,
+                    alongside the ultimate PDF toolkit for all your conversions.
+                </motion.p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8 md:mb-20 w-full">
+                <motion.div
+                    custom={2}
+                    variants={fadeUp}
+                    initial="hidden"
+                    animate="visible"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8 md:mb-20 w-full"
+                >
                     <Link to="/gov-resizer" className="w-full sm:w-auto">
                         <PhysicsButton variant="electric" className="w-full sm:w-auto justify-center">
                             Resize for Exam
@@ -54,36 +82,50 @@ const Hero = () => {
                         <FileCheck className="mr-2 w-5 h-5 text-sky-500" />
                         Explore PDF Tools
                     </PhysicsButton>
-                </div>
+                </motion.div>
 
 
 
                 {/* Floating Cards (Decorative) */}
-                <div className="hidden lg:block absolute top-[20%] left-[5%] animate-float" style={{ animationDelay: '0.5s' }}>
-                    <div className="glass-card p-4 rounded-2xl flex items-center gap-3 w-48 bg-white/80 backdrop-blur-md border border-white/40 shadow-xl">
+                <motion.div
+                    custom={3}
+                    variants={fadeUp}
+                    initial="hidden"
+                    animate="visible"
+                    className="hidden lg:block absolute top-[20%] left-[5%] animate-float"
+                    style={{ animationDelay: '0.5s' }}
+                >
+                    <div className="glass-card p-4 rounded-2xl flex items-center gap-3 w-48 bg-white/80 backdrop-blur-md border border-white/40 shadow-xl dark:bg-gray-900/80 dark:border-gray-700/40">
                         <div className="p-2 rounded-lg bg-red-100 text-red-500">
                             <FileCheck className="w-6 h-6" />
                         </div>
                         <div>
-                            <div className="text-sm font-bold text-gray-900">PDF to Word</div>
-                            <div className="text-xs text-gray-500">Converting...</div>
+                            <div className="text-sm font-bold text-gray-900 dark:text-gray-100">PDF to Word</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Converting...</div>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="hidden lg:block absolute bottom-[30%] right-[5%] animate-float" style={{ animationDelay: '1.5s' }}>
-                    <div className="glass-card p-4 rounded-2xl flex items-center gap-3 w-48 bg-white/80 backdrop-blur-md border border-white/40 shadow-xl">
+                <motion.div
+                    custom={4}
+                    variants={fadeUp}
+                    initial="hidden"
+                    animate="visible"
+                    className="hidden lg:block absolute bottom-[30%] right-[5%] animate-float"
+                    style={{ animationDelay: '1.5s' }}
+                >
+                    <div className="glass-card p-4 rounded-2xl flex items-center gap-3 w-48 bg-white/80 backdrop-blur-md border border-white/40 shadow-xl dark:bg-gray-900/80 dark:border-gray-700/40">
                         <div className="p-2 rounded-lg bg-blue-100 text-blue-500">
                             <ImageIcon className="w-6 h-6" />
                         </div>
                         <div>
-                            <div className="text-sm font-bold text-gray-900">JPG Resizer</div>
+                            <div className="text-sm font-bold text-gray-900 dark:text-gray-100">JPG Resizer</div>
                             <div className="text-xs text-green-600 flex items-center">
                                 <span className="w-2 h-2 rounded-full bg-green-500 mr-1" /> Done
                             </div>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
