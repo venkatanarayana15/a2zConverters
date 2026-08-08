@@ -19,8 +19,8 @@ const AccountSettings = ({ localFields, onLocalChange, onBlur }) => {
                 <label className={labelClass}>Email Address</label>
                 <input type="email" value={localFields.email} onChange={(e) => onLocalChange('email', e.target.value)} onBlur={() => onBlur('email')} className={inputClass} placeholder="you@example.com" />
             </div>
-            <hr className="border-gray-100 dark:border-gray-700" />
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Change Password</h4>
+            <hr className="border-gray-100 dark:border-slate-700" />
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-slate-100">Change Password</h4>
             <div>
                 <label className={labelClass}>Current Password</label>
                 <input type="password" value={localFields.currentPassword} onChange={(e) => onLocalChange('currentPassword', e.target.value)} onBlur={() => onBlur('currentPassword')} className={inputClass} placeholder="Enter current password" />
@@ -43,7 +43,7 @@ const AccountSettings = ({ localFields, onLocalChange, onBlur }) => {
                         <label className={labelClass}>Confirm Password</label>
                         <input type="password" value={localFields.confirmPassword} onChange={(e) => onLocalChange('confirmPassword', e.target.value)} onBlur={() => onBlur('confirmPassword')} className={inputClass} placeholder="Confirm new password" />
                     </div>
-                    <button className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all">
+                    <button className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all dark:bg-none dark:bg-primary dark:text-white">
                         Update Password
                     </button>
                 </>

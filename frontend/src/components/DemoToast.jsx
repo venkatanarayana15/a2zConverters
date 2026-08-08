@@ -25,7 +25,7 @@ const DemoToast = ({ message }) => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
-                        className="px-5 py-3 rounded-xl bg-gray-900 text-white text-sm font-medium shadow-lg dark:bg-white dark:text-gray-900"
+                        className="px-5 py-3 rounded-xl bg-gray-900 text-white text-sm font-medium shadow-lg dark:bg-slate-800 dark:text-slate-100 dark:border dark:border-slate-700 dark:shadow-black/40"
                     >
                         {message}
                     </motion.div>

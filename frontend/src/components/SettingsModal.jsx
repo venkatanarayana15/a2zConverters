@@ -99,10 +99,12 @@ const SettingsModal = ({ isOpen, onClose }) => {
     const handleChange = useCallback((key, value) => {
         saveSettings({ [key]: value });
         if (key === 'darkMode') {
-            if (value) {
-                document.documentElement.classList.add('dark');
+            const flip = () => document.documentElement.classList.toggle('dark', value);
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (document.startViewTransition && !reduceMotion) {
+                document.startViewTransition(flip);
             } else {
-                document.documentElement.classList.remove('dark');
+                flip();
             }
         }
     }, [saveSettings]);
@@ -146,21 +148,21 @@ const SettingsModal = ({ isOpen, onClose }) => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.96, y: 10 }}
                         transition={{ duration: 0.25, ease: 'easeOut' }}
-                        className="hidden md:flex relative bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl w-full md:w-[min(672px,92vw)] h-[min(540px,85vh)] overflow-hidden border border-white/50 dark:border-gray-700/50 ring-1 ring-black/5 z-10 flex-col"
+                        className="hidden md:flex relative bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-black/50 w-full md:w-[min(672px,92vw)] h-[min(540px,85vh)] overflow-hidden border border-white/50 dark:border-slate-700/50 ring-1 ring-black/5 z-10 flex-col"
                     >
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
-                            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Settings</h2>
-                            <button onClick={onClose} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700">
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">Settings</h2>
+                            <button onClick={onClose} className="p-1.5 hover:bg-gray-100 dark:hover:bg-primary/10 rounded-full transition-colors">
+                                <X className="w-5 h-5 text-gray-500 dark:text-slate-400" />
                             </button>
                         </div>
 
                         <div className="flex flex-1 overflow-hidden">
-                            <div className="w-52 shrink-0 border-r border-gray-100 dark:border-gray-700 p-3 space-y-0.5 overflow-y-auto">
+                            <div className="w-52 shrink-0 border-r border-gray-100 dark:border-slate-700 p-3 space-y-0.5 overflow-y-auto">
                                 {sections.map(s => {
                                     const Icon = s.icon;
                                     return (
-                                        <button key={s.id} onClick={() => setActiveSection(s.id)} className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all", activeSection === s.id ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200')}>
+                                        <button key={s.id} onClick={() => setActiveSection(s.id)} className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all", activeSection === s.id ? 'bg-blue-50 text-blue-600 dark:bg-primary/20 dark:text-primary' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-primary/10 dark:hover:text-primary')}>
                                             <Icon className="w-4 h-4 shrink-0" />
                                             <span className="truncate">{s.label}</span>
                                         </button>
@@ -169,7 +171,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
                             </div>
 
                             <div className="flex-1 overflow-y-auto p-6">
-                                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-5">{sections.find(s => s.id === activeSection)?.label}</h3>
+                                <h3 className="text-base font-bold text-gray-900 dark:text-slate-100 mb-5">{sections.find(s => s.id === activeSection)?.label}</h3>
                                 <AnimatePresence mode="popLayout">
                                     <motion.div
                                         key={activeSection}
@@ -191,12 +193,12 @@ const SettingsModal = ({ isOpen, onClose }) => {
                         animate={{ y: 0 }}
                         exit={{ y: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="md:hidden fixed inset-x-0 bottom-0 z-10 bg-white dark:bg-gray-900 rounded-t-3xl shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.1)] dark:shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.5)] max-h-[85vh] flex flex-col"
+                        className="md:hidden fixed inset-x-0 bottom-0 z-10 bg-white dark:bg-slate-900 rounded-t-3xl shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.1)] dark:shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.5)] max-h-[85vh] flex flex-col"
                     >
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 shrink-0">
-                            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Settings</h2>
-                            <button onClick={onClose} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-                                <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700 shrink-0">
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">Settings</h2>
+                            <button onClick={onClose} className="p-1.5 hover:bg-gray-100 dark:hover:bg-primary/10 rounded-full transition-colors">
+                                <X className="w-5 h-5 text-gray-500 dark:text-slate-400" />
                             </button>
                         </div>
 
@@ -205,15 +207,15 @@ const SettingsModal = ({ isOpen, onClose }) => {
                                 const Icon = s.icon;
                                 return (
                                     <div key={s.id}>
-                                        {idx > 0 && <hr className="border-gray-100 dark:border-gray-700 mb-6" />}
+                                        {idx > 0 && <hr className="border-gray-100 dark:border-slate-700 mb-6" />}
                                         <button onClick={() => setActiveSection(s.id)} className="flex items-center justify-between w-full mb-4 group">
                                             <div className="flex items-center gap-2.5">
-                                                <div className={cn("p-2 rounded-xl transition-colors", activeSection === s.id ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700')}>
+                                                <div className={cn("p-2 rounded-xl transition-colors", activeSection === s.id ? 'bg-blue-50 text-blue-600 dark:bg-primary/20 dark:text-primary' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400 dark:group-hover:bg-slate-700')}>
                                                     <Icon className="w-4 h-4" />
                                                 </div>
-                                                <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">{s.label}</h3>
+                                                <h3 className="text-base font-bold text-gray-900 dark:text-slate-100">{s.label}</h3>
                                             </div>
-                                            <ChevronRight className={cn("w-4 h-4 transition-transform duration-200", activeSection === s.id ? 'rotate-90 text-blue-500' : 'text-gray-400 dark:text-gray-500')} />
+                                            <ChevronRight className={cn("w-4 h-4 transition-transform duration-200", activeSection === s.id ? 'rotate-90 text-blue-500' : 'text-gray-400 dark:text-slate-400')} />
                                         </button>
                                         <AnimatePresence>
                                             {activeSection === s.id && (

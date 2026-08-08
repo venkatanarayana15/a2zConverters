@@ -61,35 +61,56 @@ const BottomNav = () => {
                         animate={{ y: 0 }}
                         exit={{ y: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.1)] z-50 md:hidden max-h-[75vh] flex flex-col pb-24 dark:bg-gray-900"
+                        className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.1)] z-50 md:hidden max-h-[75vh] flex flex-col pb-24 dark:bg-slate-900 dark:shadow-[0_-5px_25px_-5px_rgba(0,0,0,0.7)]"
                     >
                         {/* Drawer Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
-                            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                                {activeMenu === 'pdf' ? 'PDF Tools' : activeMenu === 'img' ? 'Image Tools' : 'Account'}
-                            </h3>
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700">
+                            <div className="flex items-center gap-3">
+                                {activeMenu === 'pdf' || activeMenu === 'img' ? (
+                                    <div className={cn(
+                                        "w-9 h-9 rounded-lg flex items-center justify-center",
+                                        activeMenu === 'pdf' ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400" : "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400"
+                                    )}>
+                                        {activeMenu === 'pdf' ? <FileText className="w-4 h-4" /> : <ImageIcon className="w-4 h-4" />}
+                                    </div>
+                                ) : (
+                                    <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                        <User className="w-4 h-4" />
+                                    </div>
+                                )}
+                                <div>
+                                    <h3 className="text-lg font-bold text-gray-900 leading-tight dark:text-slate-100">
+                                        {activeMenu === 'pdf' ? 'PDF Tools' : activeMenu === 'img' ? 'Image Tools' : 'Account'}
+                                    </h3>
+                                    {activeMenu === 'pdf' || activeMenu === 'img' ? (
+                                        <p className="text-xs text-gray-500 dark:text-slate-400">
+                                            {(activeMenu === 'pdf' ? builtPdfTools : builtImageTools).length} tools available
+                                        </p>
+                                    ) : null}
+                                </div>
+                            </div>
                             <button
                                 onClick={closeMenu}
-                                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors dark:bg-gray-800"
+                                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors dark:bg-slate-800"
                             >
-                                <X className="w-5 h-5 text-gray-500" />
+                                <X className="w-5 h-5 text-gray-500 dark:text-slate-300" />
                             </button>
                         </div>
 
                         <div className="overflow-y-auto p-4 flex-1">
                             {activeMenu === 'profile' ? (
                                 <div className="space-y-2">
-                                    <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+                                    <Link to="/profile" onClick={closeMenu} className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
                                         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">D</div>
                                         <div>
-                                            <p className="font-bold text-gray-900 dark:text-gray-100">Demo User</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Free Plan</p>
+                                            <p className="font-bold text-gray-900 dark:text-slate-100">Demo User</p>
+                                            <p className="text-xs text-gray-500 dark:text-slate-400">Free Plan</p>
                                         </div>
                                     </Link>
-                                    <button onClick={() => { setShowSettings(true); closeMenu(); }} className="w-full flex items-center p-4 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
-                                        <Settings className="w-5 h-5 mr-3 text-gray-400" /> Settings
+                                    <button onClick={() => { setShowSettings(true); closeMenu(); }} className="w-full flex items-center p-4 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-primary/10 rounded-xl font-medium border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                        <Settings className="w-5 h-5 mr-3 text-gray-400 dark:text-slate-300" /> Settings
                                     </button>
-                                    <button className="w-full flex items-center p-4 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl font-medium border border-red-100 dark:border-red-900/30 bg-white dark:bg-gray-900">
+                                    <button className="w-full flex items-center p-4 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl font-medium border border-red-100 dark:border-red-900/30 bg-white dark:bg-slate-900">
                                         <LogOut className="w-5 h-5 mr-3" /> Sign Out
                                     </button>
                                 </div>
@@ -104,13 +125,13 @@ const BottomNav = () => {
                                                     key={idx}
                                                     to={tool.path}
                                                     onClick={closeMenu}
-                                                    className="p-3 bg-gray-50 rounded-xl hover:bg-primary/5 hover:border-primary/20 border border-transparent transition-all group dark:bg-gray-800 dark:hover:bg-primary/10"
+                                                    className="p-3 bg-gray-50 rounded-xl hover:bg-primary/5 hover:border-primary/20 border border-transparent transition-all group dark:bg-slate-800 dark:hover:bg-primary/10"
                                                 >
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-9 h-9 shrink-0 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform dark:bg-gray-700">
+                                                        <div className="w-9 h-9 shrink-0 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform dark:bg-slate-700 dark:shadow-black/30">
                                                             <Icon className="w-4 h-4 text-primary" />
                                                         </div>
-                                                        <span className="text-xs font-medium text-gray-700 group-hover:text-primary leading-tight line-clamp-1 dark:text-gray-300">
+                                                        <span className="text-xs font-medium text-gray-700 group-hover:text-primary leading-tight line-clamp-1 dark:text-slate-300">
                                                             {tool.name}
                                                         </span>
                                                     </div>
@@ -140,7 +161,7 @@ const BottomNav = () => {
 
             {/* Bottom Bar */}
             <div className="md:hidden fixed bottom-4 left-4 right-4 z-50">
-                <div className="bg-white/90 backdrop-blur-xl border border-white/40 shadow-lg shadow-gray-200/50 rounded-2xl px-2 py-2 flex items-center justify-around dark:bg-gray-900/90 dark:border-gray-700/40 dark:shadow-gray-900/50">
+                <div className="bg-white/90 backdrop-blur-xl border border-white/40 shadow-lg shadow-gray-200/50 rounded-2xl px-2 py-2 flex items-center justify-around dark:bg-slate-900/90 dark:border-slate-700/40 dark:shadow-slate-900/50">
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActiveItem = item.type === 'link'
@@ -156,7 +177,7 @@ const BottomNav = () => {
                                         "flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 flex-1 min-w-0 outline-none",
                                         isActiveItem
                                             ? "text-primary"
-                                            : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                                            : "text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100"
                                     )}
                                 >
                                     <div className={cn(
@@ -182,7 +203,7 @@ const BottomNav = () => {
                                     "flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 flex-1 min-w-0 outline-none",
                                     isActiveItem
                                         ? "text-primary"
-                                        : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                                        : "text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100"
                                 )}
                             >
                                 <div className={cn(

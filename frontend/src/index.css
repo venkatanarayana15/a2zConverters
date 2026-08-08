@@ -1,32 +1,37 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 300ms;
+}
 
 @theme {
   --font-sans: "Inter", "sans-serif";
   --font-serif: "Poppins", "sans-serif";
   --radius: 0.6rem;
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
 }
 
 :root {
@@ -42,7 +47,7 @@
 
   --primary: 199 89% 48%;
   /* Sky Blue / Cyan */
-  --primary-foreground: 210 40% 98%;
+  --primary-foreground: 222 47% 4%;
 
   --secondary: 210 40% 96.1%;
   --secondary-foreground: 222.2 47.4% 11.2%;
@@ -64,32 +69,33 @@
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
+  /* Navy-Slate "Science" Theme */
+  --background: 222 47% 5%;
   --foreground: 210 40% 98%;
 
-  --card: 222.2 84% 8%;
+  --card: 222 47% 10%;
   --card-foreground: 210 40% 98%;
 
-  --popover: 222.2 84% 6%;
+  --popover: 222 47% 9%;
   --popover-foreground: 210 40% 98%;
 
   --primary: 199 89% 55%;
-  --primary-foreground: 222.2 84% 4.9%;
+  --primary-foreground: 222 47% 4%;
 
-  --secondary: 217.2 32.6% 17.5%;
+  --secondary: 215 28% 16%;
   --secondary-foreground: 210 40% 98%;
 
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
+  --muted: 215 28% 16%;
+  --muted-foreground: 215 20% 66%;
 
-  --accent: 217.2 32.6% 17.5%;
+  --accent: 215 28% 16%;
   --accent-foreground: 210 40% 98%;
 
   --destructive: 0 62.8% 50.6%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
+  --border: 215 28% 20%;
+  --input: 215 28% 20%;
   --ring: 199 89% 55%;
 
   --radius: 0.75rem;
@@ -98,18 +104,27 @@
 @layer utilities {
   .glass {
     @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-sm;
-    @apply dark:bg-gray-900/70 dark:border-gray-700/20;
+    @apply dark:bg-slate-900/70 dark:border-slate-700/20 dark:shadow-black/20;
   }
 
   .glass-card {
     @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-lg transition-all duration-300;
-    @apply dark:bg-gray-900/60 dark:border-gray-700/40;
+    @apply dark:bg-slate-900/60 dark:border-slate-700/40 dark:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_24px_rgba(0,0,0,0.3),0_24px_48px_rgba(0,0,0,0.15)];
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+    @apply dark:hover:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_12px_32px_rgba(0,0,0,0.35)];
+  }
+
+  .input-base {
+    @apply w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all;
   }
 
   @media (hover: hover) {
     .glass-card {
       @apply hover:shadow-xl hover:bg-white/80;
-      @apply dark:hover:bg-gray-900/80;
+      @apply dark:hover:bg-slate-900/80 dark:hover:shadow-[0_1px_2px_rgba(0,0,0,0.25),0_12px_32px_rgba(0,0,0,0.4),0_32px_64px_rgba(0,0,0,0.2)];
     }
   }
 
@@ -128,6 +143,15 @@
   .search-focus {
     @apply focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary!;
     @apply dark:focus-within:ring-primary/30;
+  }
+
+  .checkerboard {
+    background-image: conic-gradient(#e2e8f0 25%, #ffffff 0 50%, #e2e8f0 0 75%, #ffffff 0);
+    background-size: 20px 20px;
+  }
+
+  .dark .checkerboard {
+    background-image: conic-gradient(#1e293b 25%, #0f172a 0 50%, #1e293b 0 75%, #0f172a 0);
   }
 
   @keyframes pulse-glow {
@@ -165,9 +189,59 @@
   html,
   body {
     @apply bg-gradient-to-br from-blue-50 via-white to-cyan-50 text-foreground antialiased min-h-screen selection:bg-cyan-200 selection:text-cyan-900 overflow-x-hidden;
-    @apply dark:from-gray-950 dark:via-gray-950 dark:to-gray-900 dark:text-foreground;
+    @apply dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 dark:text-foreground;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Anti-plastic grain overlay for dark mode */
+  .dark body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* Dark-mode system polish */
+  .dark ::selection {
+    background: rgba(34, 211, 238, 0.25);
+    color: #cffafe;
+  }
+
+  .dark ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dark ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+    background-clip: content-box;
+  }
+
+  /* Respect reduced-motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   /* Mobile-specific improvements */

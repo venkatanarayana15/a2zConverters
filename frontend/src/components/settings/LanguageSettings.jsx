@@ -14,9 +14,9 @@ const LanguageSettings = ({ language, unit, dateFormat, onChange }) => (
         </div>
         <div>
             <label className={labelClass}>Measurement Unit</label>
-            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl">
+            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl">
                 {['px', 'cm', 'inch'].map(u => (
-                    <button key={u} onClick={() => onChange('unit', u)} className={cn("py-2 rounded-lg text-sm font-medium transition-all", unit === u ? 'bg-white shadow-sm text-blue-600 dark:bg-gray-700 dark:text-blue-400' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200')}>
+                    <button key={u} onClick={() => onChange('unit', u)} className={cn("py-2 rounded-lg text-sm font-medium transition-all", unit === u ? 'bg-white shadow-sm text-blue-600 dark:bg-slate-700 dark:text-primary' : 'text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-200')}>
                         {u === 'px' ? 'Pixels' : u === 'cm' ? 'CM' : 'Inches'}
                     </button>
                 ))}

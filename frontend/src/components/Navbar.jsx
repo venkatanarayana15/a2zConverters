@@ -23,18 +23,21 @@ const backdropVariants = {
 
 const allTools = [...pdfTools, ...imageTools];
 
+const pdfPaths = new Set(pdfTools.map((t) => t.path));
+const imagePaths = new Set(imageTools.map((t) => t.path));
+
 const navLinks = [
     { name: 'Home', path: '/' },
     {
         name: 'PDF Tools',
-        path: '#',
+        path: '/pdf-tools',
         icon: <FileText className="w-4 h-4 mr-2" />,
         isMegaMenu: true,
         dropdown: pdfTools
     },
     {
         name: 'Image Tools',
-        path: '#',
+        path: '/image-tools',
         icon: <ImageIcon className="w-4 h-4 mr-2" />,
         isMegaMenu: true,
         dropdown: imageTools
@@ -44,11 +47,27 @@ const navLinks = [
 
 const NavLinks = ({ activeMenu, onMenuChange, pathname }) => {
     const [hoveredLink, setHoveredLink] = useState(null);
-    const isActive = (path) => pathname === path;
+
+    const [prevPathname, setPrevPathname] = useState(pathname);
+    if (pathname !== prevPathname) {
+        setPrevPathname(pathname);
+        setHoveredLink(null);
+    }
+
+    const isActive = (path) => {
+        if (pathname === path) return true;
+        if (path === '/pdf-tools') return pdfPaths.has(pathname);
+        if (path === '/image-tools') return imagePaths.has(pathname);
+        return false;
+    };
 
     return (
         <div className="hidden md:flex items-center space-x-1" onMouseLeave={() => setHoveredLink(null)}>
-            {navLinks.map((link) => (
+            {navLinks.map((link) => {
+                const isMenuOpen = (link.name === 'PDF Tools' && activeMenu === 'pdf') || (link.name === 'Image Tools' && activeMenu === 'image');
+                const isActiveLink = isActive(link.path);
+                const isHovered = hoveredLink === link.name;
+                return (
                 <Link
                     key={link.name}
                     to={link.path}
@@ -62,10 +81,15 @@ const NavLinks = ({ activeMenu, onMenuChange, pathname }) => {
                 >
                     <span
                         className={cn(
-                            "px-3 py-2 text-sm font-medium transition-colors duration-150 flex items-center outline-none cursor-pointer",
-                            ((hoveredLink === link.name) || (activeMenu === 'pdf' && link.name === 'PDF Tools') || (activeMenu === 'image' && link.name === 'Image Tools') || (!hoveredLink && !activeMenu && isActive(link.path)))
+                            "px-3 py-2 text-sm font-medium transition-all duration-150 flex items-center outline-none cursor-pointer",
+                            ((hoveredLink === link.name) || (activeMenu === 'pdf' && link.name === 'PDF Tools') || (activeMenu === 'image' && link.name === 'Image Tools') || (!hoveredLink && !activeMenu && isActiveLink))
                                 ? "text-primary bg-linear-to-b from-primary/5 to-primary/10 border-b-2 border-primary shadow-[0_4px_15px_-3px_rgba(59,130,246,0.4)] rounded-t-lg"
-                                : "text-gray-600 hover:text-primary hover:border-primary hover:rounded-t-lg rounded-lg border-b-2 border-transparent dark:text-gray-400 dark:hover:text-blue-400 dark:hover:border-blue-500"
+                                : "text-gray-600 hover:text-primary hover:border-primary hover:rounded-t-lg rounded-lg border-b-2 border-transparent dark:text-slate-400",
+                            isMenuOpen
+                                ? "dark:bg-none dark:bg-primary/10 dark:rounded-lg dark:border-transparent dark:shadow-none dark:text-primary"
+                                : (isHovered || (!hoveredLink && !activeMenu && isActiveLink))
+                                    ? "dark:bg-none dark:bg-primary/10 dark:rounded-lg dark:border-transparent dark:shadow-none dark:text-primary"
+                                    : "dark:border-transparent"
                         )}
                     >
                         {link.name}
@@ -77,14 +101,14 @@ const NavLinks = ({ activeMenu, onMenuChange, pathname }) => {
                     {/* Standard Dropdown (Non-Mega) */}
                     {link.dropdown && !link.isMegaMenu && (
                         <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 w-56 z-50">
-                            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden p-1.5 ring-1 ring-black/5">
+                            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden p-1.5 ring-1 ring-black/5">
                                 {link.dropdown.map((item) => (
                                     <Link
                                         key={item.name}
                                         to={item.path}
-                                        className={cn("flex items-center px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-primary/5 transition-all group/item dark:text-gray-400 dark:hover:text-primary dark:hover:bg-primary/10")}
+                                        className={cn("flex items-center px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-primary/5 transition-all group/item dark:text-slate-400 dark:hover:text-primary dark:hover:bg-primary/10")}
                                     >
-                                        <div className={cn("w-7 h-7 rounded-md bg-gray-50 text-gray-400 flex items-center justify-center mr-3 group-hover/item:bg-white group-hover/item:text-primary group-hover/item:shadow-sm transition-all dark:bg-gray-800 dark:group-hover/item:bg-gray-700")}>
+                                        <div className={cn("w-7 h-7 rounded-md bg-gray-50 text-gray-400 flex items-center justify-center mr-3 group-hover/item:bg-white group-hover/item:text-primary group-hover/item:shadow-sm transition-all dark:bg-slate-800 dark:group-hover/item:bg-slate-700")}>
                                             <Sparkles className="w-3.5 h-3.5" />
                                         </div>
                                         <span className="font-medium">{item.name}</span>
@@ -94,7 +118,8 @@ const NavLinks = ({ activeMenu, onMenuChange, pathname }) => {
                         </div>
                     )}
                 </Link>
-            ))}
+                );
+            })}
         </div>
     );
 };
@@ -110,6 +135,7 @@ const Navbar = () => {
     const [showSettings, setShowSettings] = useState(false);
 
     const profileRef = useRef(null);
+    const searchRef = useRef(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -143,6 +169,23 @@ const Navbar = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Cmd/Ctrl+K to focus search, Esc to close results
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                searchRef.current?.focus();
+                setShowResults(true);
+            }
+            if (e.key === 'Escape') {
+                setShowResults(false);
+                searchRef.current?.blur();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, []);
+
     // PDF Categories with Icons
     // (pdfCategories/imageCategories/allTools live at module scope)
 
@@ -164,7 +207,7 @@ const Navbar = () => {
                 className={cn(
                     "font-sans fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b",
                     scrolled || activeMenu
-                        ? "bg-white/95 backdrop-blur-md border-gray-200/50 shadow-sm dark:bg-gray-900/95 dark:border-gray-700/50"
+                        ? "bg-white/95 backdrop-blur-md border-gray-200/50 shadow-sm dark:bg-slate-900/95 dark:border-slate-700/50"
                         : "bg-transparent border-transparent"
                 )}
                 onMouseLeave={() => { setActiveMenu(null); }}
@@ -175,7 +218,6 @@ const Navbar = () => {
                         {/* Left: Logo */}
                         <Link to="/" className="flex items-center space-x-2.5 group select-none z-50 shrink-0">
                             <div className="relative w-9 h-9">
-                                <div className={cn("absolute inset-0 bg-primary/20 rounded-full blur-lg group-hover:blur-xl transition-all opacity-0 group-hover:opacity-100")} />
                                 {/* Custom SVG Logo: Teal Swirls */}
                                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-sm transition-transform group-hover:scale-105 duration-300">
                                     {/* Top Right Arc */}
@@ -206,7 +248,7 @@ const Navbar = () => {
                                     </defs>
                                 </svg>
                             </div>
-                                <span className={cn("text-lg font-bold font-serif text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors")}>
+                                <span className="text-lg font-bold font-serif text-gray-900 dark:text-slate-100">
                                 a2zconverters
                             </span>
                         </Link>
@@ -219,12 +261,13 @@ const Navbar = () => {
 
                             {/* Search Bar - Visible on Mobile & Desktop */}
                             <div className="relative group flex-1 md:max-w-64 max-w-[200px] md:flex-none">
-                                <div className={cn("flex items-center bg-gray-100/50 border border-gray-200 rounded-full px-3 py-1.5 transition-all w-full search-focus dark:bg-gray-800/50 dark:border-gray-700")}>
-                                    <Search className="w-4 h-4 text-gray-400 mr-2 shrink-0 dark:text-gray-500" />
+                                <div className={cn("flex items-center bg-gray-100/50 border border-gray-200 rounded-full px-3 py-1.5 transition-all w-full search-focus dark:bg-slate-800/50 dark:border-slate-700")}>
+                                    <Search className="w-4 h-4 text-gray-400 mr-2 shrink-0 dark:text-slate-400" />
                                     <input
+                                        ref={searchRef}
                                         type="text"
                                         placeholder="Search..."
-                                        className="bg-transparent border-none outline-none text-sm text-gray-700 w-full placeholder:text-gray-400 min-w-0 dark:text-gray-200 dark:placeholder:text-gray-500"
+                                        className="bg-transparent border-none outline-none text-sm text-gray-700 w-full placeholder:text-gray-400 min-w-0 dark:text-slate-200 dark:placeholder:text-slate-500"
                                                 value={searchQuery}
                                         onChange={(e) => {
                                             setSearchQuery(e.target.value);
@@ -242,7 +285,7 @@ const Navbar = () => {
                                         initial="hidden"
                                         animate="visible"
                                         exit="exit"
-                                        className="absolute top-full right-0 w-full md:w-72 mt-2 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-[60]"
+                                        className="absolute top-full right-0 w-full md:w-72 mt-2 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden z-[60]"
                                     >
                                         <div className="py-2 max-h-80 overflow-y-auto">
                                             {filteredTools.length > 0 ? (
@@ -250,14 +293,14 @@ const Navbar = () => {
                                                     <button
                                                         key={idx}
                                                         onClick={() => handleSearchSelect(tool.path)}
-                                                        className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm text-gray-700 dark:text-gray-300 flex items-center transition-colors border-b border-gray-50 dark:border-gray-800 last:border-0"
+                                                        className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-primary/10 text-sm text-gray-700 dark:text-slate-300 group flex items-center transition-colors border-b border-gray-50 dark:border-slate-800 last:border-0"
                                                     >
-                                                        <Search className="w-3.5 h-3.5 mr-3 text-gray-400 dark:text-gray-500" />
-                                                        <span className="font-medium line-clamp-1">{tool.name}</span>
+                                                        <Search className="w-3.5 h-3.5 mr-3 text-gray-400 dark:text-slate-400" />
+                                                        <span className="font-medium line-clamp-1 dark:group-hover:text-primary">{tool.name}</span>
                                                     </button>
                                                 ))
                                             ) : (
-                                                <div className="px-4 py-4 text-center text-gray-500 dark:text-gray-400 text-xs">No tools found.</div>
+                                                <div className="px-4 py-4 text-center text-gray-500 dark:text-slate-400 text-xs">No tools found.</div>
                                             )}
                                         </div>
                                     </motion.div>
@@ -267,9 +310,9 @@ const Navbar = () => {
                             <div className="relative hidden md:block" ref={profileRef}>
                                 <button
                                     onClick={() => setShowProfile(!showProfile)}
-                                    className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 border border-gray-200 flex items-center justify-center transition-all shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
+                                    className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 border border-gray-200 flex items-center justify-center transition-all shadow-sm group dark:bg-slate-800 dark:hover:bg-primary/10 dark:border-slate-700"
                                 >
-                                    <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                                    <User className="w-4 h-4 text-gray-600 dark:text-slate-400 dark:group-hover:text-primary" />
                                 </button>
                                 {showProfile && (
                                     <motion.div
@@ -277,14 +320,14 @@ const Navbar = () => {
                                         initial="hidden"
                                         animate="visible"
                                         exit="exit"
-                                        className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden z-50"
+                                        className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden z-50"
                                     >
-                                        <div className="p-4 border-b border-gray-50 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50">
-                                            <p className="font-bold text-gray-900 dark:text-gray-100 text-sm">Demo User</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">user@example.com</p>
+                                        <div className="p-4 border-b border-gray-50 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-800/50">
+                                            <p className="font-bold text-gray-900 dark:text-slate-100 text-sm">Demo User</p>
+                                            <p className="text-xs text-gray-500 dark:text-slate-400">user@example.com</p>
                                         </div>
                                         <div className="p-1">
-                                            <button className="w-full flex items-center px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors" onClick={() => setShowSettings(true)}>
+                                            <button className="w-full flex items-center px-3 py-2 text-sm text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-primary/10 rounded-lg transition-colors" onClick={() => setShowSettings(true)}>
                                                 <Settings className="w-3.5 h-3.5 mr-2" /> Settings
                                             </button>
                                             <button className="w-full flex items-center px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">

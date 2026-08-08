@@ -52,17 +52,26 @@ const Premium3DBackground = () => {
             };
         };
 
-        const draw = () => {
+        const isDark = () => document.documentElement.classList.contains('dark');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const renderFrame = () => {
             time += 0.006;
             smoothMouseX += (mouseX - smoothMouseX) * 0.08;
             smoothMouseY += (mouseY - smoothMouseY) * 0.08;
 
             ctx.clearRect(0, 0, width, height);
 
-            // Light Background Gradient
+            // Theme-aware Background Gradient
+            const dark = isDark();
             const bgGrad = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width);
-            bgGrad.addColorStop(0, '#ffffff');
-            bgGrad.addColorStop(1, '#f1f5f9');
+            if (dark) {
+                bgGrad.addColorStop(0, '#020617');
+                bgGrad.addColorStop(1, '#0f172a');
+            } else {
+                bgGrad.addColorStop(0, '#ffffff');
+                bgGrad.addColorStop(1, '#f1f5f9');
+            }
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, width, height);
 
@@ -74,12 +83,11 @@ const Premium3DBackground = () => {
                     let worldZ = (i - ROWS / 2) * GAP;
 
                     // 1. MAGNETIC WARP (X/Z distortion)
-                    // The grid points actually move toward the mouse on the X/Z plane
                     const mDistX = worldX - (smoothMouseX * width * 0.5);
                     const mDistZ = worldZ - (smoothMouseY * height * 0.2);
-                    const distToMouse = Math.sqrt(mDistX * mDistX + mDistZ * mDistZ);
+                    const distToMouse = Math.max(0.0001, Math.sqrt(mDistX * mDistX + mDistZ * mDistZ));
                     const pull = Math.exp(-distToMouse * 0.005) * 40;
-                    
+
                     worldX -= (mDistX / distToMouse) * pull;
                     worldZ -= (mDistZ / distToMouse) * pull;
 
@@ -87,7 +95,7 @@ const Premium3DBackground = () => {
                     const distFromCenter = Math.sqrt(worldX * worldX + worldZ * worldZ);
                     const ripple = Math.sin(distFromCenter * 0.01 - time * 2) * 25;
                     const surface = Math.cos(worldX * 0.01 + time) * 15;
-                    
+
                     // Mouse "dent" or "peak" effect
                     const mouseEffect = Math.exp(-distToMouse * 0.01) * 60 * Math.sin(distToMouse * 0.02 - time * 5);
 
@@ -110,9 +118,10 @@ const Premium3DBackground = () => {
                     const heightFactor = (p1.h + 50) / 100;
                     const alpha = (0.05 + p1.iz * 0.2) * (0.8 + heightFactor * 0.2);
 
-                    // Dynamic Color (Light theme: Cyan to Blue)
+                    // Dynamic Color (Cyan to Blue) — dimmer/softer in dark mode
                     const hue = 190 + heightFactor * 30;
-                    const light = 60 + heightFactor * 20;
+                    const light = dark ? 30 + heightFactor * 18 : 60 + heightFactor * 20;
+                    const alphaScale = dark ? 0.85 : 1;
 
                     ctx.beginPath();
                     ctx.moveTo(p1.x, p1.y);
@@ -121,24 +130,44 @@ const Premium3DBackground = () => {
                     ctx.lineTo(p4.x, p4.y);
                     ctx.closePath();
 
-                    ctx.fillStyle = `hsla(${hue}, 80%, ${light}%, ${alpha})`;
+                    ctx.fillStyle = `hsla(${hue}, 80%, ${light}%, ${alpha * alphaScale})`;
                     ctx.fill();
 
                     // Edge highlight (Subtle wireframe)
-                    ctx.strokeStyle = `hsla(${hue}, 80%, ${light - 10}%, ${alpha * 0.5})`;
+                    ctx.strokeStyle = `hsla(${hue}, 80%, ${light - 10}%, ${alpha * 0.5 * alphaScale})`;
                     ctx.lineWidth = 0.5;
                     ctx.stroke();
                 }
             }
-
-            animationFrameId = requestAnimationFrame(draw);
         };
+
+        const draw = () => {
+            if (prefersReducedMotion) {
+                renderFrame();
+                return;
+            }
+            try {
+                renderFrame();
+            } finally {
+                animationFrameId = requestAnimationFrame(draw);
+            }
+        };
+
+        const handleVisibility = () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationFrameId);
+            } else if (!prefersReducedMotion) {
+                draw();
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
 
         draw();
 
         return () => {
             window.removeEventListener('resize', resize);
             window.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('visibilitychange', handleVisibility);
             cancelAnimationFrame(animationFrameId);
         };
     }, []);
