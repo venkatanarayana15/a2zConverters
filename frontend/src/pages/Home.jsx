@@ -2,7 +2,6 @@ import React from 'react';
 import Hero from '../components/Hero';
 import CategoryGrid from '../components/CategoryGrid';
 import Features from '../components/Features';
-import Footer from '../components/Footer';
 
 const Home = () => {
     return (
@@ -10,7 +9,6 @@ const Home = () => {
             <Hero />
             <CategoryGrid />
             <Features />
-            <Footer />
         </div>
     );
 };

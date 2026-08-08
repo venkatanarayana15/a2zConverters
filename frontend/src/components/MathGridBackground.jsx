@@ -60,9 +60,6 @@ const MathGridBackground = () => {
         const animate = () => {
             ctx.clearRect(0, 0, width, height);
 
-            // Debug log every 100 frames
-            if (Math.random() < 0.01) console.log('Animating MathGrid...', points.length);
-
             // Update points
             points.forEach(p => {
                 // ... physics ...

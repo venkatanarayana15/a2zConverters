@@ -1,13 +1,128 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Zap, Search, FileText, Image as ImageIcon, Sparkles, ChevronDown, User, LogOut, Settings, Home, Menu, X, DollarSign,
-    Files, Scissors, FileMinus, FileOutput, Layout, Scan, Minimize2, Wrench, Eye, FileImage, Presentation,
-    FileSpreadsheet, Globe, FileArchive, RotateCw, Hash, Stamp, Crop, PenSquare, Unlock, Lock, PenTool,
-    PenLine, RefreshCw, Eraser
+    Search, FileText, Image as ImageIcon, Sparkles, ChevronDown, User, LogOut, Settings,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { pdfTools, imageTools } from '../lib/constants';
 import ToolsMegaMenu from './ToolsMegaMenu';
+import SettingsModal from './SettingsModal';
+
+const menuVariants = {
+    hidden: { opacity: 0, y: -8 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeOut' } },
+    exit: { opacity: 0, y: -8, transition: { duration: 0.15, ease: 'easeIn' } },
+};
+
+const backdropVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.15 } },
+    exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+const allTools = [...pdfTools, ...imageTools];
+
+const pdfPaths = new Set(pdfTools.map((t) => t.path));
+const imagePaths = new Set(imageTools.map((t) => t.path));
+
+const navLinks = [
+    { name: 'Home', path: '/' },
+    {
+        name: 'PDF Tools',
+        path: '/pdf-tools',
+        icon: <FileText className="w-4 h-4 mr-2" />,
+        isMegaMenu: true,
+        dropdown: pdfTools
+    },
+    {
+        name: 'Image Tools',
+        path: '/image-tools',
+        icon: <ImageIcon className="w-4 h-4 mr-2" />,
+        isMegaMenu: true,
+        dropdown: imageTools
+    },
+    { name: 'Pricing', path: '/pricing' },
+];
+
+const NavLinks = ({ activeMenu, onMenuChange, pathname }) => {
+    const [hoveredLink, setHoveredLink] = useState(null);
+
+    const [prevPathname, setPrevPathname] = useState(pathname);
+    if (pathname !== prevPathname) {
+        setPrevPathname(pathname);
+        setHoveredLink(null);
+    }
+
+    const isActive = (path) => {
+        if (pathname === path) return true;
+        if (path === '/pdf-tools') return pdfPaths.has(pathname);
+        if (path === '/image-tools') return imagePaths.has(pathname);
+        return false;
+    };
+
+    return (
+        <div className="hidden md:flex items-center space-x-1" onMouseLeave={() => setHoveredLink(null)}>
+            {navLinks.map((link) => {
+                const isMenuOpen = (link.name === 'PDF Tools' && activeMenu === 'pdf') || (link.name === 'Image Tools' && activeMenu === 'image');
+                const isActiveLink = isActive(link.path);
+                const isHovered = hoveredLink === link.name;
+                return (
+                <Link
+                    key={link.name}
+                    to={link.path}
+                    className="relative group px-1"
+                    onMouseEnter={() => {
+                        setHoveredLink(link.name);
+                        if (link.name === 'PDF Tools') onMenuChange('pdf');
+                        else if (link.name === 'Image Tools') onMenuChange('image');
+                        else onMenuChange(null);
+                    }}
+                >
+                    <span
+                        className={cn(
+                            "px-3 py-2 text-sm font-medium transition-all duration-150 flex items-center outline-none cursor-pointer",
+                            ((hoveredLink === link.name) || (activeMenu === 'pdf' && link.name === 'PDF Tools') || (activeMenu === 'image' && link.name === 'Image Tools') || (!hoveredLink && !activeMenu && isActiveLink))
+                                ? "text-primary bg-linear-to-b from-primary/5 to-primary/10 border-b-2 border-primary shadow-[0_4px_15px_-3px_rgba(59,130,246,0.4)] rounded-t-lg"
+                                : "text-gray-600 hover:text-primary hover:border-primary hover:rounded-t-lg rounded-lg border-b-2 border-transparent dark:text-slate-400",
+                            isMenuOpen
+                                ? "dark:bg-none dark:bg-primary/10 dark:rounded-lg dark:border-transparent dark:shadow-none dark:text-primary"
+                                : (isHovered || (!hoveredLink && !activeMenu && isActiveLink))
+                                    ? "dark:bg-none dark:bg-primary/10 dark:rounded-lg dark:border-transparent dark:shadow-none dark:text-primary"
+                                    : "dark:border-transparent"
+                        )}
+                    >
+                        {link.name}
+                        {(link.dropdown || link.isMegaMenu) && (
+                            <ChevronDown className={cn("w-3.5 h-3.5 ml-1.5 opacity-50 transition-transform duration-200", ((activeMenu === 'pdf' && link.name === 'PDF Tools') || (activeMenu === 'image' && link.name === 'Image Tools')) ? "rotate-180" : "")} />
+                        )}
+                    </span>
+
+                    {/* Standard Dropdown (Non-Mega) */}
+                    {link.dropdown && !link.isMegaMenu && (
+                        <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 w-56 z-50">
+                            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden p-1.5 ring-1 ring-black/5">
+                                {link.dropdown.map((item) => (
+                                    <Link
+                                        key={item.name}
+                                        to={item.path}
+                                        className={cn("flex items-center px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-primary/5 transition-all group/item dark:text-slate-400 dark:hover:text-primary dark:hover:bg-primary/10")}
+                                    >
+                                        <div className={cn("w-7 h-7 rounded-md bg-gray-50 text-gray-400 flex items-center justify-center mr-3 group-hover/item:bg-white group-hover/item:text-primary group-hover/item:shadow-sm transition-all dark:bg-slate-800 dark:group-hover/item:bg-slate-700")}>
+                                            <Sparkles className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span className="font-medium">{item.name}</span>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </Link>
+                );
+            })}
+        </div>
+    );
+};
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -16,9 +131,11 @@ const Navbar = () => {
     const [showProfile, setShowProfile] = useState(false);
     const [activeMenu, setActiveMenu] = useState(null);
 
-    // Mobile State
-    const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-    const [mobileView, setMobileView] = useState('all'); // 'all', 'pdf', 'image'
+    // Settings
+    const [showSettings, setShowSettings] = useState(false);
+
+    const profileRef = useRef(null);
+    const searchRef = useRef(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -33,157 +150,74 @@ const Navbar = () => {
     }, []);
 
     // Close menu when route changes
-    useEffect(() => {
+    const [prevPathname, setPrevPathname] = useState(location.pathname);
+    if (location.pathname !== prevPathname) {
+        setPrevPathname(location.pathname);
         setActiveMenu(null);
         setShowResults(false);
         setShowProfile(false);
-        setMobileDrawerOpen(false);
-    }, [location.pathname]);
+    }
+
+    // Close profile dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileRef.current && !profileRef.current.contains(event.target)) {
+                setShowProfile(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Cmd/Ctrl+K to focus search, Esc to close results
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                searchRef.current?.focus();
+                setShowResults(true);
+            }
+            if (e.key === 'Escape') {
+                setShowResults(false);
+                searchRef.current?.blur();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     // PDF Categories with Icons
-    const pdfCategories = [
-        {
-            title: 'Organize',
-            tools: [
-                { icon: Files, name: 'Merge PDF', path: '/merge-pdf', desc: 'Combine PDFs' },
-                { icon: Scissors, name: 'Split PDF', path: '/split-pdf', desc: 'Separate pages' },
-                { icon: FileMinus, name: 'Remove Pages', path: '/remove-pages', desc: 'Delete pages' },
-                { icon: FileOutput, name: 'Extract Pages', path: '/extract-pages', desc: 'Get pages' },
-                { icon: Layout, name: 'Organize PDF', path: '/organize-pdf', desc: 'Reorder pages' },
-                { icon: Scan, name: 'Scan to PDF', path: '/scan-to-pdf', desc: 'Scan docs' },
-            ]
-        },
-        {
-            title: 'Optimize',
-            tools: [
-                { icon: Minimize2, name: 'Compress PDF', path: '/compress-pdf', desc: 'Reduce size' },
-                { icon: Wrench, name: 'Repair PDF', path: '/repair-pdf', desc: 'Fix PDF' },
-                { icon: Eye, name: 'OCR PDF', path: '/ocr-pdf', desc: 'Recognize text' },
-            ]
-        },
-        {
-            title: 'Convert to PDF',
-            tools: [
-                { icon: FileImage, name: 'JPG to PDF', path: '/jpg-to-pdf', desc: 'Images to PDF' },
-                { icon: FileText, name: 'Word to PDF', path: '/word-to-pdf', desc: 'Doc to PDF' },
-                { icon: Presentation, name: 'PPT to PDF', path: '/powerpoint-to-pdf', desc: 'Slides to PDF' },
-                { icon: FileSpreadsheet, name: 'Excel to PDF', path: '/excel-to-pdf', desc: 'Sheets to PDF' },
-                { icon: Globe, name: 'Web to PDF', path: '/web-to-pdf', desc: 'HTML to PDF' },
-            ]
-        },
-        {
-            title: 'Convert from PDF',
-            tools: [
-                { icon: ImageIcon, name: 'PDF to JPG', path: '/pdf-to-jpg', desc: 'Save as Image' },
-                { icon: FileText, name: 'PDF to Word', path: '/pdf-to-word', desc: 'Editable Doc' },
-                { icon: Presentation, name: 'PDF to PPT', path: '/pdf-to-powerpoint', desc: 'Editable Slide' },
-                { icon: FileSpreadsheet, name: 'PDF to Excel', path: '/pdf-to-excel', desc: 'Editable Sheet' },
-                { icon: FileArchive, name: 'PDF to PDF/A', path: '/pdf-to-pdfa', desc: 'Archive Format' },
-            ]
-        },
-        {
-            title: 'Edit & Security',
-            tools: [
-                { icon: RotateCw, name: 'Rotate PDF', path: '/rotate-pdf', desc: 'Turn pages' },
-                { icon: Hash, name: 'Add Page Numbers', path: '/add-page-numbers', desc: 'Numbering' },
-                { icon: Stamp, name: 'Watermark PDF', path: '/watermark-pdf', desc: 'Add overlay' },
-                { icon: PenSquare, name: 'Edit PDF', path: '/edit-pdf', desc: 'Add text' },
-                { icon: Crop, name: 'Crop PDF', path: '/crop-pdf', desc: 'Trim pages' },
-                { icon: Unlock, name: 'Unlock PDF', path: '/unlock-pdf', desc: 'Remove password' },
-                { icon: Lock, name: 'Protect PDF', path: '/protect-pdf', desc: 'Add password' },
-                { icon: PenTool, name: 'eSign PDF', path: '/esign-pdf', desc: 'Sign PDF' },
-                { icon: Eraser, name: 'Redact PDF', path: '/redact-pdf', desc: 'Hide info' },
-            ]
-        },
-        {
-            title: 'Other',
-            tools: [
-                { icon: Globe, name: 'Translate PDF', path: '/translate-pdf', desc: 'Translate text' },
-                { icon: Layout, name: 'Compare PDF', path: '/compare-pdf', desc: 'Side by side' },
-                { icon: FileText, name: 'PDF Validate', path: '/pdf-validate', desc: 'Check standard' },
-            ]
-        }
-    ];
+    // (pdfCategories/imageCategories/allTools live at module scope)
 
-    // Image Categories
-    const imageCategories = [
-        {
-            title: 'Image Tools',
-            tools: [
-                { icon: Crop, name: 'Gov Exam Resizer', path: '/gov-resizer', desc: 'Strict format' },
-                { icon: ImageIcon, name: 'Image Resizer', path: '/image-resizer', desc: 'Resize image' },
-                { icon: PenLine, name: 'Image Editor', path: '/image-editor', desc: 'Filters/Effects' },
-                { icon: RefreshCw, name: 'Image Converter', path: '/image-converter', desc: 'Change format' },
-                { icon: Eraser, name: 'Background Remover', path: '/bg-remover', desc: 'Transparent bg' },
-            ]
-        }
-    ];
-
-    // Derived Flat Lists for Search & Backward Compat
-    const pdfTools = pdfCategories.flatMap(cat => cat.tools);
-    const imageTools = imageCategories.flatMap(cat => cat.tools);
-
-    const allTools = [...pdfTools, ...imageTools];
-    const filteredTools = allTools.filter(tool =>
+    const filteredTools = useMemo(() => allTools.filter(tool =>
         tool.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    ), [searchQuery]);
 
     const handleSearchSelect = (path) => {
         navigate(path);
         setSearchQuery('');
         setShowResults(false);
-        setMobileDrawerOpen(false);
     };
 
-    const navLinks = [
-        { name: 'Home', path: '/' },
-        {
-            name: 'PDF Tools',
-            path: '#',
-            icon: <FileText className="w-4 h-4 mr-2" />,
-            isMegaMenu: true,
-            dropdown: pdfTools
-        },
-        {
-            name: 'Image Tools',
-            path: '#',
-            icon: <ImageIcon className="w-4 h-4 mr-2" />,
-            isMegaMenu: true,
-            dropdown: imageTools
-        },
-        { name: 'Pricing', path: '/pricing' },
-    ];
-
-    const isActive = (path) => location.pathname === path;
-
-    // Helper to open specific mobile view
-    const openMobileView = (view) => {
-        if (mobileDrawerOpen && mobileView === view) {
-            setMobileDrawerOpen(false); // Toggle close if same
-        } else {
-            setMobileView(view);
-            setMobileDrawerOpen(true);
-        }
-    };
+    const handleMegaMenuClose = useCallback(() => setActiveMenu(null), []);
 
     return (
         <>
             <nav
                 className={cn(
-                    "fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b",
-                    scrolled || activeMenu || mobileDrawerOpen
-                        ? "bg-white/95 backdrop-blur-md border-gray-200/50 shadow-sm"
+                    "font-sans fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b",
+                    scrolled || activeMenu
+                        ? "bg-white/95 backdrop-blur-md border-gray-200/50 shadow-sm dark:bg-slate-900/95 dark:border-slate-700/50"
                         : "bg-transparent border-transparent"
                 )}
-                onMouseLeave={() => setActiveMenu(null)}
+                onMouseLeave={() => { setActiveMenu(null); }}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
 
                         {/* Left: Logo */}
                         <Link to="/" className="flex items-center space-x-2.5 group select-none z-50 shrink-0">
                             <div className="relative w-9 h-9">
-                                <div className={cn("absolute inset-0 bg-primary/20 rounded-full blur-lg group-hover:blur-xl transition-all opacity-0 group-hover:opacity-100")} />
                                 {/* Custom SVG Logo: Teal Swirls */}
                                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-sm transition-transform group-hover:scale-105 duration-300">
                                     {/* Top Right Arc */}
@@ -214,7 +248,7 @@ const Navbar = () => {
                                     </defs>
                                 </svg>
                             </div>
-                            <span className={cn("text-lg font-bold text-gray-900 group-hover:text-primary transition-colors")}>
+                                <span className="text-lg font-bold font-serif text-gray-900 dark:text-slate-100">
                                 a2zconverters
                             </span>
                         </Link>
@@ -223,64 +257,18 @@ const Navbar = () => {
                         <div className="flex items-center gap-2 sm:gap-4 z-50 flex-1 justify-end md:justify-end">
 
                             {/* Desktop Navigation */}
-                            <div className="hidden md:flex items-center space-x-1">
-                                {navLinks.map((link) => (
-                                    <Link
-                                        key={link.name}
-                                        to={link.path}
-                                        className="relative group px-1"
-                                        onMouseEnter={() => {
-                                            if (link.name === 'PDF Tools') setActiveMenu('pdf');
-                                            else if (link.name === 'Image Tools') setActiveMenu('image');
-                                            else setActiveMenu(null);
-                                        }}
-                                    >
-                                        <span
-                                            className={cn(
-                                                "px-3 py-2 text-sm font-medium transition-all duration-300 flex items-center outline-none cursor-pointer",
-                                                ((activeMenu === 'pdf' && link.name === 'PDF Tools') || (activeMenu === 'image' && link.name === 'Image Tools') || isActive(link.path))
-                                                    ? "text-primary bg-linear-to-b from-primary/5 to-primary/10 border-b-2 border-primary shadow-[0_4px_15px_-3px_rgba(59,130,246,0.4)] rounded-t-lg"
-                                                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50 rounded-lg border-b-2 border-transparent"
-                                            )}
-                                        >
-                                            {link.name}
-                                            {(link.dropdown || link.isMegaMenu) && (
-                                                <ChevronDown className={cn("w-3.5 h-3.5 ml-1.5 opacity-50 transition-transform duration-200", ((activeMenu === 'pdf' && link.name === 'PDF Tools') || (activeMenu === 'image' && link.name === 'Image Tools')) ? "rotate-180" : "")} />
-                                            )}
-                                        </span>
-
-                                        {/* Standard Dropdown (Non-Mega) */}
-                                        {link.dropdown && !link.isMegaMenu && (
-                                            <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 w-56 z-50">
-                                                <div className="bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden p-1.5 ring-1 ring-black/5">
-                                                    {link.dropdown.map((item) => (
-                                                        <Link
-                                                            key={item.name}
-                                                            to={item.path}
-                                                            className={cn("flex items-center px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:text-primary hover:bg-primary/5 transition-all group/item")}
-                                                        >
-                                                            <div className={cn("w-7 h-7 rounded-md bg-gray-50 text-gray-400 flex items-center justify-center mr-3 group-hover/item:bg-white group-hover/item:text-primary group-hover/item:shadow-sm transition-all")}>
-                                                                <Sparkles className="w-3.5 h-3.5" />
-                                                            </div>
-                                                            <span className="font-medium">{item.name}</span>
-                                                        </Link>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </Link>
-                                ))}
-                            </div>
+                            <NavLinks activeMenu={activeMenu} onMenuChange={setActiveMenu} pathname={location.pathname} />
 
                             {/* Search Bar - Visible on Mobile & Desktop */}
                             <div className="relative group flex-1 md:max-w-64 max-w-[200px] md:flex-none">
-                                <div className={cn("flex items-center bg-gray-100/50 border border-gray-200 rounded-full px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all w-full")}>
-                                    <Search className="w-4 h-4 text-gray-400 mr-2 shrink-0" />
+                                <div className={cn("flex items-center bg-gray-100/50 border border-gray-200 rounded-full px-3 py-1.5 transition-all w-full search-focus dark:bg-slate-800/50 dark:border-slate-700")}>
+                                    <Search className="w-4 h-4 text-gray-400 mr-2 shrink-0 dark:text-slate-400" />
                                     <input
+                                        ref={searchRef}
                                         type="text"
                                         placeholder="Search..."
-                                        className="bg-transparent border-none outline-none text-sm text-gray-700 w-full placeholder:text-gray-400 min-w-0"
-                                        value={searchQuery}
+                                        className="bg-transparent border-none outline-none text-sm text-gray-700 w-full placeholder:text-gray-400 min-w-0 dark:text-slate-200 dark:placeholder:text-slate-500"
+                                                value={searchQuery}
                                         onChange={(e) => {
                                             setSearchQuery(e.target.value);
                                             setShowResults(true);
@@ -290,51 +278,63 @@ const Navbar = () => {
                                     />
                                 </div>
                                 {/* Search Results */}
+                                <AnimatePresence>
                                 {showResults && searchQuery && (
-                                    <div className="absolute top-full right-0 w-full md:w-72 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-[60]">
+                                    <motion.div
+                                        variants={menuVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
+                                        className="absolute top-full right-0 w-full md:w-72 mt-2 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden z-[60]"
+                                    >
                                         <div className="py-2 max-h-80 overflow-y-auto">
                                             {filteredTools.length > 0 ? (
                                                 filteredTools.map((tool, idx) => (
                                                     <button
                                                         key={idx}
                                                         onClick={() => handleSearchSelect(tool.path)}
-                                                        className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-sm text-gray-700 flex items-center transition-colors border-b border-gray-50 last:border-0"
+                                                        className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-primary/10 text-sm text-gray-700 dark:text-slate-300 group flex items-center transition-colors border-b border-gray-50 dark:border-slate-800 last:border-0"
                                                     >
-                                                        <Search className="w-3.5 h-3.5 mr-3 text-gray-400" />
-                                                        <span className="font-medium line-clamp-1">{tool.name}</span>
+                                                        <Search className="w-3.5 h-3.5 mr-3 text-gray-400 dark:text-slate-400" />
+                                                        <span className="font-medium line-clamp-1 dark:group-hover:text-primary">{tool.name}</span>
                                                     </button>
                                                 ))
                                             ) : (
-                                                <div className="px-4 py-4 text-center text-gray-500 text-xs">No tools found.</div>
+                                                <div className="px-4 py-4 text-center text-gray-500 dark:text-slate-400 text-xs">No tools found.</div>
                                             )}
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 )}
+                                </AnimatePresence>
                             </div>
-
-                            {/* Profile Toggle - NOW VISIBLE ON MOBILE */}
-                            <div className="relative hidden md:block">
+                            <div className="relative hidden md:block" ref={profileRef}>
                                 <button
                                     onClick={() => setShowProfile(!showProfile)}
-                                    className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 border border-gray-200 flex items-center justify-center transition-all shadow-sm"
+                                    className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 border border-gray-200 flex items-center justify-center transition-all shadow-sm group dark:bg-slate-800 dark:hover:bg-primary/10 dark:border-slate-700"
                                 >
-                                    <User className="w-4 h-4 text-gray-600" />
+                                    <User className="w-4 h-4 text-gray-600 dark:text-slate-400 dark:group-hover:text-primary" />
                                 </button>
                                 {showProfile && (
-                                    <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-slide-up-sm">
-                                        <div className="p-4 border-b border-gray-50 bg-gray-50/50">
-                                            <p className="font-bold text-gray-900 text-sm">Demo User</p>
-                                            <p className="text-xs text-gray-500">user@example.com</p>
+                                    <motion.div
+                                        variants={menuVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
+                                        className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden z-50"
+                                    >
+                                        <div className="p-4 border-b border-gray-50 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-800/50">
+                                            <p className="font-bold text-gray-900 dark:text-slate-100 text-sm">Demo User</p>
+                                            <p className="text-xs text-gray-500 dark:text-slate-400">user@example.com</p>
                                         </div>
                                         <div className="p-1">
-                                            <button className="w-full flex items-center px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                                            <button className="w-full flex items-center px-3 py-2 text-sm text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-primary/10 rounded-lg transition-colors" onClick={() => setShowSettings(true)}>
                                                 <Settings className="w-3.5 h-3.5 mr-2" /> Settings
                                             </button>
-                                            <button className="w-full flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                            <button className="w-full flex items-center px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
                                                 <LogOut className="w-3.5 h-3.5 mr-2" /> Sign Out
                                             </button>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 )}
                             </div>
                         </div>
@@ -342,158 +342,41 @@ const Navbar = () => {
                 </div>
 
                 {/* Mega Menu Overlay (Desktop Only) */}
+                <AnimatePresence>
                 {(activeMenu === 'pdf' || activeMenu === 'image') && (
-                    <div
-                        className="absolute top-full left-0 w-full z-40 animate-slide-up-sm hidden md:block"
+                    <motion.div
+                        variants={menuVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="absolute top-full left-0 w-full z-40 hidden md:block"
                         onMouseEnter={() => setActiveMenu(activeMenu)}
                         onMouseLeave={() => setActiveMenu(null)}
                     >
                         <ToolsMegaMenu
                             activeSection={activeMenu}
-                            onClose={() => setActiveMenu(null)}
+                            onClose={handleMegaMenuClose}
                         />
-                    </div>
+                    </motion.div>
                 )}
+                </AnimatePresence>
             </nav>
 
-            {/* Bottom Navigation (Mobile Only) */}
-            <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-[60] pb-safe">
-                <div className="grid grid-cols-5 gap-1 p-2">
-                    <Link
-                        to="/"
-                        className={cn("flex flex-col items-center justify-center p-2 rounded-lg text-xs font-medium", location.pathname === '/' ? "text-primary bg-primary/5" : "text-gray-500 hover:text-gray-900")}
-                    >
-                        <Home className="w-5 h-5 mb-1" />
-                        Home
-                    </Link>
-                    <button
-                        onClick={() => openMobileView('pdf')}
-                        className={cn("flex flex-col items-center justify-center p-2 rounded-lg text-xs font-medium", mobileDrawerOpen && mobileView === 'pdf' ? "text-red-500 bg-red-50" : "text-gray-500 hover:text-gray-900")}
-                    >
-                        <FileText className="w-5 h-5 mb-1" />
-                        PDF Tools
-                    </button>
-                    <button
-                        onClick={() => openMobileView('image')}
-                        className={cn("flex flex-col items-center justify-center p-2 rounded-lg text-xs font-medium", mobileDrawerOpen && mobileView === 'image' ? "text-purple-500 bg-purple-50" : "text-gray-500 hover:text-gray-900")}
-                    >
-                        <ImageIcon className="w-5 h-5 mb-1" />
-                        Image Tools
-                    </button>
-                    <Link
-                        to="/pricing"
-                        className={cn("flex flex-col items-center justify-center p-2 rounded-lg text-xs font-medium", location.pathname === '/pricing' ? "text-green-600 bg-green-50" : "text-gray-500 hover:text-gray-900")}
-                    >
-                        <DollarSign className="w-5 h-5 mb-1" />
-                        Pricing
-                    </Link>
-                    <button
-                        onClick={() => openMobileView('profile')}
-                        className={cn("flex flex-col items-center justify-center p-2 rounded-lg text-xs font-medium", mobileDrawerOpen && mobileView === 'profile' ? "text-blue-500 bg-blue-50" : "text-gray-500 hover:text-gray-900")}
-                    >
-                        <User className="w-5 h-5 mb-1" />
-                        Profile
-                    </button>
-                </div>
-            </div>
-
-            {/* Mobile Bottom Sheet/Drawer */}
-            {mobileDrawerOpen && (
-                <div className="md:hidden fixed inset-x-0 bottom-[64px] top-16 bg-white z-[55] overflow-y-auto animate-slide-up bg-white/95 backdrop-blur-xl">
-                    <div className="p-4 safe-area-bottom">
-                        {/* View: PDF Tools */}
-                        {mobileView === 'pdf' && (
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur z-10 pb-2 border-b border-gray-100">
-                                    <h3 className="text-lg font-bold text-gray-900 flex items-center">
-                                        <FileText className="w-5 h-5 mr-2 text-red-500" /> All PDF Tools
-                                    </h3>
-                                    <button onClick={() => setMobileDrawerOpen(false)} className="p-1 rounded-full bg-gray-100"><X className="w-4 h-4" /></button>
-                                </div>
-                                {pdfCategories.map((category, catIdx) => (
-                                    <div key={catIdx} className="space-y-3 pb-4">
-                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest pl-1 pt-2">{category.title}</h4>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            {category.tools.map((tool, idx) => (
-                                                <Link
-                                                    key={idx}
-                                                    to={tool.path}
-                                                    onClick={() => setMobileDrawerOpen(false)}
-                                                    className="flex flex-col p-3 bg-white border border-gray-100 rounded-xl shadow-sm hover:border-red-100 hover:shadow-md transition-all active:scale-[0.98]"
-                                                >
-                                                    <div className="p-2 rounded-lg bg-red-50 w-fit mb-2">
-                                                        <tool.icon className="w-5 h-5 text-red-500" />
-                                                    </div>
-                                                    <span className="text-sm font-semibold text-gray-800 line-clamp-1">{tool.name}</span>
-                                                    <span className="text-[10px] text-gray-500 line-clamp-1 mt-0.5">{tool.desc}</span>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-                                <div className="h-12" /> {/* Extra spacing at bottom */}
-                            </div>
-                        )}
-
-                        {/* View: Image Tools */}
-                        {mobileView === 'image' && (
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur z-10 pb-2 border-b border-gray-100">
-                                    <h3 className="text-lg font-bold text-gray-900 flex items-center">
-                                        <ImageIcon className="w-5 h-5 mr-2 text-purple-500" /> Image Tools
-                                    </h3>
-                                    <button onClick={() => setMobileDrawerOpen(false)} className="p-1 rounded-full bg-gray-100"><X className="w-4 h-4" /></button>
-                                </div>
-
-                                {imageCategories.map((category, catIdx) => (
-                                    <div key={catIdx} className="space-y-3 pb-4">
-                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest pl-1 pt-2">{category.title}</h4>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            {category.tools.map((tool, idx) => (
-                                                <Link
-                                                    key={idx}
-                                                    to={tool.path}
-                                                    onClick={() => setMobileDrawerOpen(false)}
-                                                    className="flex flex-col p-3 bg-white border border-gray-100 rounded-xl shadow-sm hover:border-purple-100 hover:shadow-md transition-all active:scale-[0.98]"
-                                                >
-                                                    <div className="p-2 rounded-lg bg-purple-50 w-fit mb-2">
-                                                        <tool.icon className="w-5 h-5 text-purple-500" />
-                                                    </div>
-                                                    <span className="text-sm font-semibold text-gray-800 line-clamp-1">{tool.name}</span>
-                                                    <span className="text-[10px] text-gray-500 line-clamp-1 mt-0.5">{tool.desc}</span>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-                                <div className="h-12" /> {/* Extra spacing at bottom */}
-                            </div>
-                        )}
-
-                        {/* View: Menu */}
-                        {mobileView === 'profile' && (
-                            <div className="space-y-2 pb-8">
-                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Account & Settings</h3>
-                                <Link to="/profile" className="flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-4 border border-gray-100">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">D</div>
-                                        <div>
-                                            <p className="font-bold text-gray-900">Demo User</p>
-                                            <p className="text-xs text-gray-500">Free Plan</p>
-                                        </div>
-                                    </div>
-                                </Link>
-                                <button className="w-full flex items-center p-4 text-gray-700 hover:bg-gray-50 rounded-xl font-medium border border-gray-100 bg-white mb-2">
-                                    <Settings className="w-5 h-5 mr-3 text-gray-400" /> Settings
-                                </button>
-                                <button className="w-full flex items-center p-4 text-red-600 hover:bg-red-50 rounded-xl font-medium border border-red-100 bg-white">
-                                    <LogOut className="w-5 h-5 mr-3" /> Sign Out
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
+            {/* Backdrop overlay when mega menu is open */}
+            <AnimatePresence>
+            {activeMenu && (
+                <motion.div
+                    variants={backdropVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="fixed inset-0 bg-black/10 z-30 hidden md:block"
+                    onMouseEnter={() => setActiveMenu(null)}
+                />
             )}
+            </AnimatePresence>
+
+            <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
         </>
     );
 };
