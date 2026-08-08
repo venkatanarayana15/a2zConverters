@@ -27,7 +27,7 @@ const WordToPDF = () => {
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
             <div className="max-w-[96rem] mx-auto">
-                <div className="mb-6">
+                <div className="pl-10 sm:pl-12 lg:pl-14 mb-8">
                     <BackLink />
                 </div>
                 <div className="text-center mb-10">
@@ -35,32 +35,32 @@ const WordToPDF = () => {
                         <FileText className="w-4 h-4 mr-2" />
                         Word to PDF
                     </div>
-                    <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                    <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-slate-100">
                         Convert Word to PDF
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-gray-600 dark:text-slate-400">
                         DOC and DOCX to PDF. Easy, fast, and free.
                     </p>
                 </div>
 
-                <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-10 text-center dark:bg-gray-900 dark:border-gray-800">
+                <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-10 text-center dark:bg-slate-900 dark:border-slate-800">
                     {!file ? (
-                        <div className="border-2 border-dashed border-gray-200 rounded-xl p-16 hover:bg-gray-50 transition-colors dark:border-gray-700 dark:hover:bg-gray-800">
+                        <div className="border-2 border-dashed border-gray-200 rounded-xl p-16 hover:bg-gray-50 transition-colors dark:border-slate-700 dark:hover:bg-primary/5 dark:hover:border-primary/30">
                             <input type="file" accept=".doc,.docx" onChange={handleFileChange} className="hidden" id="word-upload" />
                             <label htmlFor="word-upload" className="cursor-pointer">
                                 <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 dark:bg-blue-900/20 dark:text-blue-400">
                                     <FileText className="w-10 h-10" />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Select WORD file</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">or drop DOC/DOCX here</p>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2 dark:text-slate-100">Select WORD file</h3>
+                                <p className="text-sm text-gray-500 dark:text-slate-400">or drop DOC/DOCX here</p>
                             </label>
                         </div>
                     ) : (
                         <div className="py-10">
                             <div className="mb-8">
                                 <FileText className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-                                <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">{file.name}</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{(file.size / 1024).toFixed(2)} KB</p>
+                                <h3 className="text-xl font-medium text-gray-900 dark:text-slate-100">{file.name}</h3>
+                                <p className="text-sm text-gray-500 dark:text-slate-400">{(file.size / 1024).toFixed(2)} KB</p>
                             </div>
 
                             {!isDone ? (
@@ -73,10 +73,10 @@ const WordToPDF = () => {
                                         <CheckCircle className="w-6 h-6" />
                                         <span className="font-bold text-lg">Conversion Successful!</span>
                                     </div>
-                                    <PhysicsButton className="bg-gray-900 text-white hover:bg-black px-12 w-full sm:w-auto">
+                                    <PhysicsButton className="bg-gray-900 text-white hover:bg-black dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white px-12 w-full sm:w-auto">
                                         <Download className="w-4 h-4 mr-2" /> Download PDF
                                     </PhysicsButton>
-                                    <button onClick={() => setFile(null)} className="block mt-4 mx-auto text-sm text-gray-500 hover:text-gray-900 underline dark:text-gray-400 dark:hover:text-gray-100">
+                                    <button onClick={() => setFile(null)} className="block mt-4 mx-auto text-sm text-gray-500 hover:text-gray-900 underline dark:text-slate-400 dark:hover:text-slate-100">
                                         Convert another file
                                     </button>
                                 </div>

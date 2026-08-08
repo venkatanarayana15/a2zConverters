@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
 const tones = {
-    gray: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-500 dark:text-gray-400' },
+    gray: { bg: 'bg-gray-100 dark:bg-slate-800', text: 'text-gray-500 dark:text-slate-400' },
     teal: { bg: 'bg-teal-50 dark:bg-teal-900/20', text: 'text-teal-600 dark:text-teal-400' },
     blue: { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400' },
     red: { bg: 'bg-red-50 dark:bg-red-900/20', text: 'text-red-600 dark:text-red-400' },
@@ -40,7 +40,7 @@ const StateScreen = ({
             )}
         >
             {badge && (
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 mb-6">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400 mb-6">
                     {badge}
                 </span>
             )}
@@ -49,9 +49,9 @@ const StateScreen = ({
                 <Icon className={cn('w-10 h-10', toneClasses.text, iconClassName)} />
             </div>
 
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{title}</h3>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">{title}</h3>
             {description && (
-                <p className="text-gray-500 dark:text-gray-400 text-sm max-w-sm leading-relaxed mb-6">{description}</p>
+                <p className="text-gray-500 dark:text-slate-400 text-sm max-w-sm leading-relaxed mb-6">{description}</p>
             )}
 
             {children}

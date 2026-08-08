@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Gauge, Download } from 'lucide-react';
+import { Gauge } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { loadPdfDoc, renderPdfPageToCanvas, downloadBlob, stripExtension, formatBytes } from '../../../lib/pdfUtils';
 import ToolLayout from '../../../components/ui/ToolLayout';
 import ToolDropzone from '../../../components/ui/ToolDropzone';
 import ProcessButton from '../../../components/ui/ProcessButton';
+import InlineNotice from '../../../components/ui/InlineNotice';
 
 const CompressPDF = () => {
     const [file, setFile] = useState([]);
@@ -57,23 +58,23 @@ const CompressPDF = () => {
 
     return (
         <ToolLayout icon={Gauge} badge="Convert from pdf" title="Compress PDF" subtitle="Shrink your PDF file size while keeping it readable." accent="teal">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {file[0] && (
                     <>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Compression level</label>
-                            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-gray-800">
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Compression level</label>
+                            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-slate-800">
                                 <button
                                     onClick={() => setLevel('fast')}
-                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${level === 'fast' ? 'bg-white shadow-sm text-teal-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${level === 'fast' ? 'bg-white shadow-sm text-teal-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                 >
                                     Fast · keep quality
                                 </button>
                                 <button
                                     onClick={() => setLevel('strong')}
-                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${level === 'strong' ? 'bg-white shadow-sm text-teal-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${level === 'strong' ? 'bg-white shadow-sm text-teal-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                 >
                                     Strong · smallest size
                                 </button>
@@ -82,31 +83,30 @@ const CompressPDF = () => {
 
                         {level === 'strong' && (
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Quality</label>
-                                <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-gray-800">
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Quality</label>
+                                <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-slate-800">
                                     {['low', 'medium', 'high'].map((q) => (
                                         <button
                                             key={q}
                                             onClick={() => setQuality(q)}
-                                            className={`py-2 rounded-lg text-sm font-medium capitalize transition-all ${quality === q ? 'bg-white shadow-sm text-teal-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                            className={`py-2 rounded-lg text-sm font-medium capitalize transition-all ${quality === q ? 'bg-white shadow-sm text-teal-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                         >
                                             {q}
                                         </button>
                                     ))}
                                 </div>
-                                <p className="text-xs text-gray-400 mt-2 dark:text-gray-500">Strong mode re-renders pages as images — great for scans, but text becomes non-selectable.</p>
+                                <p className="text-xs text-gray-400 mt-2 dark:text-slate-400">Strong mode re-renders pages as images — great for scans, but text becomes non-selectable.</p>
                             </div>
                         )}
                     </>
                 )}
 
-                {error && <p className="p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">{error}</p>}
+                {error && <InlineNotice variant="error" title="Compression failed">{error}</InlineNotice>}
 
                 {result && (
-                    <div className="p-4 rounded-xl bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800">
-                        <p className="font-bold text-green-700 dark:text-green-400 flex items-center gap-2"><Download className="w-4 h-4" /> Compressed</p>
-                        <p className="text-sm text-green-600 dark:text-green-500">{formatBytes(result.original)} → {formatBytes(result.size)} ({savings}% smaller)</p>
-                    </div>
+                    <InlineNotice variant="success" title="Compressed">
+                        {formatBytes(result.original)} → {formatBytes(result.size)} ({savings}% smaller)
+                    </InlineNotice>
                 )}
 
                 <ProcessButton
@@ -114,7 +114,7 @@ const CompressPDF = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Compressing PDF..."
-                    accent="from-teal-500 to-cyan-600 shadow-teal-200 hover:shadow-teal-300"
+                    accent="from-teal-500 to-cyan-600 shadow-teal-200 dark:shadow-teal-900/40 hover:shadow-teal-300 dark:hover:shadow-teal-900/60"
                 >
                     <Gauge className="w-5 h-5 mr-2" /> Compress PDF
                 </ProcessButton>

@@ -44,23 +44,23 @@ const RotatePDF = () => {
 
     return (
         <ToolLayout icon={RotateCw} badge="Edit & Security" title="Rotate PDF" subtitle="Rotate every page in your PDF by 90°, 180° or 270°." accent="blue">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {file[0] && (
                     <>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Direction</label>
-                            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-gray-800">
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Direction</label>
+                            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-slate-800">
                                 <button
                                     onClick={() => setDirection('clockwise')}
-                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${direction === 'clockwise' ? 'bg-white shadow-sm text-blue-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${direction === 'clockwise' ? 'bg-white shadow-sm text-blue-600 dark:bg-slate-700 dark:text-primary' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                 >
                                     Clockwise
                                 </button>
                                 <button
                                     onClick={() => setDirection('counterclockwise')}
-                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${direction === 'counterclockwise' ? 'bg-white shadow-sm text-blue-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${direction === 'counterclockwise' ? 'bg-white shadow-sm text-blue-600 dark:bg-slate-700 dark:text-primary' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                 >
                                     Counter-clockwise
                                 </button>
@@ -68,13 +68,13 @@ const RotatePDF = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Angle</label>
-                            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-gray-800">
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Angle</label>
+                            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-slate-800">
                                 {options.map((opt) => (
                                     <button
                                         key={opt.value}
                                         onClick={() => setRotation(opt.value)}
-                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${rotation === opt.value ? 'bg-white shadow-sm text-blue-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${rotation === opt.value ? 'bg-white shadow-sm text-blue-600 dark:bg-slate-700 dark:text-primary' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                     >
                                         {opt.label}
                                     </button>
@@ -98,7 +98,7 @@ const RotatePDF = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Rotating PDF..."
-                    accent="from-blue-600 to-indigo-600 shadow-blue-200 hover:shadow-blue-300"
+                    accent="from-blue-600 to-indigo-600 shadow-blue-200 dark:shadow-blue-900/40 hover:shadow-blue-300 dark:hover:shadow-blue-900/60"
                 >
                     <RotateCw className="w-5 h-5 mr-2" /> Rotate PDF
                 </ProcessButton>

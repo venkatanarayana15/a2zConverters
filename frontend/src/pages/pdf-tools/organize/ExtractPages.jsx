@@ -77,24 +77,24 @@ const ExtractPages = () => {
 
     return (
         <ToolLayout icon={FileOutput} badge="Organize" title="Extract Pages" subtitle="Pull specific pages out of a PDF and save them as a new document." accent="red">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={handleFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {pageCount !== null && (
-                    <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
-                        This PDF has <span className="font-bold text-gray-900 dark:text-gray-100">{pageCount}</span> pages.
+                    <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-600 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">
+                        This PDF has <span className="font-bold text-gray-900 dark:text-slate-100">{pageCount}</span> pages.
                     </div>
                 )}
 
                 {pageCount !== null && (
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Pages to Extract</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Pages to Extract</label>
                         <input
                             type="text"
                             value={rangesInput}
                             onChange={(e) => setRangesInput(e.target.value)}
                             placeholder={`e.g. 1-3, 5, 8-${pageCount}`}
-                            className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                            className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                         />
                     </div>
                 )}
@@ -113,7 +113,7 @@ const ExtractPages = () => {
                     disabled={!file[0] || pageCount === null || !rangesInput.trim()}
                     isProcessing={isProcessing}
                     processingText="Extracting pages..."
-                    accent="from-red-500 to-rose-500 shadow-red-200 hover:shadow-red-300"
+                    accent="from-red-500 to-rose-500 shadow-red-200 dark:shadow-red-900/40 hover:shadow-red-300 dark:hover:shadow-red-900/60"
                 >
                     <FileOutput className="w-5 h-5 mr-2" /> Extract Pages
                 </ProcessButton>

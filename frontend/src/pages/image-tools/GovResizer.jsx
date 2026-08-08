@@ -102,7 +102,7 @@ const GovResizer = () => {
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
             <div className="max-w-[96rem] mx-auto">
-                <div className="mb-6">
+                <div className="pl-10 sm:pl-12 lg:pl-14 mb-8">
                     <BackLink />
                 </div>
                 <div className="text-center mb-12 animate-float">
@@ -110,10 +110,10 @@ const GovResizer = () => {
                         <Crop className="w-4 h-4 mr-2" />
                         Official Exam Compliant
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-slate-100">
                         Govt. Exam Photo Resizer
                     </h1>
-                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-400">
+                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-slate-400">
                         Perfectly resize photos and signatures for UPSC, SSC, TNPSC, IBPS, GATE, and other official exams.
                         Automatic compliance with size and dimension rules.
                     </p>
@@ -122,14 +122,14 @@ const GovResizer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Upload Section */}
                     <div className="glass-card p-8 rounded-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-100 rounded-full blur-3xl -z-10 transition-all group-hover:bg-orange-200" />
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-100 rounded-full blur-3xl -z-10 transition-all group-hover:bg-orange-200 dark:bg-orange-900/15 dark:group-hover:bg-orange-900/25" />
 
-                        <h2 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-gray-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-slate-100">
                             <Upload className="w-5 h-5 mr-2 text-orange-500" />
                             1. Upload Image
                         </h2>
 
-                        <div className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${file ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' : 'border-gray-300 hover:border-orange-400 hover:bg-orange-50/50 dark:border-gray-600 dark:hover:bg-orange-900/10'}`}>
+                        <div className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${file ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' : 'border-gray-300 hover:border-orange-400 hover:bg-orange-50/50 dark:border-slate-600 dark:hover:bg-orange-900/10'}`}>
                             <input
                                 type="file"
                                 id="file-upload"
@@ -147,11 +147,11 @@ const GovResizer = () => {
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="w-16 h-16 bg-white border border-gray-100 shadow-sm rounded-full flex items-center justify-center mb-4 text-gray-400 group-hover:scale-110 group-hover:text-orange-500 transition-all duration-300 dark:bg-gray-800 dark:border-gray-700">
+                                        <div className="w-16 h-16 bg-white border border-gray-100 shadow-sm rounded-full flex items-center justify-center mb-4 text-gray-400 group-hover:scale-110 group-hover:text-orange-500 transition-all duration-300 dark:bg-slate-800 dark:border-slate-700">
                                             <Upload className="w-8 h-8" />
                                         </div>
-                                        <span className="text-gray-900 font-medium dark:text-gray-100">Click to upload photo</span>
-                                        <span className="text-sm text-gray-500 mt-2 dark:text-gray-400">JPG, PNG up to 5MB</span>
+                                        <span className="text-gray-900 font-medium dark:text-slate-100">Click to upload photo</span>
+                                        <span className="text-sm text-gray-500 mt-2 dark:text-slate-400">JPG, PNG up to 5MB</span>
                                     </>
                                 )}
                             </label>
@@ -162,22 +162,22 @@ const GovResizer = () => {
                     <div className="glass-card p-8 rounded-2xl relative overflow-hidden">
                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-sky-100 rounded-full blur-3xl -z-10" />
 
-                        <h2 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-gray-100">
+                        <h2 className="text-xl font-bold mb-6 flex items-center text-gray-900 dark:text-slate-100">
                             <Crop className="w-5 h-5 mr-2 text-sky-500" />
                             2. Resize Settings
                         </h2>
 
                         <div className="space-y-6">
                             <div ref={dropdownRef} className="relative">
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Select Exam / Purpose</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Select Exam / Purpose</label>
 
                                 {/* Custom Dropdown Trigger */}
                                 <button
                                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                    className="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-left text-gray-900 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all flex justify-between items-center shadow-sm hover:bg-white dark:bg-gray-800/80 dark:border-gray-700 dark:text-gray-100 dark:hover:bg-gray-700"
+                                    className="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-left text-gray-900 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all flex justify-between items-center shadow-sm hover:bg-white dark:bg-slate-800/80 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-primary/10 dark:hover:border-primary/30"
                                 >
                                     <span className="truncate mr-2">{selectedExamLabel}</span>
-                                    <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''} dark:text-gray-400`} />
+                                    <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''} dark:text-slate-400`} />
                                 </button>
 
                                 {/* Dropdown Menu */}
@@ -188,17 +188,17 @@ const GovResizer = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -8 }}
                                         transition={{ duration: 0.15 }}
-                                        className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-20 dark:bg-gray-800 dark:border-gray-700"
+                                        className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-20 dark:bg-slate-800 dark:border-slate-700"
                                     >
-                                        <div className="p-2 border-b border-gray-50 sticky top-0 bg-white z-10 dark:bg-gray-800 dark:border-gray-700">
+                                        <div className="p-2 border-b border-gray-50 sticky top-0 bg-white z-10 dark:bg-slate-800 dark:border-slate-700">
                                             <div className="relative">
-                                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 dark:text-gray-500" />
+                                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 dark:text-slate-400" />
                                                 <input
                                                     type="text"
                                                     placeholder="Search exams..."
                                                     value={searchTerm}
                                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-sky-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-sky-500 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100"
                                                     autoFocus
                                                 />
                                             </div>
@@ -209,14 +209,14 @@ const GovResizer = () => {
                                                     <button
                                                         key={key}
                                                         onClick={() => handleExamSelect(key)}
-                                                        className={`w-full text-left px-4 py-3 text-sm hover:bg-sky-50 transition-colors flex items-center justify-between dark:hover:bg-sky-900/20 ${selectedExam === key ? 'bg-sky-50 text-sky-700 font-medium dark:bg-sky-900/20 dark:text-sky-400' : 'text-gray-700 dark:text-gray-300'}`}
+                                                        className={`w-full text-left px-4 py-3 text-sm hover:bg-sky-50 transition-colors flex items-center justify-between dark:hover:bg-sky-900/20 ${selectedExam === key ? 'bg-sky-50 text-sky-700 font-medium dark:bg-sky-900/20 dark:text-sky-400' : 'text-gray-700 dark:text-slate-300'}`}
                                                     >
                                                         {preset.label}
                                                         {selectedExam === key && <Check className="w-4 h-4 text-sky-600" />}
                                                     </button>
                                                 ))
                                             ) : (
-                                                <div className="px-4 py-3 text-sm text-gray-500 text-center dark:text-gray-400">
+                                                <div className="px-4 py-3 text-sm text-gray-500 text-center dark:text-slate-400">
                                                     No exams found
                                                 </div>
                                             )}
@@ -228,15 +228,15 @@ const GovResizer = () => {
 
                             {/* Unit Selection */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Dimensions Unit</label>
-                                <div className="flex space-x-4 bg-gray-50 p-1.5 rounded-xl border border-gray-200 w-fit dark:bg-gray-800 dark:border-gray-700">
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Dimensions Unit</label>
+                                <div className="flex space-x-4 bg-gray-50 p-1.5 rounded-xl border border-gray-200 w-fit dark:bg-slate-800 dark:border-slate-700">
                                     {['px', 'cm', 'inch'].map((u) => (
                                         <button
                                             key={u}
                                             onClick={() => setUnit(u)}
                                             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${unit === u
-                                                    ? 'bg-white text-sky-600 shadow-sm ring-1 ring-gray-100 dark:bg-gray-700 dark:ring-gray-600'
-                                                    : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+                                                    ? 'bg-white text-sky-600 shadow-sm ring-1 ring-gray-100 dark:bg-slate-700 dark:ring-slate-600'
+                                                    : 'text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100'
                                                 }`}
                                         >
                                             {u === 'px' ? 'Pixels' : u === 'cm' ? 'CM' : 'Inches'}
@@ -247,22 +247,22 @@ const GovResizer = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Width ({unit})</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Width ({unit})</label>
                                     <input
                                         type="number"
                                         value={width}
                                         onChange={(e) => setWidth(e.target.value)}
-                                        className="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-sky-500 transition-all dark:bg-gray-800/80 dark:border-gray-700 dark:text-gray-100"
+                                        className="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-sky-500 transition-all dark:bg-slate-800/80 dark:border-slate-700 dark:text-slate-100"
                                         placeholder={unit === 'px' ? "e.g. 350" : unit === 'cm' ? "e.g. 3.5" : "e.g. 1.38"}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Height ({unit})</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Height ({unit})</label>
                                     <input
                                         type="number"
                                         value={height}
                                         onChange={(e) => setHeight(e.target.value)}
-                                        className="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-sky-500 transition-all dark:bg-gray-800/80 dark:border-gray-700 dark:text-gray-100"
+                                        className="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-sky-500 transition-all dark:bg-slate-800/80 dark:border-slate-700 dark:text-slate-100"
                                         placeholder={unit === 'px' ? "e.g. 450" : unit === 'cm' ? "e.g. 4.5" : "e.g. 1.77"}
                                     />
                                 </div>
@@ -270,7 +270,7 @@ const GovResizer = () => {
 
                             <div>
                                 <div className="flex justify-between mb-2">
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Max File Size</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Max File Size</label>
                                     <span className="text-sm font-bold text-sky-600">{maxSize} KB</span>
                                 </div>
                                 <input
@@ -280,9 +280,9 @@ const GovResizer = () => {
                                     step="5"
                                     value={maxSize}
                                     onChange={(e) => setMaxSize(e.target.value)}
-                                    className="w-full accent-sky-500 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                                    className="w-full accent-sky-500 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700"
                                 />
-                                <div className="flex justify-between text-xs text-gray-500 mt-2 dark:text-gray-400">
+                                <div className="flex justify-between text-xs text-gray-500 mt-2 dark:text-slate-400">
                                     <span>10KB</span>
                                     <span>Max 500KB</span>
                                 </div>
@@ -291,8 +291,8 @@ const GovResizer = () => {
                             <button
                                 disabled={!file}
                                 className={`w-full py-4 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file
-                                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-orange-200 hover:shadow-orange-300 hover:scale-[1.02]'
-                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200 dark:bg-gray-800 dark:border-gray-700'
+                                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-orange-200 dark:shadow-orange-900/40 hover:shadow-orange-300 dark:hover:shadow-orange-900/60 hover:scale-[1.02]'
+                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200 dark:bg-slate-800 dark:border-slate-700'
                                     }`}
                             >
                                 {file ? <Download className="w-5 h-5 mr-2" /> : <Upload className="w-5 h-5 mr-2" />}
@@ -304,26 +304,26 @@ const GovResizer = () => {
 
                 {/* Info Section */}
                 <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm text-center hover:bg-white/80 transition-colors dark:bg-gray-800/60 dark:border-gray-700 dark:hover:bg-gray-800/80">
+                    <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm text-center hover:bg-white/80 transition-colors dark:bg-slate-800/60 dark:border-slate-700 dark:hover:bg-primary/10">
                         <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto mb-4 dark:bg-purple-900/20 dark:text-purple-400">
                             <AlertCircle className="w-6 h-6" />
                         </div>
-                        <h3 className="font-bold text-gray-900 mb-2 dark:text-gray-100">Privacy First</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Images are processed in your browser. We never store your personal datas.</p>
+                        <h3 className="font-bold text-gray-900 mb-2 dark:text-slate-100">Privacy First</h3>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">Images are processed in your browser. We never store your personal datas.</p>
                     </div>
-                    <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm text-center hover:bg-white/80 transition-colors dark:bg-gray-800/60 dark:border-gray-700 dark:hover:bg-gray-800/80">
+                    <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm text-center hover:bg-white/80 transition-colors dark:bg-slate-800/60 dark:border-slate-700 dark:hover:bg-primary/10">
                         <div className="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-4 dark:bg-green-900/20 dark:text-green-400">
                             <Check className="w-6 h-6" />
                         </div>
-                        <h3 className="font-bold text-gray-900 mb-2 dark:text-gray-100">Exact Dimensions</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Guaranteed width x height compliance for pixels or centimeters.</p>
+                        <h3 className="font-bold text-gray-900 mb-2 dark:text-slate-100">Exact Dimensions</h3>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">Guaranteed width x height compliance for pixels or centimeters.</p>
                     </div>
-                    <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm text-center hover:bg-white/80 transition-colors dark:bg-gray-800/60 dark:border-gray-700 dark:hover:bg-gray-800/80">
+                    <div className="p-6 rounded-2xl bg-white/60 border border-white/50 shadow-sm text-center hover:bg-white/80 transition-colors dark:bg-slate-800/60 dark:border-slate-700 dark:hover:bg-primary/10">
                         <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-4 dark:bg-blue-900/20 dark:text-blue-400">
                             <Info className="w-6 h-6" />
                         </div>
-                        <h3 className="font-bold text-gray-900 mb-2 dark:text-gray-100">File Size Control</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Compresses your image to fit strictly under the Size limit (e.g. &lt;50KB).</p>
+                        <h3 className="font-bold text-gray-900 mb-2 dark:text-slate-100">File Size Control</h3>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">Compresses your image to fit strictly under the Size limit (e.g. &lt;50KB).</p>
                     </div>
                 </div>
             </div>

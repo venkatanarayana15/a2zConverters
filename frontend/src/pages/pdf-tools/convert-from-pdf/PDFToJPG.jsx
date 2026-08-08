@@ -52,23 +52,23 @@ const PDFToJPG = () => {
 
     return (
         <ToolLayout icon={FileImage} badge="Convert from pdf" title="PDF to JPG" subtitle="Turn every PDF page into a high-quality JPG image." accent="red">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {file[0] && (
                     <>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Pages</label>
-                            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-gray-800">
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Pages</label>
+                            <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-slate-800">
                                 <button
                                     onClick={() => setMode('all')}
-                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${mode === 'all' ? 'bg-white shadow-sm text-red-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${mode === 'all' ? 'bg-white shadow-sm text-red-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                 >
                                     All pages
                                 </button>
                                 <button
                                     onClick={() => setMode('first')}
-                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${mode === 'first' ? 'bg-white shadow-sm text-red-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                    className={`py-2 rounded-lg text-sm font-medium transition-all ${mode === 'first' ? 'bg-white shadow-sm text-red-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                 >
                                     First page only
                                 </button>
@@ -76,13 +76,13 @@ const PDFToJPG = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Image quality · {scale === 1 ? 'Standard' : scale === 2 ? 'High' : 'Best'}</label>
-                            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-gray-800">
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Image quality · {scale === 1 ? 'Standard' : scale === 2 ? 'High' : 'Best'}</label>
+                            <div className="grid grid-cols-3 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-slate-800">
                                 {[1, 2, 3].map((s) => (
                                     <button
                                         key={s}
                                         onClick={() => setScale(s)}
-                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${scale === s ? 'bg-white shadow-sm text-red-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'}`}
+                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${scale === s ? 'bg-white shadow-sm text-red-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400'}`}
                                     >
                                         {s === 1 ? 'Standard' : s === 2 ? 'High' : 'Best'}
                                     </button>
@@ -106,7 +106,7 @@ const PDFToJPG = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Converting to JPG..."
-                    accent="from-red-500 to-rose-600 shadow-red-200 hover:shadow-red-300"
+                    accent="from-red-500 to-rose-600 shadow-red-200 dark:shadow-red-900/40 hover:shadow-red-300 dark:hover:shadow-red-900/60"
                 >
                     <FileImage className="w-5 h-5 mr-2" /> Convert to JPG
                 </ProcessButton>

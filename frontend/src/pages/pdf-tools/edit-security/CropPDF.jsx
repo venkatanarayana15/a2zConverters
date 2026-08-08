@@ -51,7 +51,7 @@ const CropPDF = () => {
 
     return (
         <ToolLayout icon={Crop} badge="Edit & Security" title="Crop PDF" subtitle="Trim the margins of every page in your PDF by a percentage." accent="blue">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {file[0] && (
@@ -59,8 +59,8 @@ const CropPDF = () => {
                         {marginsConfig.map(({ key, label }) => (
                             <div key={key}>
                                 <div className="flex justify-between mb-2">
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-                                    <span className="text-sm text-blue-600 font-bold">{margins[key]}%</span>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">{label}</label>
+                                    <span className="text-sm text-blue-600 dark:text-primary font-bold">{margins[key]}%</span>
                                 </div>
                                 <input
                                     type="range"
@@ -69,7 +69,7 @@ const CropPDF = () => {
                                     step="1"
                                     value={margins[key]}
                                     onChange={(e) => updateMargin(key, e.target.value)}
-                                    className="w-full accent-blue-500 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                                    className="w-full accent-blue-500 dark:accent-primary h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700"
                                 />
                             </div>
                         ))}
@@ -90,7 +90,7 @@ const CropPDF = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Cropping PDF..."
-                    accent="from-blue-600 to-indigo-600 shadow-blue-200 hover:shadow-blue-300"
+                    accent="from-blue-600 to-indigo-600 shadow-blue-200 dark:shadow-blue-900/40 hover:shadow-blue-300 dark:hover:shadow-blue-900/60"
                 >
                     <Crop className="w-5 h-5 mr-2" /> Crop PDF
                 </ProcessButton>

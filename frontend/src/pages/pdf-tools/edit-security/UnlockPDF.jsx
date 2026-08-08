@@ -58,12 +58,12 @@ const UnlockPDF = () => {
 
     return (
         <ToolLayout icon={Unlock} badge="Edit & Security" title="Unlock PDF" subtitle="Remove password protection from your PDF and download an open copy." accent="green">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={handleFile} label="Drop a locked PDF here" hint="or click to browse" />
 
                 {passwordRequired && (
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">
+                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">
                             <Lock className="w-4 h-4 inline mr-1 text-green-600" /> PDF Password
                         </label>
                         <input
@@ -71,7 +71,7 @@ const UnlockPDF = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter document password"
-                            className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                            className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                         />
                     </div>
                 )}
@@ -90,7 +90,7 @@ const UnlockPDF = () => {
                     disabled={!file[0] || (passwordRequired && !password)}
                     isProcessing={isProcessing}
                     processingText="Unlocking PDF..."
-                    accent="from-green-600 to-emerald-600 shadow-green-200 hover:shadow-green-300"
+                    accent="from-green-600 to-emerald-600 shadow-green-200 dark:shadow-green-900/40 hover:shadow-green-300 dark:hover:shadow-green-900/60"
                 >
                     <Unlock className="w-5 h-5 mr-2" /> {passwordRequired ? 'Unlock with Password' : 'Unlock PDF'}
                 </ProcessButton>

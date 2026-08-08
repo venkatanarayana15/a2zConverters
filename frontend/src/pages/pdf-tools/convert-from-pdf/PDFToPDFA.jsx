@@ -23,7 +23,7 @@ const PDFToPDFA = () => {
 
     return (
         <ToolLayout icon={FileArchive} badge="Convert from PDF" title="PDF to PDF/A" subtitle="Convert your PDF into the archival PDF/A format for long-term preservation." accent="green">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 <p className="p-3 rounded-xl bg-blue-50 text-blue-600 text-sm border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">Demo preview — this tool is simulated in the browser and no file is generated.</p>
@@ -42,7 +42,7 @@ const PDFToPDFA = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Converting to PDF/A..."
-                    accent="from-green-500 to-emerald-500 shadow-green-200 hover:shadow-green-300"
+                    accent="from-green-500 to-emerald-500 shadow-green-200 dark:shadow-green-900/40 hover:shadow-green-300 dark:hover:shadow-green-900/60"
                 >
                     <FileArchive className="w-5 h-5 mr-2" /> Convert to PDF/A
                 </ProcessButton>

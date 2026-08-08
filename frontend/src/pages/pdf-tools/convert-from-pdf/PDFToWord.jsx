@@ -49,7 +49,7 @@ const PDFToWord = () => {
 
     return (
         <ToolLayout icon={FileText} badge="Convert from pdf" title="PDF to Word" subtitle="Extract the text from your PDF into a clean editable Word document." accent="blue">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {error && <p className="p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">{error}</p>}
@@ -66,12 +66,12 @@ const PDFToWord = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Extracting text..."
-                    accent="from-blue-600 to-indigo-600 shadow-blue-200 hover:shadow-blue-300"
+                    accent="from-blue-600 to-indigo-600 shadow-blue-200 dark:shadow-blue-900/40 hover:shadow-blue-300 dark:hover:shadow-blue-900/60"
                 >
                     <FileText className="w-5 h-5 mr-2" /> Convert to Word
                 </ProcessButton>
 
-                <p className="text-xs text-gray-400 dark:text-gray-500">Text extraction preserves the words, not the exact layout. Use a scanned PDF for images only.</p>
+                <p className="text-xs text-gray-400 dark:text-slate-400">Text extraction preserves the words, not the exact layout. Use a scanned PDF for images only.</p>
             </div>
         </ToolLayout>
     );

@@ -32,7 +32,7 @@ const RepairPDF = () => {
 
     return (
         <ToolLayout icon={Wrench} badge="Optimize" title="Repair PDF" subtitle="Rebuild the internal structure of a damaged or corrupted PDF file." accent="teal">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {error && <p className="p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">{error}</p>}
@@ -49,7 +49,7 @@ const RepairPDF = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Repairing PDF..."
-                    accent="from-teal-500 to-emerald-500 shadow-teal-200 hover:shadow-teal-300"
+                    accent="from-teal-500 to-emerald-500 shadow-teal-200 dark:shadow-teal-900/40 hover:shadow-teal-300 dark:hover:shadow-teal-900/60"
                 >
                     <Wrench className="w-5 h-5 mr-2" /> Repair PDF
                 </ProcessButton>

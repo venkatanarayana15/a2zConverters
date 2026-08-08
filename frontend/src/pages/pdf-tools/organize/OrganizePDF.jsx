@@ -71,7 +71,7 @@ const OrganizePDF = () => {
 
     return (
         <ToolLayout icon={Layout} badge="Organize" title="Organize PDF" subtitle="Reorder, remove, and arrange pages in your PDF exactly how you want them." accent="red">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={handleFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {error && <p className="p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">{error}</p>}
@@ -79,15 +79,15 @@ const OrganizePDF = () => {
                 {thumbnails.length > 0 && (
                     <>
                         <div className="flex items-center justify-between">
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <p className="text-sm text-gray-600 dark:text-slate-400">
                                 {thumbnails.length} page{thumbnails.length !== 1 ? 's' : ''} loaded. Use the arrows to reorder, or remove pages you don't want.
                             </p>
-                            <span className="text-xs text-gray-400 dark:text-gray-500">{thumbnails.length === MAX_PAGES && `Showing first ${MAX_PAGES} pages.`}</span>
+                            <span className="text-xs text-gray-400 dark:text-slate-400">{thumbnails.length === MAX_PAGES && `Showing first ${MAX_PAGES} pages.`}</span>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             {thumbnails.map((t, i) => (
-                                <div key={t.index} className="border border-gray-200 rounded-xl overflow-hidden bg-white dark:border-gray-700 dark:bg-gray-800">
-                                    <div className="relative bg-gray-50 dark:bg-gray-900">
+                                <div key={t.index} className="border border-gray-200 rounded-xl overflow-hidden bg-white dark:border-slate-700 dark:bg-slate-800">
+                                    <div className="relative bg-gray-50 dark:bg-slate-900">
                                         <img src={t.dataUrl} alt={`Page ${t.index + 1}`} className="w-full aspect-[3/4] object-contain" />
                                         <span className="absolute top-1 left-1 px-2 py-0.5 rounded-md bg-black/60 text-white text-xs font-bold">
                                             {i + 1}
@@ -97,7 +97,7 @@ const OrganizePDF = () => {
                                         <button
                                             onClick={() => move(i, -1)}
                                             disabled={i === 0}
-                                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:bg-gray-700"
+                                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:text-slate-400 dark:hover:bg-primary/10"
                                             aria-label="Move up"
                                         >
                                             <ArrowUp className="w-4 h-4" />
@@ -105,7 +105,7 @@ const OrganizePDF = () => {
                                         <button
                                             onClick={() => move(i, 1)}
                                             disabled={i === thumbnails.length - 1}
-                                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:bg-gray-700"
+                                            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:text-slate-400 dark:hover:bg-primary/10"
                                             aria-label="Move down"
                                         >
                                             <ArrowDown className="w-4 h-4" />
@@ -136,7 +136,7 @@ const OrganizePDF = () => {
                     disabled={!file[0] || thumbnails.length === 0}
                     isProcessing={isProcessing}
                     processingText="Organizing pages..."
-                    accent="from-red-500 to-rose-500 shadow-red-200 hover:shadow-red-300"
+                    accent="from-red-500 to-rose-500 shadow-red-200 dark:shadow-red-900/40 hover:shadow-red-300 dark:hover:shadow-red-900/60"
                 >
                     <Layout className="w-5 h-5 mr-2" /> Organize PDF
                 </ProcessButton>

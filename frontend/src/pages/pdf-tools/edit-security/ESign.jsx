@@ -46,7 +46,7 @@ const ESign = () => {
         const ctx = canvas.getContext('2d');
         ctx.lineWidth = 2;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = '#000';
+        ctx.strokeStyle = '#0f172a';
 
         const rect = canvas.getBoundingClientRect();
         ctx.beginPath();
@@ -66,7 +66,7 @@ const ESign = () => {
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
             <div className="max-w-[96rem] mx-auto">
-                <div className="mb-6">
+                <div className="pl-10 sm:pl-12 lg:pl-14 mb-8">
                     <BackLink />
                 </div>
                 <div className="text-center mb-12 animate-float">
@@ -74,10 +74,10 @@ const ESign = () => {
                         <PenTool className="w-4 h-4 mr-2" />
                         Digital Signature
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-slate-100">
                         eSign PDF
                     </h1>
-                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-400">
+                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-slate-400">
                         Sign documents yourself or request signatures from others securely.
                     </p>
                 </div>
@@ -86,11 +86,11 @@ const ESign = () => {
                     {/* Sidebar / Tools */}
                     <div className="lg:col-span-1 space-y-6">
                         <div className="glass-card p-6 rounded-2xl relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-32 h-32 bg-purple-100 rounded-full blur-3xl -z-10" />
-                            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Document Upload</h2>
+                            <div className="absolute top-0 left-0 w-32 h-32 bg-purple-100 rounded-full blur-3xl -z-10 dark:bg-purple-900/20" />
+                            <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-slate-100">Document Upload</h2>
 
                             {!file ? (
-                                <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer relative dark:border-gray-600 dark:bg-gray-800/50 dark:hover:bg-gray-700/50">
+                                <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer relative dark:border-slate-600 dark:bg-slate-800/50 dark:hover:bg-primary/5 dark:hover:border-primary/30">
                                     <input
                                         type="file"
                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -98,13 +98,13 @@ const ESign = () => {
                                         onChange={handleFileChange}
                                     />
                                     <Upload className="w-8 h-8 text-purple-500 mx-auto mb-2" />
-                                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Drop PDF here</span>
+                                    <span className="text-sm font-medium text-gray-600 dark:text-slate-400">Drop PDF here</span>
                                 </div>
                             ) : (
                                 <div className="text-center">
-                                    <div className="flex items-center justify-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 mb-4 dark:bg-gray-800 dark:border-gray-700">
+                                    <div className="flex items-center justify-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 mb-4 dark:bg-slate-800 dark:border-slate-700">
                                         <FileIcon className="w-6 h-6 text-red-500 mr-2" />
-                                        <span className="text-sm font-medium truncate max-w-[150px] dark:text-gray-300">{file.name}</span>
+                                        <span className="text-sm font-medium truncate max-w-[150px] dark:text-slate-300">{file.name}</span>
                                     </div>
                                     <button
                                         onClick={() => setFile(null)}
@@ -118,17 +118,17 @@ const ESign = () => {
 
                         {file && (
                             <div className="glass-card p-6 rounded-2xl relative overflow-hidden animate-slide-up">
-                                <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Your Signature</h2>
+                                <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-slate-100">Your Signature</h2>
                                 <button
                                     onClick={startSigning}
-                                    className="w-full py-3 px-4 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium shadow-sm hover:shadow-md hover:bg-gray-50 transition-all flex items-center justify-center dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
+                                    className="w-full py-3 px-4 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium shadow-sm hover:shadow-md hover:bg-gray-50 transition-all flex items-center justify-center dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-primary/10 dark:hover:text-primary dark:hover:border-primary/30"
                                 >
                                     <PenTool className="w-4 h-4 mr-2" />
                                     Create Signature
                                 </button>
 
                                 {signature && (
-                                    <div className="mt-4 p-2 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                                    <div className="mt-4 p-2 bg-white border border-gray-200 rounded-lg dark:bg-slate-800 dark:border-slate-700">
                                         <img src={signature} alt="Signature" className="h-12 mx-auto" />
                                     </div>
                                 )}
@@ -138,15 +138,15 @@ const ESign = () => {
 
                     {/* Main Preview Area */}
                     <div className="lg:col-span-2">
-                        <div className="glass-card p-4 rounded-2xl min-h-[600px] flex items-center justify-center bg-gray-100/50 border-gray-200 relative dark:bg-gray-800/50 dark:border-gray-700">
+                        <div className="glass-card p-4 rounded-2xl min-h-[600px] flex items-center justify-center bg-gray-100/50 border-gray-200 relative dark:bg-slate-800/50 dark:border-slate-700">
                             {!file ? (
-                                <div className="text-center text-gray-400 dark:text-gray-500">
+                                <div className="text-center text-gray-400 dark:text-slate-400">
                                     <Upload className="w-16 h-16 mx-auto mb-4 opacity-20" />
                                     <p>Upload a PDF to start signing</p>
                                 </div>
                             ) : (
-                                <div className="relative w-full h-full bg-white shadow-lg rounded-lg min-h-[550px] flex items-center justify-center dark:bg-gray-900">
-                                    <p className="text-gray-400 dark:text-gray-500">PDF Preview Area (Page 1)</p>
+                                <div className="relative w-full h-full bg-white shadow-lg rounded-lg min-h-[550px] flex items-center justify-center dark:bg-slate-900">
+                                    <p className="text-gray-400 dark:text-slate-400">PDF Preview Area (Page 1)</p>
 
                                     {/* Draggable Signature Placeholder */}
                                     {signature && (
@@ -165,14 +165,14 @@ const ESign = () => {
                             {/* Signature Modal */}
                             {isSigning && (
                                 <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-2xl z-20 flex items-center justify-center">
-                                    <div className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md m-4 dark:bg-gray-800">
-                                        <h3 className="text-xl font-bold mb-4 dark:text-gray-100">Draw Your Signature</h3>
-                                        <div className="border border-gray-200 rounded-xl bg-gray-50 mb-4 h-40 relative touch-none dark:border-gray-700 dark:bg-gray-700">
+                                    <div className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md m-4 dark:bg-slate-800">
+                                        <h3 className="text-xl font-bold mb-4 dark:text-slate-100">Draw Your Signature</h3>
+                                        <div className="border border-gray-200 rounded-xl bg-gray-50 mb-4 h-40 relative touch-none dark:border-slate-700 dark:bg-slate-700">
                                             <canvas
                                                 ref={canvasRef}
                                                 width={400}
                                                 height={160}
-                                                className="w-full h-full cursor-crosshair"
+                                                className="w-full h-full cursor-crosshair bg-white"
                                                 onMouseDown={startDrawing}
                                             />
                                             <div className="absolute bottom-2 right-2 text-xs text-gray-400 pointer-events-none">Sign Here</div>
@@ -180,7 +180,7 @@ const ESign = () => {
                                         <div className="flex gap-3">
                                             <button
                                                 onClick={() => { setIsSigning(false); clearSignature(); }}
-                                                className="flex-1 py-2 px-4 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-700"
+                                                className="flex-1 py-2 px-4 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors dark:text-slate-400 dark:hover:bg-primary/10"
                                             >
                                                 Cancel
                                             </button>
@@ -204,7 +204,7 @@ const ESign = () => {
 
                         {file && (
                             <div className="mt-6 flex justify-end">
-                                <button className="py-3 px-8 rounded-xl font-bold font-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 hover:scale-[1.02] transition-all flex items-center">
+                                <button className="py-3 px-8 rounded-xl font-bold font-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-200 dark:shadow-purple-900/30 hover:shadow-purple-300 dark:hover:shadow-purple-900/60 dark:hover:shadow-purple-900/50 hover:scale-[1.02] transition-all flex items-center">
                                     <Download className="w-5 h-5 mr-2" />
                                     Download Signed PDF
                                 </button>

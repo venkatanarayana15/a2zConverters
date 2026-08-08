@@ -81,7 +81,7 @@ const WatermarkPDF = () => {
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
             <div className="max-w-[96rem] mx-auto">
-                <div className="mb-6">
+                <div className="pl-10 sm:pl-12 lg:pl-14 mb-8">
                     <BackLink />
                 </div>
                 <div className="text-center mb-12 animate-float">
@@ -89,17 +89,17 @@ const WatermarkPDF = () => {
                         <ImageIcon className="w-4 h-4 mr-2" />
                         Brand & Protect
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-slate-100">
                         Watermark PDF
                     </h1>
-                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-400">
+                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-slate-400">
                         Stamp an image or text over your PDF in seconds.
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Preview Section */}
-                    <div className="lg:col-span-2 glass-card p-4 rounded-2xl min-h-[500px] flex items-center justify-center bg-gray-100/50 relative overflow-hidden dark:bg-gray-800/50">
+                    <div className="lg:col-span-2 glass-card p-4 rounded-2xl min-h-[500px] flex items-center justify-center bg-gray-100/50 relative overflow-hidden dark:bg-slate-800/50">
                         <AnimatePresence mode="wait">
                         {!file ? (
                             <motion.div
@@ -108,7 +108,7 @@ const WatermarkPDF = () => {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.2 }}
-                                className="text-center text-gray-400 dark:text-gray-500"
+                                className="text-center text-gray-400 dark:text-slate-400"
                             >
                                 <Upload className="w-16 h-16 mx-auto mb-4 opacity-20" />
                                 <p>Upload a PDF to preview watermark</p>
@@ -159,17 +159,17 @@ const WatermarkPDF = () => {
                     {/* Settings / Sidebar */}
                     <div className="space-y-6">
                         <div className="glass-card p-6 rounded-2xl relative overflow-hidden">
-                            <div className="absolute bottom-0 right-0 w-32 h-32 bg-teal-100 rounded-full blur-3xl -z-10" />
+                            <div className="absolute bottom-0 right-0 w-32 h-32 bg-teal-100 rounded-full blur-3xl -z-10 dark:bg-teal-900/15" />
 
-                            <h2 className="text-lg font-bold mb-6 text-gray-900 flex items-center dark:text-gray-100">
+                            <h2 className="text-lg font-bold mb-6 text-gray-900 flex items-center dark:text-slate-100">
                                 <Settings className="w-5 h-5 mr-2 text-teal-500" />
                                 Configuration
                             </h2>
 
                             {!file && (
                                 <div className="mb-6">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Upload Document</label>
-                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer relative dark:border-gray-600 dark:hover:bg-teal-900/10">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Upload Document</label>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer relative dark:border-slate-600 dark:hover:bg-teal-900/10">
                                         <input
                                             type="file"
                                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -182,17 +182,17 @@ const WatermarkPDF = () => {
                             )}
 
                             <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-3 dark:text-gray-300">Watermark Type</label>
-                                <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-gray-800">
+                                <label className="block text-sm font-medium text-gray-700 mb-3 dark:text-slate-300">Watermark Type</label>
+                                <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl dark:bg-slate-800">
                                     <button
                                         onClick={() => setWatermarkType('text')}
-                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${watermarkType === 'text' ? 'bg-white shadow-sm text-teal-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}
+                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${watermarkType === 'text' ? 'bg-white shadow-sm text-teal-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-300'}`}
                                     >
                                         <Type className="w-4 h-4 inline mr-1" /> Text
                                     </button>
                                     <button
                                         onClick={() => setWatermarkType('image')}
-                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${watermarkType === 'image' ? 'bg-white shadow-sm text-teal-600 dark:bg-gray-700' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}
+                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${watermarkType === 'image' ? 'bg-white shadow-sm text-teal-600 dark:bg-slate-700' : 'text-gray-500 hover:text-gray-700 dark:text-slate-400 dark:hover:text-slate-300'}`}
                                     >
                                         <ImageIcon className="w-4 h-4 inline mr-1" /> Image
                                     </button>
@@ -201,19 +201,19 @@ const WatermarkPDF = () => {
 
                             {watermarkType === 'text' && (
                                 <div className="mb-6">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Watermark Text</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Watermark Text</label>
                                     <input
                                         type="text"
                                         value={text}
                                         onChange={(e) => setText(e.target.value)}
-                                        className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                                        className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                                     />
                                 </div>
                             )}
 
                             <div className="mb-6">
                                 <div className="flex justify-between mb-2">
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Transparency</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Transparency</label>
                                     <span className="text-sm text-teal-600 font-bold">{opacity}%</span>
                                 </div>
                                 <input
@@ -222,18 +222,18 @@ const WatermarkPDF = () => {
                                     max="100"
                                     value={opacity}
                                     onChange={(e) => setOpacity(e.target.value)}
-                                    className="w-full accent-teal-500 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                                    className="w-full accent-teal-500 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700"
                                 />
                             </div>
 
                             <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Position</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Position</label>
                                 <div className="grid grid-cols-3 gap-2">
                                     {['top-left', 'top-right', 'center', 'bottom-left', 'bottom-right'].map((pos) => (
                                         <button
                                             key={pos}
                                             onClick={() => setPosition(pos)}
-                                            className={`p-2 rounded-lg border text-xs font-medium transition-all ${position === pos ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-400' : 'border-gray-200 hover:border-gray-300 text-gray-500 dark:border-gray-700 dark:hover:border-gray-600 dark:text-gray-400'}`}
+                                            className={`p-2 rounded-lg border text-xs font-medium transition-all ${position === pos ? 'border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-900/20 dark:text-teal-400' : 'border-gray-200 hover:border-gray-300 text-gray-500 dark:border-slate-700 dark:hover:border-slate-600 dark:text-slate-400'}`}
                                         >
                                             {pos.replace('-', ' ')}
                                         </button>
@@ -245,8 +245,8 @@ const WatermarkPDF = () => {
                                 disabled={!file || isProcessing}
                                 onClick={handleAddWatermark}
                                 className={`w-full py-3 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file && !isProcessing
-                                    ? 'bg-gradient-to-r from-teal-500 to-green-500 text-white shadow-teal-200 hover:shadow-teal-300 hover:scale-[1.02]'
-                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200 dark:bg-gray-800 dark:border-gray-700'
+                                    ? 'bg-gradient-to-r from-teal-500 to-green-500 text-white shadow-teal-200 dark:shadow-teal-900/40 hover:shadow-teal-300 dark:hover:shadow-teal-900/60 hover:scale-[1.02]'
+                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200 dark:bg-slate-800 dark:border-slate-700'
                                     }`}
                             >
                                 <Wand2 className="w-5 h-5 mr-2" />

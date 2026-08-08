@@ -16,7 +16,7 @@ const NoResultsState = ({
         description={description}
         action={
             onClearFilters && (
-                <button type="button" onClick={onClearFilters} className="inline-flex items-center px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:shadow-lg hover:scale-[1.02] transition-all">
+                <button type="button" onClick={onClearFilters} className="inline-flex items-center px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:shadow-lg dark:bg-none dark:bg-primary dark:text-white hover:scale-[1.02] transition-all">
                     {clearLabel}
                 </button>
             )

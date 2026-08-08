@@ -85,23 +85,23 @@ const TranslatePDF = () => {
 
     return (
         <ToolLayout icon={Languages} badge="Edit & Security" title="Translate PDF" subtitle="Extract the text from an English PDF and translate it into another language." accent="cyan">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={handleFile} label="Drop an English PDF here" hint="or click to browse" />
 
                 {pageCount !== null && (
-                    <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
-                        This PDF has <span className="font-bold text-gray-900 dark:text-gray-100">{pageCount}</span> pages.
-                        <span className="ml-1 text-gray-400 dark:text-gray-500">The first {MAX_PAGES} pages will be translated.</span>
+                    <div className="p-3 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-600 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">
+                        This PDF has <span className="font-bold text-gray-900 dark:text-slate-100">{pageCount}</span> pages.
+                        <span className="ml-1 text-gray-400 dark:text-slate-400">The first {MAX_PAGES} pages will be translated.</span>
                     </div>
                 )}
 
                 {pageCount !== null && (
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Translate To</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Translate To</label>
                         <select
                             value={target}
                             onChange={(e) => setTarget(e.target.value)}
-                            className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                            className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                         >
                             {LANGS.map((l) => (
                                 <option key={l.code} value={l.code}>{l.label}</option>
@@ -116,7 +116,7 @@ const TranslatePDF = () => {
                     <div className="p-4 rounded-xl bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800">
                         <p className="font-bold text-green-700 dark:text-green-400 flex items-center gap-2"><Download className="w-4 h-4" /> Translation complete</p>
                         <p className="text-sm text-green-600 dark:text-green-500">{result.pages} pages translated · .txt file downloaded</p>
-                        <pre className="mt-3 p-3 rounded-xl bg-white/70 border border-green-100 text-xs text-gray-700 whitespace-pre-wrap max-h-64 overflow-y-auto dark:bg-gray-800/70 dark:border-gray-700 dark:text-gray-300">
+                        <pre className="mt-3 p-3 rounded-xl bg-white/70 border border-green-100 text-xs text-gray-700 whitespace-pre-wrap max-h-64 overflow-y-auto dark:bg-slate-800/70 dark:border-slate-700 dark:text-slate-300">
                             {result.text.slice(0, 2000)}
                         </pre>
                     </div>
@@ -127,7 +127,7 @@ const TranslatePDF = () => {
                     disabled={!file[0] || pageCount === null}
                     isProcessing={isProcessing}
                     processingText={progress || 'Translating...'}
-                    accent="from-cyan-500 to-blue-500 shadow-cyan-200 hover:shadow-cyan-300"
+                    accent="from-cyan-500 to-blue-500 shadow-cyan-200 dark:shadow-cyan-900/40 hover:shadow-cyan-300 dark:hover:shadow-cyan-900/60"
                 >
                     <Languages className="w-5 h-5 mr-2" /> Translate PDF
                 </ProcessButton>

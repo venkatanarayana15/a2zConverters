@@ -44,27 +44,27 @@ const ComparePDF = () => {
 
     return (
         <ToolLayout icon={GitCompare} badge="Edit & Security" title="Compare PDF" subtitle="View any page of two PDF documents side by side." accent="purple">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <p className="text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">First PDF</p>
+                        <p className="text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">First PDF</p>
                         <ToolDropzone files={fileA} onChange={setFileA} label="Drop first PDF here" hint="or click to browse" />
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Second PDF</p>
+                        <p className="text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Second PDF</p>
                         <ToolDropzone files={fileB} onChange={setFileB} label="Drop second PDF here" hint="or click to browse" />
                     </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Page Number</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Page Number</label>
                         <input
                             type="number"
                             min="1"
                             value={page}
                             onChange={(e) => setPage(Math.max(1, parseInt(e.target.value || '1', 10)))}
-                            className="w-32 bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                            className="w-32 bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                         />
                     </div>
                     <ProcessButton
@@ -72,7 +72,7 @@ const ComparePDF = () => {
                         disabled={!fileA[0] || !fileB[0]}
                         isProcessing={isProcessing}
                         processingText="Rendering pages..."
-                        accent="from-purple-500 to-violet-500 shadow-purple-200 hover:shadow-purple-300"
+                        accent="from-purple-500 to-violet-500 shadow-purple-200 dark:shadow-purple-900/40 hover:shadow-purple-300 dark:hover:shadow-purple-900/60"
                     >
                         <GitCompare className="w-5 h-5 mr-2" /> Compare
                     </ProcessButton>
@@ -83,14 +83,14 @@ const ComparePDF = () => {
                 {imgA && imgB && (
                     <>
                         <div className="flex items-center justify-between">
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                Viewing page <span className="font-bold text-gray-900 dark:text-gray-100">{page}</span> of up to {maxPage}
+                            <p className="text-sm text-gray-600 dark:text-slate-400">
+                                Viewing page <span className="font-bold text-gray-900 dark:text-slate-100">{page}</span> of up to {maxPage}
                             </p>
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => renderAt(page - 1)}
                                     disabled={page <= 1 || isProcessing}
-                                    className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                                    className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-400 dark:hover:bg-primary/10"
                                     aria-label="Previous page"
                                 >
                                     <ChevronLeft className="w-4 h-4" />
@@ -98,7 +98,7 @@ const ComparePDF = () => {
                                 <button
                                     onClick={() => renderAt(page + 1)}
                                     disabled={page >= maxPage || isProcessing}
-                                    className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                                    className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed dark:border-slate-700 dark:text-slate-400 dark:hover:bg-primary/10"
                                     aria-label="Next page"
                                 >
                                     <ChevronRight className="w-4 h-4" />
@@ -106,12 +106,12 @@ const ComparePDF = () => {
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                                <p className="px-3 py-2 text-xs font-bold text-gray-500 bg-gray-50 border-b border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700">First PDF</p>
+                            <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
+                                <p className="px-3 py-2 text-xs font-bold text-gray-500 bg-gray-50 border-b border-gray-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">First PDF</p>
                                 <img src={imgA} alt="First PDF page" className="w-full bg-white" />
                             </div>
-                            <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                                <p className="px-3 py-2 text-xs font-bold text-gray-500 bg-gray-50 border-b border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700">Second PDF</p>
+                            <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
+                                <p className="px-3 py-2 text-xs font-bold text-gray-500 bg-gray-50 border-b border-gray-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">Second PDF</p>
                                 <img src={imgB} alt="Second PDF page" className="w-full bg-white" />
                             </div>
                         </div>

@@ -52,7 +52,7 @@ const PDFToExcel = () => {
 
     return (
         <ToolLayout icon={FileSpreadsheet} badge="Convert from pdf" title="PDF to Excel" subtitle="Turn the tables and text in your PDF into spreadsheet rows." accent="green">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {error && <p className="p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">{error}</p>}
@@ -69,12 +69,12 @@ const PDFToExcel = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Extracting tables..."
-                    accent="from-green-600 to-emerald-600 shadow-green-200 hover:shadow-green-300"
+                    accent="from-green-600 to-emerald-600 shadow-green-200 dark:shadow-green-900/40 hover:shadow-green-300 dark:hover:shadow-green-900/60"
                 >
                     <FileSpreadsheet className="w-5 h-5 mr-2" /> Convert to Excel
                 </ProcessButton>
 
-                <p className="text-xs text-gray-400 dark:text-gray-500">Each PDF page becomes a sheet. Columns are detected from spacing — exact cell alignment is best effort.</p>
+                <p className="text-xs text-gray-400 dark:text-slate-400">Each PDF page becomes a sheet. Columns are detected from spacing — exact cell alignment is best effort.</p>
             </div>
         </ToolLayout>
     );

@@ -38,7 +38,7 @@ const ScanToPDF = () => {
 
     return (
         <ToolLayout icon={Scan} badge="Organize" title="Scan to PDF" subtitle="Turn a set of scanned images or photos into a single PDF document." accent="red">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={files} onChange={setFiles} multiple accept="image/png,image/jpeg" label="Drop images here" hint="or click to browse (PNG or JPG)" />
 
                 {error && <p className="p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">{error}</p>}
@@ -55,7 +55,7 @@ const ScanToPDF = () => {
                     disabled={files.length === 0}
                     isProcessing={isProcessing}
                     processingText="Creating PDF..."
-                    accent="from-red-500 to-rose-500 shadow-red-200 hover:shadow-red-300"
+                    accent="from-red-500 to-rose-500 shadow-red-200 dark:shadow-red-900/40 hover:shadow-red-300 dark:hover:shadow-red-900/60"
                 >
                     <Scan className="w-5 h-5 mr-2" /> Convert to PDF
                 </ProcessButton>

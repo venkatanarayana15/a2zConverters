@@ -54,7 +54,7 @@ const PDFToPPT = () => {
 
     return (
         <ToolLayout icon={Presentation} badge="Convert from pdf" title="PDF to PPT" subtitle="Turn your PDF pages into a ready-to-present PowerPoint file." accent="orange">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {error && <p className="p-3 rounded-xl bg-red-50 text-red-600 text-sm border border-red-200 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">{error}</p>}
@@ -71,12 +71,12 @@ const PDFToPPT = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Building slides..."
-                    accent="from-orange-500 to-amber-600 shadow-orange-200 hover:shadow-orange-300"
+                    accent="from-orange-500 to-amber-600 shadow-orange-200 dark:shadow-orange-900/40 hover:shadow-orange-300 dark:hover:shadow-orange-900/60"
                 >
                     <Presentation className="w-5 h-5 mr-2" /> Convert to PPT
                 </ProcessButton>
 
-                <p className="text-xs text-gray-400 dark:text-gray-500">Each page becomes a slide with the page image. Text stays non-editable — perfect for sharing, not editing.</p>
+                <p className="text-xs text-gray-400 dark:text-slate-400">Each page becomes a slide with the page image. Text stays non-editable — perfect for sharing, not editing.</p>
             </div>
         </ToolLayout>
     );

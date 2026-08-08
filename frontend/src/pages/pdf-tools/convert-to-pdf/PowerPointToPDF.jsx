@@ -23,7 +23,7 @@ const PowerPointToPDF = () => {
 
     return (
         <ToolLayout icon={Presentation} badge="Convert to PDF" title="PowerPoint to PDF" subtitle="Turn your PowerPoint slides into a PDF presentation you can share anywhere." accent="orange">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} accept=".pptx,.ppt" label="Drop a PowerPoint here" hint="or click to browse (.pptx)" />
 
                 <p className="p-3 rounded-xl bg-blue-50 text-blue-600 text-sm border border-blue-200 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">Demo preview — this tool is simulated in the browser and no file is generated.</p>
@@ -42,7 +42,7 @@ const PowerPointToPDF = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Converting slides..."
-                    accent="from-orange-500 to-red-500 shadow-orange-200 hover:shadow-orange-300"
+                    accent="from-orange-500 to-red-500 shadow-orange-200 dark:shadow-orange-900/40 hover:shadow-orange-300 dark:hover:shadow-orange-900/60"
                 >
                     <Presentation className="w-5 h-5 mr-2" /> Convert to PDF
                 </ProcessButton>

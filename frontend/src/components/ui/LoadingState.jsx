@@ -14,7 +14,7 @@ const LoadingState = ({ label = 'Loading…', progress, description, ...props })
     >
         {typeof progress === 'number' && (
             <div className="w-full max-w-xs mx-auto mb-6">
-                <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${progress}%` }}

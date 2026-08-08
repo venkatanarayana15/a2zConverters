@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, Download, Image as ImageIcon, Check, Sliders, RefreshCw, AlertCircle } from 'lucide-react';
+import { Upload, Download, Image as ImageIcon, Sliders, RefreshCw } from 'lucide-react';
 import BackLink from '../../components/BackLink';
+import InlineNotice from '../../components/ui/InlineNotice';
 
 const ImageResizer = () => {
     const [file, setFile] = useState(null);
@@ -67,18 +68,18 @@ const ImageResizer = () => {
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
             <div className="max-w-[96rem] mx-auto">
-                <div className="mb-6">
+                <div className="pl-10 sm:pl-12 lg:pl-14 mb-8">
                     <BackLink />
                 </div>
                 <div className="text-center mb-12 animate-float">
-                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-sm font-medium text-blue-600 mb-4 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-sm font-medium text-blue-600 mb-4 dark:bg-primary/20 dark:border-primary/30 dark:text-primary">
                         <ImageIcon className="w-4 h-4 mr-2" />
                         Professional Tools
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-slate-100">
                         Image Resizer & Compressor
                     </h1>
-                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-400">
+                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-slate-400">
                         Resize images by pixel, percentage, or dimensions. Compress without losing visible quality.
                     </p>
                 </div>
@@ -87,7 +88,7 @@ const ImageResizer = () => {
                     {/* Left: Upload & Preview */}
                     <div className="lg:col-span-2 space-y-8">
                         <div className="glass-card p-8 rounded-2xl relative overflow-hidden min-h-[500px] flex flex-col justify-center items-center group">
-                            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 transition-all group-hover:bg-blue-100" />
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 transition-all group-hover:bg-blue-100 dark:bg-blue-900/10 dark:group-hover:bg-blue-900/20" />
 
                             <AnimatePresence mode="wait">
                             {!file ? (
@@ -97,7 +98,7 @@ const ImageResizer = () => {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.2 }}
-                                    className={`border-2 border-dashed rounded-2xl p-12 text-center w-full h-full flex flex-col items-center justify-center transition-all duration-300 border-gray-300 hover:border-blue-400 hover:bg-blue-50/30 dark:border-gray-600 dark:hover:bg-blue-900/10`}
+                                    className={`border-2 border-dashed rounded-2xl p-12 text-center w-full h-full flex flex-col items-center justify-center transition-all duration-300 border-gray-300 hover:border-blue-400 hover:bg-blue-50/30 dark:border-slate-600 dark:hover:bg-blue-900/10`}
                                 >
                                     <input
                                         type="file"
@@ -107,11 +108,11 @@ const ImageResizer = () => {
                                         onChange={handleFileChange}
                                     />
                                     <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
-                                        <div className="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                        <div className="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-6 shadow-sm dark:bg-primary/20 dark:text-primary dark:shadow-black/30 group-hover:scale-110 transition-transform">
                                             <Upload className="w-10 h-10" />
                                         </div>
-                                        <h3 className="text-2xl font-bold text-gray-900 mb-2 dark:text-gray-100">Upload Image</h3>
-                                        <p className="text-gray-500 dark:text-gray-400">JPG, PNG, WEBP up to 10MB</p>
+                                        <h3 className="text-2xl font-bold text-gray-900 mb-2 dark:text-slate-100">Upload Image</h3>
+                                        <p className="text-gray-500 dark:text-slate-400">JPG, PNG, WEBP up to 10MB</p>
                                     </label>
                                 </motion.div>
                             ) : (
@@ -130,7 +131,7 @@ const ImageResizer = () => {
                                     />
                                     <button
                                         onClick={() => { setFile(null); setPreview(null); }}
-                                        className="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-gray-600 hover:text-red-500 transition-all dark:bg-gray-800/90 dark:text-gray-400 dark:hover:bg-red-900/20"
+                                        className="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-gray-600 hover:text-red-500 transition-all dark:bg-slate-800/90 dark:text-slate-400 dark:hover:bg-red-900/20"
                                     >
                                         <RefreshCw className="w-5 h-5" />
                                     </button>
@@ -147,19 +148,19 @@ const ImageResizer = () => {
                     <div className="space-y-6">
                         <div className="glass-card p-6 rounded-2xl">
                             <h3 className="font-bold text-lg mb-6 flex items-center">
-                                <Sliders className="w-5 h-5 mr-2 text-blue-600" />
+                                <Sliders className="w-5 h-5 mr-2 text-blue-600 dark:text-primary" />
                                 Resize Settings
                             </h3>
 
                             {/* Unit Selection */}
                             <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Unit</label>
-                                <div className="flex bg-gray-100 p-1 rounded-lg dark:bg-gray-800">
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Unit</label>
+                                <div className="flex bg-gray-100 p-1 rounded-lg dark:bg-slate-800">
                                     {['px', '%', 'cm', 'inch'].map((u) => (
                                         <button
                                             key={u}
                                             onClick={() => toggleUnit(u)}
-                                            className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all ${unit === u ? 'bg-white text-blue-600 shadow-sm dark:bg-gray-700' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+                                            className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all ${unit === u ? 'bg-white text-blue-600 shadow-sm dark:bg-slate-700 dark:text-primary' : 'text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100'
                                                 }`}
                                         >
                                             {u}
@@ -171,22 +172,22 @@ const ImageResizer = () => {
                             {/* Dimensions */}
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Width</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-slate-300">Width</label>
                                     <input
                                         type="number"
                                         value={width}
                                         onChange={handleWidthChange}
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500 dark:focus:border-primary transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
                                         placeholder="0"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Height</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-slate-300">Height</label>
                                     <input
                                         type="number"
                                         value={height}
                                         onChange={handleHeightChange}
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-gray-900 focus:outline-none focus:border-blue-500 dark:focus:border-primary transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-slate-100"
                                         placeholder="0"
                                     />
                                 </div>
@@ -199,9 +200,9 @@ const ImageResizer = () => {
                                     id="aspect"
                                     checked={lockAspectRatio}
                                     onChange={(e) => setLockAspectRatio(e.target.checked)}
-                                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 dark:text-primary dark:focus:ring-primary"
                                 />
-                                <label htmlFor="aspect" className="ml-2 text-sm text-gray-600 cursor-pointer select-none dark:text-gray-400">
+                                <label htmlFor="aspect" className="ml-2 text-sm text-gray-600 cursor-pointer select-none dark:text-slate-400">
                                     Lock Aspect Ratio
                                 </label>
                             </div>
@@ -209,8 +210,8 @@ const ImageResizer = () => {
                             {/* Quality */}
                             <div className="mb-8">
                                 <div className="flex justify-between mb-2">
-                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Quality</label>
-                                    <span className="text-sm font-bold text-blue-600">{quality}%</span>
+                                    <label className="text-sm font-medium text-gray-700 dark:text-slate-300">Quality</label>
+                                    <span className="text-sm font-bold text-blue-600 dark:text-primary">{quality}%</span>
                                 </div>
                                 <input
                                     type="range"
@@ -218,15 +219,15 @@ const ImageResizer = () => {
                                     max="100"
                                     value={quality}
                                     onChange={(e) => setQuality(e.target.value)}
-                                    className="w-full accent-blue-500 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                                    className="w-full accent-blue-500 dark:accent-primary h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700"
                                 />
                             </div>
 
                             <button
                                 disabled={!file}
                                 className={`w-full py-3.5 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center ${file
-                                        ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-blue-200 hover:shadow-blue-300 hover:scale-[1.02]'
-                                        : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800'
+                                        ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-blue-200 dark:shadow-cyan-900/40 hover:shadow-blue-300 dark:hover:shadow-cyan-900/60 hover:scale-[1.02] dark:bg-none dark:bg-primary dark:text-white'
+                                        : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-slate-800'
                                     }`}
                             >
                                 <Download className="w-5 h-5 mr-2" />
@@ -234,12 +235,9 @@ const ImageResizer = () => {
                             </button>
                         </div>
 
-                        <div className="bg-orange-50 p-4 rounded-xl border border-orange-100 flex items-start dark:bg-orange-900/20 dark:border-orange-800/50">
-                            <AlertCircle className="w-5 h-5 text-orange-500 mr-2 flex-shrink-0 mt-0.5" />
-                            <p className="text-sm text-orange-700 dark:text-orange-400">
-                                <strong>Tip:</strong> Use 'px' for exact dimensions or '%' for quick scaling. Reducing quality helps lower file size.
-                            </p>
-                        </div>
+                        <InlineNotice variant="warning" title="Tip">
+                            Use 'px' for exact dimensions or '%' for quick scaling. Reducing quality helps lower file size.
+                        </InlineNotice>
                     </div>
                 </div>
             </div>

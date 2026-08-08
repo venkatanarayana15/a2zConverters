@@ -106,30 +106,30 @@ const ImageConverter = () => {
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
             <div className="max-w-[96rem] mx-auto">
-                <div className="mb-6">
+                <div className="pl-10 sm:pl-12 lg:pl-14 mb-8">
                     <BackLink />
                 </div>
                 {/* Header */}
                 <div className="text-center mb-10">
-                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-sm font-medium text-blue-600 mb-4 animate-float dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-sm font-medium text-blue-600 mb-4 animate-float dark:bg-primary/20 dark:border-primary/30 dark:text-primary">
                         <RefreshCw className="w-4 h-4 mr-2" />
                         Universal Image Converter
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-slate-100">
                         Convert Images to Any Format
                     </h1>
-                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-gray-400">
+                    <p className="text-gray-600 max-w-2xl mx-auto dark:text-slate-400">
                         Transform your images instantly. Support for JPG, PNG, WEBP, BMP, and more.
                         Batch processing handled locally in your browser.
                     </p>
                 </div>
 
                 {/* Main Card */}
-                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden dark:bg-gray-900 dark:border-gray-800">
+                <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden dark:bg-slate-900 dark:border-slate-800">
                     <div className="p-8">
                         {/* Upload Area */}
                         {files.length === 0 ? (
-                            <div className="border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center hover:bg-gray-50 transition-colors group dark:border-gray-700 dark:hover:bg-gray-800">
+                            <div className="border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center hover:bg-gray-50 transition-colors group dark:border-slate-700 dark:hover:bg-primary/5 dark:hover:border-primary/30">
                                 <input
                                     type="file"
                                     id="file-upload"
@@ -140,10 +140,10 @@ const ImageConverter = () => {
                                 />
                                 <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
                                     <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform dark:bg-blue-900/20">
-                                        <Upload className="w-10 h-10 text-blue-600 dark:text-blue-400" />
+                                        <Upload className="w-10 h-10 text-blue-600 dark:text-primary" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2 dark:text-gray-100">Click to Upload Images</h3>
-                                    <p className="text-gray-500 dark:text-gray-400">or drag and drop here</p>
+                                    <h3 className="text-xl font-bold text-gray-900 mb-2 dark:text-slate-100">Click to Upload Images</h3>
+                                    <p className="text-gray-500 dark:text-slate-400">or drag and drop here</p>
                                 </label>
                             </div>
                         ) : (
@@ -151,8 +151,8 @@ const ImageConverter = () => {
                                 {/* File List */}
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     {files.map(file => (
-                                        <div key={file.id} className="relative group bg-gray-50 rounded-xl p-3 border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
-                                            <div className="aspect-square rounded-lg overflow-hidden bg-white mb-2 relative dark:bg-gray-700">
+                                        <div key={file.id} className="relative group bg-gray-50 rounded-xl p-3 border border-gray-100 dark:bg-slate-800 dark:border-slate-700">
+                                            <div className="aspect-square rounded-lg overflow-hidden bg-white mb-2 relative dark:bg-slate-700">
                                                 <img src={file.preview} alt={file.name} className="w-full h-full object-cover" />
                                                 <button
                                                     onClick={() => removeFile(file.id)}
@@ -161,11 +161,11 @@ const ImageConverter = () => {
                                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                                 </button>
                                             </div>
-                                            <div className="text-xs font-medium truncate dark:text-gray-300">{file.name}</div>
-                                            <div className="text-[10px] text-gray-500 dark:text-gray-400">{file.originalSize}</div>
+                                            <div className="text-xs font-medium truncate dark:text-slate-300">{file.name}</div>
+                                            <div className="text-[10px] text-gray-500 dark:text-slate-400">{file.originalSize}</div>
                                         </div>
                                     ))}
-                                    <div className="border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 min-h-[140px] dark:border-gray-700 dark:hover:bg-gray-800">
+                                    <div className="border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center hover:bg-gray-50 min-h-[140px] dark:border-slate-700 dark:hover:bg-primary/5 dark:hover:border-primary/30">
                                         <input
                                             type="file"
                                             id="add-more"
@@ -175,26 +175,26 @@ const ImageConverter = () => {
                                             className="hidden"
                                         />
                                         <label htmlFor="add-more" className="cursor-pointer flex flex-col items-center p-4">
-                                            <div className="p-2 bg-gray-100 rounded-full mb-2 dark:bg-gray-700">
-                                                <Upload className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                                            <div className="p-2 bg-gray-100 rounded-full mb-2 dark:bg-slate-700">
+                                                <Upload className="w-5 h-5 text-gray-500 dark:text-slate-400" />
                                             </div>
-                                            <span className="text-xs text-gray-500 font-medium dark:text-gray-400">Add More</span>
+                                            <span className="text-xs text-gray-500 font-medium dark:text-slate-400">Add More</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 {/* Controls */}
-                                <div className="flex flex-col md:flex-row items-center justify-between bg-gray-50 p-6 rounded-2xl gap-4 dark:bg-gray-800">
+                                <div className="flex flex-col md:flex-row items-center justify-between bg-gray-50 p-6 rounded-2xl gap-4 dark:bg-slate-800">
                                     <div className="flex items-center gap-4 w-full md:w-auto">
-                                        <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 dark:bg-gray-700 dark:border-gray-600">
-                                            <Settings className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                                        <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100 dark:bg-slate-700 dark:border-slate-600">
+                                            <Settings className="w-6 h-6 text-gray-400 dark:text-slate-400" />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-300">Convert to</label>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-slate-300">Convert to</label>
                                             <select
                                                 value={targetFormat}
                                                 onChange={(e) => setTargetFormat(e.target.value)}
-                                                className="bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                                className="bg-white border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-primary dark:focus:border-primary block w-40 p-2.5 outline-none dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100"
                                             >
                                                 {formats.map(format => (
                                                     <option key={format.value} value={format.value}>{format.label}</option>
@@ -232,30 +232,30 @@ const ImageConverter = () => {
                 {convertedFiles.length > 0 && (
                     <div className="mt-8 animate-slide-up-sm">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Converted Files</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Converted Files</h2>
                             <button
                                 onClick={downloadAll}
-                                className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center"
+                                className="text-blue-600 hover:text-blue-700 dark:text-primary dark:hover:text-cyan-600 font-medium text-sm flex items-center"
                             >
                                 <Download className="w-4 h-4 mr-1" /> Download All
                             </button>
                         </div>
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-100 dark:bg-gray-900 dark:border-gray-800 dark:divide-gray-800">
+                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-100 dark:bg-slate-900 dark:border-slate-800 dark:divide-slate-800">
                             {convertedFiles.map((file, idx) => (
-                                <div key={idx} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors dark:hover:bg-gray-800">
+                                <div key={idx} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors dark:hover:bg-primary/10">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center text-green-600 dark:bg-green-900/20 dark:text-green-400">
                                             <Check className="w-6 h-6" />
                                         </div>
                                         <div>
-                                            <div className="font-medium text-gray-900 dark:text-gray-100">{file.name}</div>
-                                            <div className="text-xs text-gray-500 dark:text-gray-400">{file.size}</div>
+                                            <div className="font-medium text-gray-900 dark:text-slate-100">{file.name}</div>
+                                            <div className="text-xs text-gray-500 dark:text-slate-400">{file.size}</div>
                                         </div>
                                     </div>
                                     <a
                                         href={file.url}
                                         download={file.name}
-                                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors dark:hover:text-blue-400 dark:hover:bg-blue-900/20"
+                                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors dark:hover:text-primary dark:hover:bg-primary/20"
                                     >
                                         <Download className="w-5 h-5" />
                                     </a>

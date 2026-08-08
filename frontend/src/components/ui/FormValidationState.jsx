@@ -15,10 +15,10 @@ const validate = (values) => {
 
 const fieldClass = (hasError) =>
     cn(
-        'w-full bg-white/80 dark:bg-gray-800/80 border rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 transition-all',
+        'w-full bg-white/80 dark:bg-slate-800/80 border rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 transition-all',
         hasError
             ? 'border-red-300 dark:border-red-700 focus:border-red-500 focus:ring-red-500/20'
-            : 'border-gray-200 dark:border-gray-700 focus:border-teal-500 focus:ring-teal-500/20'
+            : 'border-gray-200 dark:border-slate-700 focus:border-teal-500 focus:ring-teal-500/20'
     );
 
 const FormValidationState = ({ onSubmit, title = 'Check your details', description = 'Fill in the form to see inline validation in action.', badge = 'Validation Demo', ...props }) => {
@@ -58,7 +58,7 @@ const FormValidationState = ({ onSubmit, title = 'Check your details', descripti
         <StateScreen icon={CircleAlert} tone="amber" badge={badge} title={title} description={description} {...props}>
             <form onSubmit={handleSubmit} noValidate className="w-full max-w-sm mx-auto text-left space-y-4 mb-2">
                 <div>
-                    <label htmlFor="fv-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Name</label>
+                    <label htmlFor="fv-name" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">Name</label>
                     <input
                         id="fv-name"
                         type="text"
@@ -71,7 +71,7 @@ const FormValidationState = ({ onSubmit, title = 'Check your details', descripti
                     {errors.name && <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">{errors.name}</p>}
                 </div>
                 <div>
-                    <label htmlFor="fv-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
+                    <label htmlFor="fv-email" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">Email</label>
                     <input
                         id="fv-email"
                         type="email"

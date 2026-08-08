@@ -57,13 +57,13 @@ const AddPageNumbers = () => {
 
     return (
         <ToolLayout icon={Hash} badge="Edit & Security" title="Add Page Numbers" subtitle="Add page numbers to every page of your PDF in seconds." accent="indigo">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {file[0] && (
                     <>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Number Format</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Number Format</label>
                             <div className="grid grid-cols-3 gap-2">
                                 {[
                                     { value: 'page-of', label: 'Page X of Y' },
@@ -73,7 +73,7 @@ const AddPageNumbers = () => {
                                     <button
                                         key={opt.value}
                                         onClick={() => setFormat(opt.value)}
-                                        className={`p-2 rounded-lg border text-xs font-medium transition-all ${format === opt.value ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400' : 'border-gray-200 hover:border-gray-300 text-gray-500 dark:border-gray-700 dark:hover:border-gray-600 dark:text-gray-400'}`}
+                                        className={`p-2 rounded-lg border text-xs font-medium transition-all ${format === opt.value ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400' : 'border-gray-200 hover:border-gray-300 text-gray-500 dark:border-slate-700 dark:hover:border-slate-600 dark:text-slate-400'}`}
                                     >
                                         {opt.label}
                                     </button>
@@ -82,13 +82,13 @@ const AddPageNumbers = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Position</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Position</label>
                             <div className="grid grid-cols-3 gap-2">
                                 {['bottom-left', 'bottom-center', 'bottom-right'].map((pos) => (
                                     <button
                                         key={pos}
                                         onClick={() => setPosition(pos)}
-                                        className={`p-2 rounded-lg border text-xs font-medium transition-all ${position === pos ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400' : 'border-gray-200 hover:border-gray-300 text-gray-500 dark:border-gray-700 dark:hover:border-gray-600 dark:text-gray-400'}`}
+                                        className={`p-2 rounded-lg border text-xs font-medium transition-all ${position === pos ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400' : 'border-gray-200 hover:border-gray-300 text-gray-500 dark:border-slate-700 dark:hover:border-slate-600 dark:text-slate-400'}`}
                                     >
                                         {pos.replace('-', ' ')}
                                     </button>
@@ -98,24 +98,24 @@ const AddPageNumbers = () => {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Start Number</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Start Number</label>
                                 <input
                                     type="number"
                                     min="0"
                                     value={startAt}
                                     onChange={(e) => setStartAt(Math.max(0, parseInt(e.target.value || '0', 10)))}
-                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Font Size</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Font Size</label>
                                 <input
                                     type="number"
                                     min="8"
                                     max="48"
                                     value={fontSize}
                                     onChange={(e) => setFontSize(Math.max(8, Math.min(48, parseInt(e.target.value || '12', 10))))}
-                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                                 />
                             </div>
                         </div>
@@ -136,7 +136,7 @@ const AddPageNumbers = () => {
                     disabled={!file[0]}
                     isProcessing={isProcessing}
                     processingText="Adding page numbers..."
-                    accent="from-indigo-500 to-purple-500 shadow-indigo-200 hover:shadow-indigo-300"
+                    accent="from-indigo-500 to-purple-500 shadow-indigo-200 dark:shadow-indigo-900/40 hover:shadow-indigo-300 dark:hover:shadow-indigo-900/60"
                 >
                     <Hash className="w-5 h-5 mr-2" /> Add Page Numbers
                 </ProcessButton>

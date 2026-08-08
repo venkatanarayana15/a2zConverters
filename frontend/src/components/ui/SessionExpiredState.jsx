@@ -47,7 +47,7 @@ const SessionExpiredState = ({
                 )
             }
             secondaryAction={
-                <span className="text-sm text-gray-400 dark:text-gray-500">Redirecting in {secondsLeft}s</span>
+                <span className="text-sm text-gray-400 dark:text-slate-400">Redirecting in {secondsLeft}s</span>
             }
             {...props}
         />

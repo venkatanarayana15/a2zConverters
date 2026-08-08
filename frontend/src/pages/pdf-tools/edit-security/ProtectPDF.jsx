@@ -59,14 +59,14 @@ const ProtectPDF = () => {
 
     return (
         <ToolLayout icon={ShieldCheck} badge="Edit & Security" title="Protect PDF" subtitle="Lock your PDF with a password and control what others can do with it." accent="purple">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={setFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {file[0] && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">
                                     <Lock className="w-4 h-4 inline mr-1 text-purple-600" /> Password
                                 </label>
                                 <input
@@ -74,11 +74,11 @@ const ProtectPDF = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Required to open the PDF"
-                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">
+                                <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">
                                     <Lock className="w-4 h-4 inline mr-1 text-purple-600" /> Confirm password
                                 </label>
                                 <input
@@ -86,13 +86,13 @@ const ProtectPDF = () => {
                                     value={confirm}
                                     onChange={(e) => setConfirm(e.target.value)}
                                     placeholder="Repeat the password"
-                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">Permissions</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">Permissions</label>
                             <div className="space-y-2">
                                 {permissions.map((p) => (
                                     <button
@@ -100,17 +100,17 @@ const ProtectPDF = () => {
                                         onClick={() => togglePerm(p.key)}
                                         className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${perms[p.key]
                                             ? 'bg-purple-50 border-purple-200 dark:bg-purple-900/20 dark:border-purple-800'
-                                            : 'bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700'
+                                            : 'bg-gray-50 border-gray-200 dark:bg-slate-800 dark:border-slate-700'
                                         }`}
                                     >
-                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{p.label}</span>
-                                        <span className={`w-9 h-5 rounded-full relative transition-all ${perms[p.key] ? 'bg-purple-600' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                                        <span className="text-sm font-medium text-gray-700 dark:text-slate-300">{p.label}</span>
+                                        <span className={`w-9 h-5 rounded-full relative transition-all ${perms[p.key] ? 'bg-purple-600' : 'bg-gray-300 dark:bg-slate-600'}`}>
                                             <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all ${perms[p.key] ? 'left-4' : 'left-0.5'}`} />
                                         </span>
                                     </button>
                                 ))}
                             </div>
-                            <p className="text-xs text-gray-400 mt-2 dark:text-gray-500">Note: PDF permissions are advisory and honored by conforming readers.</p>
+                            <p className="text-xs text-gray-400 mt-2 dark:text-slate-400">Note: PDF permissions are advisory and honored by conforming readers.</p>
                         </div>
                     </>
                 )}
@@ -129,7 +129,7 @@ const ProtectPDF = () => {
                     disabled={!file[0] || !password || !confirm}
                     isProcessing={isProcessing}
                     processingText="Protecting PDF..."
-                    accent="from-purple-600 to-violet-600 shadow-purple-200 hover:shadow-purple-300"
+                    accent="from-purple-600 to-violet-600 shadow-purple-200 dark:shadow-purple-900/40 hover:shadow-purple-300 dark:hover:shadow-purple-900/60"
                 >
                     <ShieldCheck className="w-5 h-5 mr-2" /> Protect PDF
                 </ProcessButton>

@@ -102,13 +102,13 @@ const RedactPDF = () => {
 
     return (
         <ToolLayout icon={EyeOff} badge="Edit & Security" title="Redact PDF" subtitle="Permanently black out sensitive text across your entire PDF." accent="gray">
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-gray-900 dark:border-gray-800 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 md:p-8 dark:bg-slate-900 dark:border-slate-800 space-y-6">
                 <ToolDropzone files={file} onChange={handleFile} label="Drop a PDF here" hint="or click to browse" />
 
                 {file[0] && (
                     <>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-300">
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">
                                 <Search className="w-4 h-4 inline mr-1 text-gray-600" /> Words to redact
                             </label>
                             <textarea
@@ -117,9 +117,9 @@ const RedactPDF = () => {
                                 rows={3}
                                 disabled={redactAll}
                                 placeholder="One term per line, e.g.&#10;John Doe&#10;123-45-6789"
-                                className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 outline-none transition-all disabled:opacity-50 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100"
+                                className="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 outline-none transition-all disabled:opacity-50 dark:bg-slate-800/50 dark:border-slate-700 dark:text-slate-100"
                             />
-                            <label className="flex items-center gap-2 mt-3 text-sm font-medium text-gray-700 cursor-pointer dark:text-gray-300">
+                            <label className="flex items-center gap-2 mt-3 text-sm font-medium text-gray-700 cursor-pointer dark:text-slate-300">
                                 <input type="checkbox" checked={redactAll} onChange={(e) => setRedactAll(e.target.checked)} className="w-4 h-4 accent-gray-600" />
                                 Redact all text on every page
                             </label>
@@ -137,15 +137,15 @@ const RedactPDF = () => {
 
                         {preview && (
                             <div className="space-y-3">
-                                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <p className="text-sm font-medium text-gray-700 dark:text-slate-300">
                                     {preview.totalMatches} match{preview.totalMatches === 1 ? '' : 'es'} on the first page
                                 </p>
                                 {preview.previewDataUrl && (
-                                    <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                                    <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
                                         <img src={preview.previewDataUrl} alt="Preview" className="w-full h-auto" />
                                     </div>
                                 )}
-                                <p className="text-xs text-gray-400 dark:text-gray-500">Detected areas are highlighted in red. Black bars will be drawn over them.</p>
+                                <p className="text-xs text-gray-400 dark:text-slate-400">Detected areas are highlighted in red. Black bars will be drawn over them.</p>
                             </div>
                         )}
                     </>
