@@ -32,7 +32,7 @@ async function officeToPdf(inputBuffer, ext) {
 
     try {
         await new Promise((resolve, reject) => {
-            const proc = spawn(soffice, ['--headless', '--norestore', '--convert-to', 'pdf', '--outdir', dir, inPath]);
+            const proc = spawn(soffice, ['--headless', '--norestore', '-env:UserInstallation=file://' + dir, '--convert-to', 'pdf', '--outdir', dir, inPath]);
             let errOutput = '';
             proc.stderr.on('data', (d) => (errOutput += d));
             proc.on('error', reject);
@@ -598,7 +598,7 @@ router.post('/pdf-to-ppt', upload.single('file'), async (req, res) => {
         try {
             const inPath = path.join(dir, 'input.pdf');
             fs.writeFileSync(inPath, req.file.buffer);
-            await runCmd(process.env.SOFFICE_BIN || 'soffice', ['--headless', '--norestore', '--convert-to', 'pptx:Impress MS PowerPoint 2007 XML', '--outdir', dir, inPath], { timeout: 180000 });
+            await runCmd(process.env.SOFFICE_BIN || 'soffice', ['--headless', '--norestore', '-env:UserInstallation=file://' + dir, '--convert-to', 'pptx:Impress MS PowerPoint 2007 XML', '--outdir', dir, inPath], { timeout: 180000 });
             const outPath = path.join(dir, 'input.pptx');
             if (!fs.existsSync(outPath)) throw new Error('Conversion produced no output');
 
