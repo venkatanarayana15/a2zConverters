@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, FileText, FileImage, Download, AlertCircle } from 'lucide-react';
 import PhysicsButton from '../components/PhysicsButton';
+import { apiPost, dataUrlToBlob, downloadDataUrl } from '../lib/api';
 
 const JPGToPDF = () => {
     const [files, setFiles] = useState([]);
@@ -10,25 +11,32 @@ const JPGToPDF = () => {
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         setFiles(prev => [...prev, ...selectedFiles.map(f => ({
+            file: f,
             name: f.name,
             size: (f.size / 1024).toFixed(2) + ' KB',
             preview: URL.createObjectURL(f)
         }))]);
     };
 
-    const convertToPDF = () => {
+    const convertToPDF = async () => {
         if (files.length === 0) return;
         setIsConverting(true);
-
-        // Simulate conversion
-        setTimeout(() => {
-            setIsConverting(false);
+        try {
+            const form = new FormData();
+            files.forEach(f => form.append('images', f.file));
+            const result = await apiPost('/api/v1/pdf/jpg-to-pdf', form);
+            const blob = dataUrlToBlob(result.dataUrl);
             setConvertedFile({
-                name: 'merged_images.pdf',
-                size: '1.2 MB', // Simulated size
-                url: '#' // Would be a real blob URL in production
+                name: result.fileName,
+                size: (result.size / 1024).toFixed(2) + ' KB',
+                url: URL.createObjectURL(blob),
+                dataUrl: result.dataUrl,
             });
-        }, 2000);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsConverting(false);
+        }
     };
 
     return (
@@ -81,7 +89,10 @@ const JPGToPDF = () => {
                                         {isConverting ? 'Generating PDF...' : 'Convert to PDF'}
                                     </PhysicsButton>
                                 ) : (
-                                    <PhysicsButton className="bg-green-600 hover:bg-green-700 w-full md:w-auto px-12">
+                                    <PhysicsButton
+                                        onClick={() => downloadDataUrl(convertedFile.dataUrl, convertedFile.name)}
+                                        className="bg-green-600 hover:bg-green-700 w-full md:w-auto px-12"
+                                    >
                                         <Download className="w-5 h-5 mr-2" /> Download PDF
                                     </PhysicsButton>
                                 )}

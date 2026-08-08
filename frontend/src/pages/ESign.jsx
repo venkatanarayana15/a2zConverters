@@ -1,20 +1,34 @@
 import React, { useState, useRef } from 'react';
 import { Upload, PenTool, Download, Eraser, Move } from 'lucide-react';
+import { apiPost, downloadDataUrl } from '../lib/api';
 
 const ESign = () => {
     const [file, setFile] = useState(null);
-    const [preview, setPreview] = useState(null);
     const [signature, setSignature] = useState(null);
     const [isSigning, setIsSigning] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
     const canvasRef = useRef(null);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
-            // In a real app, we'd render the PDF pages here.
-            // For this UI demo, we'll just show a placeholder or the file name.
-            setPreview(URL.createObjectURL(selectedFile));
+        }
+    };
+
+    const handleDownloadSigned = async () => {
+        if (!file || !signature) return;
+        setIsDownloading(true);
+        try {
+            const form = new FormData();
+            form.append('file', file);
+            form.append('signature', signature);
+            const result = await apiPost('/api/v1/pdf/sign', form);
+            downloadDataUrl(result.dataUrl, result.fileName);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsDownloading(false);
         }
     };
 
@@ -200,9 +214,16 @@ const ESign = () => {
 
                         {file && (
                             <div className="mt-6 flex justify-end">
-                                <button className="py-3 px-8 rounded-xl font-bold font-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 hover:scale-[1.02] transition-all flex items-center">
+                                <button
+                                    onClick={handleDownloadSigned}
+                                    disabled={!signature || isDownloading}
+                                    className={`py-3 px-8 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center ${signature && !isDownloading
+                                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-purple-200 hover:shadow-purple-300 hover:scale-[1.02]'
+                                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                        }`}
+                                >
                                     <Download className="w-5 h-5 mr-2" />
-                                    Download Signed PDF
+                                    {isDownloading ? 'Signing...' : 'Download Signed PDF'}
                                 </button>
                             </div>
                         )}

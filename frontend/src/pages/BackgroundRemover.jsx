@@ -1,33 +1,36 @@
 import React, { useState } from 'react';
 import { Upload, Download, Image as ImageIcon, Layers, Wand2, Eraser, Check } from 'lucide-react';
+import { apiPost, downloadDataUrl, makeUploadForm } from '../lib/api';
 
 const BackgroundRemover = () => {
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
+    const [resultUrl, setResultUrl] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isProcessed, setIsProcessed] = useState(false);
-
-    // For comparison slider (50% default)
-    const [sliderPosition, setSliderPosition] = useState(50);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
             setPreview(URL.createObjectURL(selectedFile));
+            setResultUrl(null);
             setIsProcessed(false);
         }
     };
 
-    const handleRemoveBackground = () => {
+    const handleRemoveBackground = async () => {
         if (!file) return;
         setIsProcessing(true);
-
-        // Simulate API processing delay
-        setTimeout(() => {
-            setIsProcessing(false);
+        try {
+            const result = await apiPost('/api/v1/image/bg-remove', makeUploadForm(file, {}, 'image'));
+            setResultUrl(result.dataUrl);
             setIsProcessed(true);
-        }, 2500);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     return (
@@ -77,17 +80,8 @@ const BackgroundRemover = () => {
                                             {/* Original Image (Behind) */}
                                             <img src={preview} alt="Original" className="absolute inset-0 w-full h-full object-contain opacity-30 blur-sm" />
 
-                                            {/* Processed Result (Placeholder for simulation as we don't have real AI here) */}
-                                            <div className="relative z-10 p-6 bg-white/90 backdrop-blur-md rounded-xl shadow-xl text-center max-w-sm">
-                                                <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-subtle">
-                                                    <Check className="w-8 h-8" />
-                                                </div>
-                                                <h3 className="text-xl font-bold text-gray-900 mb-2">Background Removed!</h3>
-                                                <p className="text-gray-600 text-sm mb-4">
-                                                    Your image is ready. In this demo, we simulate the process.
-                                                </p>
-                                                <img src={preview} alt="Result" className="w-24 h-24 object-cover rounded-lg mx-auto border-2 border-white shadow-md" />
-                                            </div>
+                                            {/* Processed Result */}
+                                            <img src={resultUrl} alt="Result" className="relative z-10 max-w-full max-h-full object-contain drop-shadow-2xl" />
                                         </>
                                     ) : (
                                         <img src={preview} alt="Preview" className="max-w-full max-h-full object-contain relative z-10" />
@@ -163,6 +157,7 @@ const BackgroundRemover = () => {
                                     Upload New
                                 </button>
                                 <button
+                                    onClick={() => downloadDataUrl(resultUrl, 'image-no-bg.png')}
                                     className="w-full py-4 rounded-xl font-bold bg-gray-900 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center transition-all"
                                 >
                                     <Download className="w-5 h-5 mr-2" />

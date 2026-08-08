@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Upload, Download, Image as ImageIcon, RotateCw, Contrast, Sun, Droplets, Wand2, RefreshCw } from 'lucide-react';
+import { apiPost, downloadDataUrl, makeUploadForm } from '../lib/api';
 
 const ImageEditor = () => {
     const [file, setFile] = useState(null);
@@ -10,8 +11,7 @@ const ImageEditor = () => {
     const [grayscale, setGrayscale] = useState(0);
     const [sepia, setSepia] = useState(0);
     const [rotation, setRotation] = useState(0);
-
-    const canvasRef = useRef(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -36,35 +36,24 @@ const ImageEditor = () => {
         transform: `rotate(${rotation}deg)`
     };
 
-    const handleDownload = () => {
+    const handleDownload = async () => {
         if (!file || !preview) return;
-
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-
-        img.onload = () => {
-            // Handle rotation dimensions
-            if (rotation % 180 !== 0) {
-                canvas.width = img.height;
-                canvas.height = img.width;
-            } else {
-                canvas.width = img.width;
-                canvas.height = img.height;
-            }
-
-            ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) grayscale(${grayscale}%) sepia(${sepia}%)`;
-
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate((rotation * Math.PI) / 180);
-            ctx.drawImage(img, -img.width / 2, -img.height / 2);
-
-            const link = document.createElement('a');
-            link.download = 'edited-image.png';
-            link.href = canvas.toDataURL();
-            link.click();
-        };
-        img.src = preview;
+        setIsSaving(true);
+        try {
+            const result = await apiPost('/api/v1/image/edit', makeUploadForm(file, {
+                brightness,
+                contrast,
+                saturation,
+                grayscale,
+                sepia,
+                rotation,
+            }, 'image'));
+            downloadDataUrl(result.dataUrl, result.fileName);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -220,15 +209,24 @@ const ImageEditor = () => {
                         </div>
 
                         <button
-                            disabled={!file}
+                            disabled={!file || isSaving}
                             onClick={handleDownload}
-                            className={`w-full py-4 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file
+                            className={`w-full py-4 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file && !isSaving
                                     ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-purple-200 hover:shadow-purple-300 hover:scale-[1.02]'
                                     : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                 }`}
                         >
-                            <Download className="w-5 h-5 mr-2" />
-                            Save Image
+                            {isSaving ? (
+                                <>
+                                    <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
+                                    Applying edits...
+                                </>
+                            ) : (
+                                <>
+                                    <Download className="w-5 h-5 mr-2" />
+                                    Save Image
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>

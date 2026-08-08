@@ -1,30 +1,8 @@
-const sharp = require('sharp');
-const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage() }); // Keep file in memory
+const app = require('./app');
 
-app.post("/api/v1/png-to-jpg", upload.single('image'), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No image uploaded" });
-        }
+const PORT = process.env.PORT || 3001;
 
-        // Convert PNG Buffer to JPG Buffer
-        const jpgBuffer = await sharp(req.file.buffer)
-            .jpeg({ quality: 90 }) 
-            .toBuffer();
-
-        // Send back as Base64 so the frontend can display/download it
-        const base64Image = jpgBuffer.toString('base64');
-        const dataUri = `data:image/jpeg;base64,${base64Image}`;
-
-        res.json({ 
-            success: true, 
-            message: "Conversion complete", 
-            downloadUrl: dataUri 
-        });
-
-    } catch (error) {
-        console.error("Conversion error:", error);
-        res.status(500).json({ error: "Failed to convert image" });
-    }
+app.listen(PORT, () => {
+    console.log(`API server running on http://localhost:${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/health`);
 });

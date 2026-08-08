@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Upload, Check, AlertCircle, Download, Crop, Info, Search, ChevronDown } from 'lucide-react';
+import { Upload, Check, AlertCircle, Download, Crop, Info, Search, ChevronDown, RefreshCw } from 'lucide-react';
+import { apiPost, downloadDataUrl, makeUploadForm } from '../lib/api';
 
 const examPresets = {
     custom: { label: "Custom Dimensions", width: "", height: "", size: { min: 10, max: 200 } },
@@ -51,6 +52,7 @@ const GovResizer = () => {
     const [height, setHeight] = useState('');
     const [unit, setUnit] = useState('px');
     const [maxSize, setMaxSize] = useState(50);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     // Dropdown state
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -68,7 +70,7 @@ const GovResizer = () => {
     }, []);
 
     const filteredPresets = useMemo(() => {
-        return Object.entries(examPresets).filter(([key, preset]) =>
+        return Object.entries(examPresets).filter(([, preset]) =>
             preset.label.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [searchTerm]);
@@ -96,6 +98,24 @@ const GovResizer = () => {
     };
 
     const selectedExamLabel = examPresets[selectedExam]?.label || "Select Exam";
+
+    const handleProcess = async () => {
+        if (!file) return;
+        setIsProcessing(true);
+        try {
+            const result = await apiPost('/api/v1/image/gov-resize', makeUploadForm(file, {
+                width,
+                height,
+                unit,
+                maxSize,
+            }, 'image'));
+            downloadDataUrl(result.dataUrl, result.fileName);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     return (
         <div className="min-h-screen pt-24 px-4 pb-12 bg-background text-foreground">
@@ -276,14 +296,24 @@ const GovResizer = () => {
                             </div>
 
                             <button
-                                disabled={!file}
-                                className={`w-full py-4 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file
+                                disabled={!file || isProcessing}
+                                onClick={handleProcess}
+                                className={`w-full py-4 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file && !isProcessing
                                     ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-orange-200 hover:shadow-orange-300 hover:scale-[1.02]'
                                     : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
                                     }`}
                             >
-                                <Download className="w-5 h-5 mr-2" />
-                                {file ? 'Process & Download Image' : 'Upload Image to Start'}
+                                {isProcessing ? (
+                                    <>
+                                        <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
+                                        Processing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download className="w-5 h-5 mr-2" />
+                                        {file ? 'Process & Download Image' : 'Upload Image to Start'}
+                                    </>
+                                )}
                             </button>
                         </div>
                     </div>

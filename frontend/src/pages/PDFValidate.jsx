@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, CheckCircle, AlertTriangle, FileText, ShieldCheck } from 'lucide-react';
+import { apiPost, makeUploadForm } from '../lib/api';
 
 const PDFValidate = () => {
     const [file, setFile] = useState(null);
@@ -14,19 +15,17 @@ const PDFValidate = () => {
         }
     };
 
-    const handleValidate = () => {
+    const handleValidate = async () => {
         if (!file) return;
         setIsValidating(true);
-        // Simulate validation process
-        setTimeout(() => {
+        try {
+            const result = await apiPost('/api/v1/pdf/validate', makeUploadForm(file, {}, 'file'));
+            setValidationResult(result);
+        } catch (error) {
+            alert(error.message);
+        } finally {
             setIsValidating(false);
-            // Randomly succeed for demo purposes, or just always succeed
-            setValidationResult({
-                isValid: true,
-                message: "PDF is valid and structurally sound.",
-                details: ["Header check passed", "Cross-reference table valid", "EOF marker found"]
-            });
-        }, 2000);
+        }
     };
 
     return (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Upload, Type, Image as ImageIcon, Download, Settings, Grid as GridIcon } from 'lucide-react';
+import { Upload, Type, Image as ImageIcon, Download, Settings, Grid as GridIcon, CheckCircle } from 'lucide-react';
+import { apiPost, downloadDataUrl } from '../lib/api';
 
 const WatermarkPDF = () => {
     const [file, setFile] = useState(null);
@@ -7,11 +8,35 @@ const WatermarkPDF = () => {
     const [text, setText] = useState('CONFIDENTIAL');
     const [opacity, setOpacity] = useState(50);
     const [position, setPosition] = useState('center');
+    const [wmImage, setWmImage] = useState(null);
+    const [isAdding, setIsAdding] = useState(false);
+    const [resultPdf, setResultPdf] = useState(null);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
+            setResultPdf(null);
+        }
+    };
+
+    const handleAddWatermark = async () => {
+        if (!file) return;
+        setIsAdding(true);
+        try {
+            const form = new FormData();
+            form.append('file', file);
+            form.append('type', watermarkType);
+            form.append('text', text);
+            form.append('opacity', opacity);
+            form.append('position', position);
+            if (watermarkType === 'image' && wmImage) form.append('image', wmImage);
+            const result = await apiPost('/api/v1/pdf/watermark', form);
+            setResultPdf({ url: result.dataUrl, name: result.fileName });
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsAdding(false);
         }
     };
 
@@ -129,6 +154,25 @@ const WatermarkPDF = () => {
                                 </div>
                             )}
 
+                            {watermarkType === 'image' && (
+                                <div className="mb-6">
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Watermark Image</label>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer relative">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            onChange={(e) => {
+                                                if (e.target.files[0]) setWmImage(e.target.files[0]);
+                                            }}
+                                        />
+                                        <span className="text-sm font-medium text-teal-600">
+                                            {wmImage ? wmImage.name : 'Choose watermark image'}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="mb-6">
                                 <div className="flex justify-between mb-2">
                                     <label className="block text-sm font-medium text-gray-700">Transparency</label>
@@ -160,15 +204,40 @@ const WatermarkPDF = () => {
                             </div>
 
                             <button
-                                disabled={!file}
-                                className={`w-full py-3 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file
+                                disabled={!file || isAdding}
+                                onClick={handleAddWatermark}
+                                className={`w-full py-3 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file && !isAdding
                                     ? 'bg-gradient-to-r from-teal-500 to-green-500 text-white shadow-teal-200 hover:shadow-teal-300 hover:scale-[1.02]'
                                     : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
                                     }`}
                             >
-                                <Download className="w-5 h-5 mr-2" />
-                                Add Watermark
+                                {isAdding ? (
+                                    <span className="flex items-center">
+                                        <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin mr-2"></span>
+                                        Adding Watermark...
+                                    </span>
+                                ) : resultPdf ? (
+                                    <>
+                                        <CheckCircle className="w-5 h-5 mr-2" />
+                                        Watermark Added
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download className="w-5 h-5 mr-2" />
+                                        Add Watermark
+                                    </>
+                                )}
                             </button>
+
+                            {resultPdf && (
+                                <button
+                                    onClick={() => downloadDataUrl(resultPdf.url, resultPdf.name)}
+                                    className="w-full mt-3 py-3 rounded-xl font-bold bg-gray-900 text-white shadow-lg hover:bg-black transition-all flex items-center justify-center"
+                                >
+                                    <Download className="w-5 h-5 mr-2" />
+                                    Download PDF
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

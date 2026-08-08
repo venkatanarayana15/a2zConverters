@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Upload, Download, Image as ImageIcon, Check, Sliders, RefreshCw, AlertCircle } from 'lucide-react';
+import { apiPost, downloadDataUrl, makeUploadForm } from '../lib/api';
 
 const ImageResizer = () => {
     const [file, setFile] = useState(null);
@@ -11,6 +12,26 @@ const ImageResizer = () => {
     const [aspectRatio, setAspectRatio] = useState(1);
     const [quality, setQuality] = useState(90);
     const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
+    const [isResizing, setIsResizing] = useState(false);
+
+    const handleResize = async () => {
+        if (!file) return;
+        setIsResizing(true);
+        try {
+            const result = await apiPost('/api/v1/image/resize', makeUploadForm(file, {
+                width,
+                height,
+                unit,
+                lockAspect: String(lockAspectRatio),
+                quality,
+            }, 'image'));
+            downloadDataUrl(result.dataUrl, result.fileName);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsResizing(false);
+        }
+    };
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -202,14 +223,24 @@ const ImageResizer = () => {
                             </div>
 
                             <button
-                                disabled={!file}
-                                className={`w-full py-3.5 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center ${file
+                                disabled={!file || isResizing}
+                                onClick={handleResize}
+                                className={`w-full py-3.5 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center ${file && !isResizing
                                         ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-blue-200 hover:shadow-blue-300 hover:scale-[1.02]'
                                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                     }`}
                             >
-                                <Download className="w-5 h-5 mr-2" />
-                                Resize & Download
+                                {isResizing ? (
+                                    <>
+                                        <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
+                                        Resizing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download className="w-5 h-5 mr-2" />
+                                        Resize & Download
+                                    </>
+                                )}
                             </button>
                         </div>
 

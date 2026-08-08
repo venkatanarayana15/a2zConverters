@@ -1,13 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Upload, Download, Image as ImageIcon, RefreshCw, FileImage, Settings, Check } from 'lucide-react';
 import PhysicsButton from '../components/PhysicsButton';
+import { apiPost, dataUrlToBlob, makeUploadForm } from '../lib/api';
 
 const ImageConverter = () => {
     const [files, setFiles] = useState([]);
     const [targetFormat, setTargetFormat] = useState('image/jpeg');
     const [isConverting, setIsConverting] = useState(false);
     const [convertedFiles, setConvertedFiles] = useState([]);
-    const canvasRef = useRef(null);
 
     const formats = [
         { value: 'image/jpeg', label: 'JPG', ext: 'jpg' },
@@ -54,37 +54,12 @@ const ImageConverter = () => {
         setIsConverting(false);
     };
 
-    const processImage = (file) => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-
-                // Draw white background for JPG conversion (transparency becomes black otherwise)
-                if (targetFormat === 'image/jpeg' || targetFormat === 'image/bmp') {
-                    ctx.fillStyle = '#FFFFFF';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                }
-
-                ctx.drawImage(img, 0, 0);
-
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        resolve({
-                            url: URL.createObjectURL(blob),
-                            blob: blob
-                        });
-                    } else {
-                        reject(new Error('Canvas to Blob failed'));
-                    }
-                }, targetFormat, 0.9); // 0.9 quality
-            };
-            img.onerror = reject;
-            img.src = URL.createObjectURL(file);
-        });
+    const processImage = async (file) => {
+        const ext = formats.find(f => f.value === targetFormat)?.ext;
+        if (!ext) throw new Error('Unknown target format');
+        const result = await apiPost('/api/v1/image/convert', makeUploadForm(file, { format: ext, quality: 90 }, 'image'));
+        const blob = dataUrlToBlob(result.dataUrl);
+        return { url: URL.createObjectURL(blob), blob };
     };
 
     const removeFile = (id) => {
@@ -117,7 +92,7 @@ const ImageConverter = () => {
                     </h1>
                     <p className="text-gray-600 max-w-2xl mx-auto">
                         Transform your images instantly. Support for JPG, PNG, WEBP, BMP, and more.
-                        Batch processing handled locally in your browser.
+                        Batch processing handled on our secure servers.
                     </p>
                 </div>
 

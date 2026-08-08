@@ -7,6 +7,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "grpc": "node grpc_server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -15,6 +18,8 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "multer": "^2.0.2",
-    "sharp": "^0.34.5"
+    "pdf-lib": "^1.17.1",
+    "sharp": "^0.34.5",
+    "xlsx": "^0.18.5"
   }
 }

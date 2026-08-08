@@ -9,6 +9,7 @@ export const pdfTools = [
     { name: 'CSV to Excel', path: '/csv-to-excel', icon: Table },
     { name: 'Word to PDF', path: '/word-to-pdf', icon: FileText },
     { name: 'Excel to PDF', path: '/excel-to-pdf', icon: Table },
+    { name: 'Convert PDF', path: '/pdf-converter', icon: RefreshCw },
     { name: 'PDF to Word', path: '/pdf-to-word', icon: FileText },
     { name: 'PDF to Excel', path: '/pdf-to-excel', icon: Table },
     { name: 'PDF to JPG', path: '/pdf-to-jpg', icon: FileImage },

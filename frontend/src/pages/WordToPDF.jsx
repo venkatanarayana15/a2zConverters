@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
 import { Upload, FileText, CheckCircle, Download } from 'lucide-react';
 import PhysicsButton from '../components/PhysicsButton';
+import { apiPost, downloadDataUrl, makeUploadForm } from '../lib/api';
 
 const WordToPDF = () => {
     const [file, setFile] = useState(null);
     const [isConverting, setIsConverting] = useState(false);
     const [isDone, setIsDone] = useState(false);
+    const [pdfUrl, setPdfUrl] = useState(null);
+    const [pdfName, setPdfName] = useState('converted.pdf');
 
     const handleFileChange = (e) => {
         if (e.target.files[0]) {
             setFile(e.target.files[0]);
             setIsDone(false);
+            setPdfUrl(null);
         }
     };
 
-    const handleConvert = () => {
+    const handleConvert = async () => {
         if (!file) return;
         setIsConverting(true);
-        setTimeout(() => {
-            setIsConverting(false);
+        try {
+            const result = await apiPost('/api/v1/pdf/word-to-pdf', makeUploadForm(file, {}, 'file'));
+            setPdfUrl(result.dataUrl);
+            setPdfName(result.fileName);
             setIsDone(true);
-        }, 2000);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsConverting(false);
+        }
     };
 
     return (
@@ -69,7 +79,7 @@ const WordToPDF = () => {
                                         <CheckCircle className="w-6 h-6" />
                                         <span className="font-bold text-lg">Conversion Successful!</span>
                                     </div>
-                                    <PhysicsButton className="bg-gray-900 text-white hover:bg-black px-12 w-full sm:w-auto">
+                                    <PhysicsButton onClick={() => downloadDataUrl(pdfUrl, pdfName)} className="bg-gray-900 text-white hover:bg-black px-12 w-full sm:w-auto">
                                         <Download className="w-4 h-4 mr-2" /> Download PDF
                                     </PhysicsButton>
                                     <button onClick={() => setFile(null)} className="block mt-4 mx-auto text-sm text-gray-500 hover:text-gray-900 underline">

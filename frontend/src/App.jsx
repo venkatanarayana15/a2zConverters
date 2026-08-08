@@ -18,6 +18,18 @@ import ImageConverter from './pages/ImageConverter';
 import JPGToPDF from './pages/JPGToPDF';
 import WordToPDF from './pages/WordToPDF';
 import ExcelToPDF from './pages/ExcelToPDF';
+import MergePDF from './pages/MergePDF';
+import SplitPDF from './pages/SplitPDF';
+import RemovePages from './pages/RemovePages';
+import ExtractPages from './pages/ExtractPages';
+import OrganizePDF from './pages/OrganizePDF';
+import ScanToPDF from './pages/ScanToPDF';
+import PDFToJPG from './pages/PDFToJPG';
+import PDFToWord from './pages/PDFToWord';
+import PDFToPPT from './pages/PDFToPPT';
+import PDFToExcel from './pages/PDFToExcel';
+import PDFToPDFA from './pages/PDFToPDFA';
+import ConvertFromPDF from './pages/ConvertFromPDF';
 import ComingSoon from './pages/ComingSoon';
 
 function App() {
@@ -45,23 +57,28 @@ function App() {
           <Route path="/esign-pdf" element={<ESign />} />
           <Route path="/watermark-pdf" element={<WatermarkPDF />} />
 
+          {/* PDF Tools - Now Available */}
+          <Route path="/merge-pdf" element={<MergePDF />} />
+          <Route path="/split-pdf" element={<SplitPDF />} />
+          <Route path="/remove-pages" element={<RemovePages />} />
+          <Route path="/extract-pages" element={<ExtractPages />} />
+          <Route path="/organize-pdf" element={<OrganizePDF />} />
+          <Route path="/scan-to-pdf" element={<ScanToPDF />} />
+
+          {/* PDF Tools - Convert from PDF */}
+          <Route path="/pdf-converter" element={<ConvertFromPDF />} />
+          <Route path="/pdf-to-jpg" element={<PDFToJPG />} />
+          <Route path="/pdf-to-word" element={<PDFToWord />} />
+          <Route path="/pdf-to-powerpoint" element={<PDFToPPT />} />
+          <Route path="/pdf-to-excel" element={<PDFToExcel />} />
+          <Route path="/pdf-to-pdfa" element={<PDFToPDFA />} />
+
           {/* PDF Tools - Coming Soon */}
-          <Route path="/merge-pdf" element={<ComingSoon />} />
-          <Route path="/split-pdf" element={<ComingSoon />} />
-          <Route path="/remove-pages" element={<ComingSoon />} />
-          <Route path="/extract-pages" element={<ComingSoon />} />
-          <Route path="/organize-pdf" element={<ComingSoon />} />
-          <Route path="/scan-to-pdf" element={<ComingSoon />} />
           <Route path="/compress-pdf" element={<ComingSoon />} />
           <Route path="/repair-pdf" element={<ComingSoon />} />
           <Route path="/ocr-pdf" element={<ComingSoon />} />
           <Route path="/powerpoint-to-pdf" element={<ComingSoon />} />
           <Route path="/html-to-pdf" element={<ComingSoon />} />
-          <Route path="/pdf-to-jpg" element={<ComingSoon />} />
-          <Route path="/pdf-to-word" element={<ComingSoon />} />
-          <Route path="/pdf-to-powerpoint" element={<ComingSoon />} />
-          <Route path="/pdf-to-excel" element={<ComingSoon />} />
-          <Route path="/pdf-to-pdfa" element={<ComingSoon />} />
           <Route path="/rotate-pdf" element={<ComingSoon />} />
           <Route path="/add-page-numbers" element={<ComingSoon />} />
           <Route path="/crop-pdf" element={<ComingSoon />} />
