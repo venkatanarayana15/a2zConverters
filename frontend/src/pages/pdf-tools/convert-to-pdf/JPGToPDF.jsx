@@ -1,37 +1,67 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, FileImage, Download } from 'lucide-react';
+import { Upload, FileImage, Download, AlertCircle } from 'lucide-react';
+import { PDFDocument } from 'pdf-lib';
 import PhysicsButton from '../../../components/PhysicsButton';
 import BackLink from '../../../components/BackLink';
 import InlineNotice from '../../../components/ui/InlineNotice';
+import { downloadBlob, formatBytes, stripExtension } from '../../../lib/pdfUtils';
+
+const readAsDataURL = (file) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Could not read the image file'));
+        reader.readAsDataURL(file);
+    });
 
 const JPGToPDF = () => {
     const [files, setFiles] = useState([]);
     const [isConverting, setIsConverting] = useState(false);
     const [convertedFile, setConvertedFile] = useState(null);
+    const [error, setError] = useState(null);
 
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         setFiles(prev => [...prev, ...selectedFiles.map(f => ({
+            file: f,
             name: f.name,
             size: (f.size / 1024).toFixed(2) + ' KB',
             preview: URL.createObjectURL(f)
         }))]);
+        setConvertedFile(null);
+        setError(null);
     };
 
-    const convertToPDF = () => {
+    const convertToPDF = async () => {
         if (files.length === 0) return;
         setIsConverting(true);
-
-        // Simulate conversion
-        setTimeout(() => {
+        setError(null);
+        setConvertedFile(null);
+        try {
+            const pdf = await PDFDocument.create();
+            for (const { file } of files) {
+                const bytes = new Uint8Array(await file.arrayBuffer());
+                const dataUrl = await readAsDataURL(file);
+                const isPng = dataUrl.startsWith('data:image/png');
+                const image = isPng ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes);
+                const page = pdf.addPage([image.width, image.height]);
+                page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
+            }
+            const pdfBytes = await pdf.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const base = files.length === 1 ? stripExtension(files[0].name) : 'merged_images';
+            setConvertedFile({ name: `${base}.pdf`, size: formatBytes(blob.size), blob });
+        } catch (e) {
+            setError(e.message || 'Failed to convert images to PDF');
+        } finally {
             setIsConverting(false);
-            setConvertedFile({
-                name: 'merged_images.pdf',
-                size: '1.2 MB', // Simulated size
-                url: '#' // Would be a real blob URL in production
-            });
-        }, 2000);
+        }
+    };
+
+    const downloadPdf = () => {
+        if (!convertedFile) return;
+        downloadBlob(convertedFile.blob, convertedFile.name);
     };
 
     return (
@@ -93,13 +123,19 @@ const JPGToPDF = () => {
                                 </InlineNotice>
                             )}
 
+                            {error && (
+                                <InlineNotice variant="error" title="Conversion failed">
+                                    {error}
+                                </InlineNotice>
+                            )}
+
                             <div className="flex justify-center pt-4">
                                 {!convertedFile ? (
                                     <PhysicsButton onClick={convertToPDF} disabled={isConverting} className="w-full md:w-auto px-12">
                                         {isConverting ? 'Generating PDF...' : 'Convert to PDF'}
                                     </PhysicsButton>
                                 ) : (
-                                    <PhysicsButton className="bg-green-600 hover:bg-green-700 w-full md:w-auto px-12">
+                                    <PhysicsButton onClick={downloadPdf} className="bg-green-600 hover:bg-green-700 w-full md:w-auto px-12">
                                         <Download className="w-5 h-5 mr-2" /> Download PDF
                                     </PhysicsButton>
                                 )}

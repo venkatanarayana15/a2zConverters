@@ -155,6 +155,8 @@ const ImageConverter = () => {
                                             <div className="aspect-square rounded-lg overflow-hidden bg-white mb-2 relative dark:bg-slate-700">
                                                 <img src={file.preview} alt={file.name} className="w-full h-full object-cover" />
                                                 <button
+                                                    type="button"
+                                                    aria-label={`Remove ${file.name}`}
                                                     onClick={() => removeFile(file.id)}
                                                     className="absolute top-1 right-1 bg-black/50 hover:bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                                 >
@@ -255,6 +257,7 @@ const ImageConverter = () => {
                                     <a
                                         href={file.url}
                                         download={file.name}
+                                        aria-label={`Download ${file.name}`}
                                         className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors dark:hover:text-primary dark:hover:bg-primary/20"
                                     >
                                         <Download className="w-5 h-5" />

@@ -81,6 +81,7 @@ const ToolDropzone = ({ files, onChange, accept = '.pdf', multiple = false, labe
                             </div>
                             <button
                                 type="button"
+                                aria-label={`Remove ${file.name}`}
                                 onClick={() => removeFile(i)}
                                 className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors dark:hover:bg-red-900/20"
                             >

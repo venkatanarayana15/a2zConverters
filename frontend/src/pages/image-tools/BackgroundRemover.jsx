@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { Upload, Download, Image as ImageIcon, Layers, Wand2, Eraser, Check } from 'lucide-react';
+import { Upload, Download, Layers, Wand2, Eraser, AlertCircle } from 'lucide-react';
 import LoadingState from '../../components/ui/LoadingState';
 import BackLink from '../../components/BackLink';
+import { apiPost, dataUrlToBlob } from '../../lib/api';
+import { downloadBlob } from '../../lib/pdfUtils';
 
 const BackgroundRemover = () => {
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isProcessed, setIsProcessed] = useState(false);
+    const [resultDataUrl, setResultDataUrl] = useState('');
+    const [error, setError] = useState(null);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -15,18 +19,32 @@ const BackgroundRemover = () => {
             setFile(selectedFile);
             setPreview(URL.createObjectURL(selectedFile));
             setIsProcessed(false);
+            setResultDataUrl('');
+            setError(null);
         }
     };
 
-    const handleRemoveBackground = () => {
+    const handleRemoveBackground = async () => {
         if (!file) return;
         setIsProcessing(true);
-
-        // Simulate API processing delay
-        setTimeout(() => {
-            setIsProcessing(false);
+        setError(null);
+        try {
+            const form = new FormData();
+            form.append('image', file);
+            const res = await apiPost('/api/v1/image/bg-remove', form);
+            setResultDataUrl(res.dataUrl);
             setIsProcessed(true);
-        }, 2500);
+        } catch (e) {
+            setError(e.message || 'Background removal failed. Is the backend running?');
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const handleDownload = () => {
+        if (!resultDataUrl) return;
+        const base = (file?.name || 'image').replace(/\.[^.]+$/, '');
+        downloadBlob(dataUrlToBlob(resultDataUrl), `${base}-no-bg.png`);
     };
 
     return (
@@ -72,41 +90,33 @@ const BackgroundRemover = () => {
                             </div>
                         ) : (
                             <div className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl dark:shadow-black/50 checkerboard">
-                                {/* This is a simulation of comparison. In a real app we would overlay the processed image on top */}
-                                <div className="relative w-full h-[450px] flex items-center justify-center">
-                                    {isProcessed ? (
-                                        <>
-                                            {/* Original Image (Behind) */}
-                                            <img src={preview} alt="Original" className="absolute inset-0 w-full h-full object-contain opacity-30 blur-sm" />
+                            <div className="relative w-full h-[450px] flex items-center justify-center">
+                                {isProcessed ? (
+                                    <>
+                                        {/* Original Image (Behind) */}
+                                        <img src={preview} alt="Original" className="absolute inset-0 w-full h-full object-contain opacity-30 blur-sm" />
 
-                                            {/* Processed Result (Placeholder for simulation as we don't have real AI here) */}
-                                            <div className="relative z-10 p-6 bg-white/90 backdrop-blur-md rounded-xl shadow-xl text-center max-w-sm dark:bg-slate-800/90">
-                                                <div className="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-subtle dark:bg-green-900/20 dark:text-green-400">
-                                                    <Check className="w-8 h-8" />
-                                                </div>
-                                                <h3 className="text-xl font-bold text-gray-900 mb-2 dark:text-slate-100">Background Removed!</h3>
-                                                <p className="text-gray-600 text-sm mb-4 dark:text-slate-400">
-                                                    Your image is ready. In this demo, we simulate the process.
-                                                </p>
-                                                <img src={preview} alt="Result" className="w-24 h-24 object-cover rounded-lg mx-auto border-2 border-white shadow-md" />
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <img src={preview} alt="Preview" className="max-w-full max-h-full object-contain relative z-10" />
-                                    )}
-
-                                    {/* Loading Overlay */}
-                                    {isProcessing && (
-                                        <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-                                            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl">
-                                                <LoadingState size="card" label="Removing background…" description="AI is cutting out your subject." />
-                                            </div>
+                                        {/* Processed Result (real PNG with transparency) */}
+                                        <div className="relative z-10 max-w-full max-h-full">
+                                            <img src={resultDataUrl} alt="Background removed result" className="max-w-full max-h-[420px] object-contain rounded-xl border border-gray-200 dark:border-slate-700" />
                                         </div>
-                                    )}
-                                </div>
+                                    </>
+                                ) : (
+                                    <img src={preview} alt="Preview" className="max-w-full max-h-full object-contain relative z-10" />
+                                )}
+
+                                {/* Loading Overlay */}
+                                {isProcessing && (
+                                    <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                                        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl">
+                                            <LoadingState size="card" label="Removing background…" description="AI is cutting out your subject." />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
+                </div>
 
                     {/* Right: Actions */}
                     <div className="space-y-8 pt-8">
@@ -139,8 +149,16 @@ const BackgroundRemover = () => {
                             </div>
                         </div>
 
+                        {error && (
+                            <div className="flex items-start gap-2 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+                                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                {error}
+                            </div>
+                        )}
+
                         {!isProcessed ? (
                             <button
+                                type="button"
                                 onClick={handleRemoveBackground}
                                 disabled={!file || isProcessing}
                                 className={`w-full py-4 rounded-xl font-bold text-xl shadow-lg transition-all flex items-center justify-center ${file && !isProcessing
@@ -160,12 +178,15 @@ const BackgroundRemover = () => {
                         ) : (
                             <div className="grid grid-cols-2 gap-4">
                                 <button
-                                    onClick={() => setFile(null)}
+                                    type="button"
+                                    onClick={() => { setFile(null); setIsProcessed(false); setResultDataUrl(''); setError(null); }}
                                     className="w-full py-4 rounded-xl font-bold border-2 border-gray-200 text-gray-600 hover:bg-gray-50 transition-all dark:border-slate-700 dark:text-slate-400 dark:hover:bg-primary/10 dark:hover:text-primary dark:hover:border-primary/30"
                                 >
                                     Upload New
                                 </button>
                                 <button
+                                    type="button"
+                                    onClick={handleDownload}
                                     className="w-full py-4 rounded-xl font-bold bg-gray-900 text-white shadow-lg dark:bg-slate-100 dark:text-slate-900 dark:shadow-black/40 hover:shadow-xl hover:scale-[1.02] flex items-center justify-center transition-all"
                                 >
                                     <Download className="w-5 h-5 mr-2" />

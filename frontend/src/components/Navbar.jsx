@@ -248,7 +248,7 @@ const Navbar = () => {
                                     </defs>
                                 </svg>
                             </div>
-                                <span className="text-lg font-bold font-serif text-gray-900 dark:text-slate-100">
+                                <span className="text-lg font-bold font-display text-gray-900 dark:text-slate-100">
                                 a2zconverters
                             </span>
                         </Link>

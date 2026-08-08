@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
-import { Upload, CheckCircle, AlertTriangle, FileText, ShieldCheck } from 'lucide-react';
+import { Upload, CheckCircle, AlertTriangle, FileText, ShieldCheck, AlertCircle } from 'lucide-react';
 import BackLink from '../../../components/BackLink';
+import { apiPost } from '../../../lib/api';
+
+const isFailDetail = (detail) => /failed|missing|corrupt/i.test(detail);
 
 const PDFValidate = () => {
     const [file, setFile] = useState(null);
     const [isValidating, setIsValidating] = useState(false);
     const [validationResult, setValidationResult] = useState(null);
+    const [error, setError] = useState(null);
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
             setValidationResult(null);
+            setError(null);
         }
     };
 
-    const handleValidate = () => {
+    const handleValidate = async () => {
         if (!file) return;
         setIsValidating(true);
-        // Simulate validation process
-        setTimeout(() => {
+        setError(null);
+        try {
+            const form = new FormData();
+            form.append('file', file);
+            const result = await apiPost('/api/v1/pdf/validate', form);
+            setValidationResult(result);
+        } catch (e) {
+            setError(e.message || 'Validation failed. Is the backend running?');
+        } finally {
             setIsValidating(false);
-            // Randomly succeed for demo purposes, or just always succeed
-            setValidationResult({
-                isValid: true,
-                message: "PDF is valid and structurally sound.",
-                details: ["Header check passed", "Cross-reference table valid", "EOF marker found"]
-            });
-        }, 2000);
+        }
     };
 
     return (
@@ -79,6 +85,7 @@ const PDFValidate = () => {
                                                 e.preventDefault();
                                                 setFile(null);
                                                 setValidationResult(null);
+                                                setError(null);
                                             }}
                                         >
                                             Remove
@@ -122,15 +129,21 @@ const PDFValidate = () => {
                     <div className="glass-card p-8 rounded-2xl relative overflow-hidden flex flex-col justify-center min-h-[400px]">
                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-100 rounded-full blur-3xl -z-10 dark:bg-indigo-900/15" />
 
-                        {!validationResult ? (
+                        {error && (
+                            <div className="flex items-start gap-2 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm mb-4 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+                                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                                {error}
+                            </div>
+                        )}
+
+                        {!validationResult && !error ? (
                             <div className="text-center text-gray-500 dark:text-slate-400">
                                 <ShieldCheck className="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-slate-600" />
                                 <h3 className="text-lg font-medium mb-2">Ready to Validate</h3>
                                 <p>Upload a PDF file to check its integrity and compliance.</p>
                             </div>
-                        ) : (
-                            <div className="animate-fade-in">
-                                <div className={`flex items-center justify-center w-20 h-20 rounded-full mx-auto mb-6 ${validationResult.isValid ? 'bg-green-100 text-green-600 dark:bg-green-900/25 dark:text-green-400' : 'bg-red-100 text-red-600 dark:bg-red-900/25 dark:text-red-400'}`}>
+                        ) : validationResult ? (
+                            <div className="animate-fade-in">                                <div className={`flex items-center justify-center w-20 h-20 rounded-full mx-auto mb-6 ${validationResult.isValid ? 'bg-green-100 text-green-600 dark:bg-green-900/25 dark:text-green-400' : 'bg-red-100 text-red-600 dark:bg-red-900/25 dark:text-red-400'}`}>
                                     {validationResult.isValid ? <CheckCircle className="w-10 h-10" /> : <AlertTriangle className="w-10 h-10" />}
                                 </div>
                                 <h3 className="text-2xl font-bold text-center text-gray-900 mb-2 dark:text-slate-100">
@@ -139,17 +152,29 @@ const PDFValidate = () => {
                                 <p className="text-center text-gray-600 mb-8 dark:text-slate-400">
                                     {validationResult.message}
                                 </p>
+                                {typeof validationResult.pageCount === 'number' && (
+                                    <p className="text-center text-sm text-gray-500 mb-4 dark:text-slate-400">
+                                        {validationResult.pageCount} page{validationResult.pageCount === 1 ? '' : 's'} detected
+                                    </p>
+                                )}
 
                                 <div className="space-y-3">
-                                    {validationResult.details.map((detail, idx) => (
-                                        <div key={idx} className="flex items-center p-3 bg-white/50 rounded-lg border border-gray-100 dark:bg-slate-800/50 dark:border-slate-700">
-                                            <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                                            <span className="text-gray-700 text-sm dark:text-slate-300">{detail}</span>
-                                        </div>
-                                    ))}
+                                    {validationResult.details.map((detail, idx) => {
+                                        const failed = isFailDetail(detail);
+                                        return (
+                                            <div key={idx} className={`flex items-center p-3 bg-white/50 rounded-lg border ${failed ? 'border-red-200 dark:border-red-900/50' : 'border-gray-100 dark:border-slate-700'} dark:bg-slate-800/50`}>
+                                                {failed ? (
+                                                    <AlertTriangle className="w-5 h-5 text-red-500 mr-3 flex-shrink-0" />
+                                                ) : (
+                                                    <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                                                )}
+                                                <span className={`text-sm ${failed ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-slate-300'}`}>{detail}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </div>

@@ -77,7 +77,7 @@ const Footer = () => {
                                     </defs>
                                 </svg>
                             </div>
-                            <span className="text-xl font-bold font-serif text-gray-900 dark:text-slate-100">a2zconverters</span>
+                            <span className="text-xl font-bold font-display text-gray-900 dark:text-slate-100">a2zconverters</span>
                         </Link>
                         <p className="text-gray-500 dark:text-slate-400 text-sm mb-4 leading-relaxed">
                             The most advanced file conversion tool on the web. Secure, fast, and beautifully designed for professionals.

@@ -9,8 +9,9 @@
 }
 
 @theme {
-  --font-sans: "Inter", "sans-serif";
-  --font-serif: "Poppins", "sans-serif";
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Display/heading face (Poppins). Kept as its own semantic token: it is NOT a serif face. */
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --radius: 0.6rem;
 
   --color-background: hsl(var(--background));

@@ -1,8 +1,51 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, Download, Image as ImageIcon, Sliders, RefreshCw } from 'lucide-react';
+import { Upload, Download, Image as ImageIcon, Sliders, RefreshCw, AlertCircle, Loader2 } from 'lucide-react';
 import BackLink from '../../components/BackLink';
 import InlineNotice from '../../components/ui/InlineNotice';
+import { downloadBlob } from '../../lib/pdfUtils';
+
+const DPI = 300;
+
+const toPx = (value, unit, originalDim) => {
+    const v = parseFloat(value);
+    if (isNaN(v) || v <= 0) return null;
+    switch (unit) {
+        case '%': return Math.round(originalDim * v / 100);
+        case 'cm': return Math.round((v / 2.54) * DPI);
+        case 'inch': return Math.round(v * DPI);
+        default: return Math.round(v);
+    }
+};
+
+const resizeImage = (file, { width, height, lockAspect, quality, unit }) =>
+    new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            let w = toPx(width, unit, img.naturalWidth);
+            let h = toPx(height, unit, img.naturalHeight);
+            if (!w && !h) return reject(new Error('Provide at least one dimension'));
+            if (w && h && lockAspect) {
+                const target = Math.min(w / img.naturalWidth, h / img.naturalHeight);
+                w = Math.round(img.naturalWidth * target);
+                h = Math.round(img.naturalHeight * target);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w || img.naturalWidth;
+            canvas.height = h || img.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob((blob) => {
+                if (blob) resolve(blob);
+                else reject(new Error('Could not encode resized image'));
+            }, 'image/jpeg', (quality || 90) / 100);
+        };
+        img.onerror = () => reject(new Error('Could not read the image file'));
+        img.src = URL.createObjectURL(file);
+    });
 
 const ImageResizer = () => {
     const [file, setFile] = useState(null);
@@ -14,6 +57,23 @@ const ImageResizer = () => {
     const [aspectRatio, setAspectRatio] = useState(1);
     const [quality, setQuality] = useState(90);
     const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [error, setError] = useState(null);
+
+    const handleResize = async () => {
+        if (!file) return;
+        setIsProcessing(true);
+        setError(null);
+        try {
+            const blob = await resizeImage(file, { width, height, lockAspect: lockAspectRatio, quality, unit });
+            const baseName = file.name.replace(/\.[^.]+$/, '') || 'resized';
+            downloadBlob(blob, `${baseName}-resized.jpg`);
+        } catch (e) {
+            setError(e.message);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -130,6 +190,8 @@ const ImageResizer = () => {
                                         className="max-w-full max-h-[500px] object-contain rounded-lg shadow-xl"
                                     />
                                     <button
+                                        type="button"
+                                        aria-label="Replace image"
                                         onClick={() => { setFile(null); setPreview(null); }}
                                         className="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-gray-600 hover:text-red-500 transition-all dark:bg-slate-800/90 dark:text-slate-400 dark:hover:bg-red-900/20"
                                     >
@@ -159,6 +221,8 @@ const ImageResizer = () => {
                                     {['px', '%', 'cm', 'inch'].map((u) => (
                                         <button
                                             key={u}
+                                            type="button"
+                                            aria-pressed={unit === u}
                                             onClick={() => toggleUnit(u)}
                                             className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all ${unit === u ? 'bg-white text-blue-600 shadow-sm dark:bg-slate-700 dark:text-primary' : 'text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-100'
                                                 }`}
@@ -223,15 +287,32 @@ const ImageResizer = () => {
                                 />
                             </div>
 
+                            {error && (
+                                <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+                                    <AlertCircle className="w-4 h-4 shrink-0" />
+                                    {error}
+                                </div>
+                            )}
+
                             <button
-                                disabled={!file}
-                                className={`w-full py-3.5 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center ${file
+                                onClick={handleResize}
+                                disabled={!file || isProcessing}
+                                className={`w-full py-3.5 rounded-xl font-bold shadow-lg transition-all flex items-center justify-center ${file && !isProcessing
                                         ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-blue-200 dark:shadow-cyan-900/40 hover:shadow-blue-300 dark:hover:shadow-cyan-900/60 hover:scale-[1.02] dark:bg-none dark:bg-primary dark:text-white'
                                         : 'bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-slate-800'
                                     }`}
                             >
-                                <Download className="w-5 h-5 mr-2" />
-                                Resize & Download
+                                {isProcessing ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                                        Resizing…
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download className="w-5 h-5 mr-2" />
+                                        Resize & Download
+                                    </>
+                                )}
                             </button>
                         </div>
 

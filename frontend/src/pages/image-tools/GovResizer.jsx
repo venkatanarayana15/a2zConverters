@@ -1,7 +1,88 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, Check, AlertCircle, Download, Crop, Info, Search, ChevronDown, X } from 'lucide-react';
+import { Upload, Check, AlertCircle, Download, Crop, Info, Search, ChevronDown, X, Loader2 } from 'lucide-react';
 import BackLink from '../../components/BackLink';
+import { downloadBlob } from '../../lib/pdfUtils';
+
+const DPI = 300;
+
+const unitToPx = (value, unit, originalDim) => {
+    const v = parseFloat(value);
+    if (isNaN(v) || v <= 0) return null;
+    switch (unit) {
+        case '%': return Math.round(originalDim * v / 100);
+        case 'cm': return Math.round((v / 2.54) * DPI);
+        case 'inch': return Math.round(v * DPI);
+        default: return Math.round(v);
+    }
+};
+
+/* Loads an image file, resizes it to the exact requested dimensions (fill-fit,
+   matching the backend /api/v1/image/gov-resize behaviour) and encodes JPEG
+   at a binary-searched quality so the output fits under maxSizeKB. Falls back
+   to scaling the canvas down when even the lowest quality is too large. */
+const processGovPhoto = (file, { widthPx, heightPx, maxSizeKB }) =>
+    new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = widthPx;
+            canvas.height = heightPx;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, widthPx, heightPx);
+
+            const maxBytes = maxSizeKB * 1024;
+            const encode = (w, h, quality, resolveEncode, rejectEncode) =>
+                canvas.toBlob((blob) => {
+                    if (blob) resolveEncode({ blob, w, h });
+                    else rejectEncode(new Error('Could not encode image'));
+                }, 'image/jpeg', quality / 100);
+
+            const attempt = (w, h, q) => new Promise((res, rej) => encode(w, h, q, res, rej));
+
+            (async () => {
+                try {
+                    let result = await attempt(widthPx, heightPx, 90);
+                    if (result.blob.size <= maxBytes) return resolve(result);
+
+                    // Binary search quality 10..90 to fit under the limit
+                    let low = 10, high = 90, best = null;
+                    for (let i = 0; i < 8; i++) {
+                        const q = Math.round((low + high) / 2);
+                        const candidate = await attempt(widthPx, heightPx, q);
+                        if (candidate.blob.size <= maxBytes) { best = candidate; low = q; }
+                        else high = q;
+                    }
+                    if (best) return resolve(best);
+
+                    // Still too big at q=10 — scale the canvas down
+                    let scale = Math.sqrt(maxBytes / result.blob.size);
+                    let iterations = 0;
+                    while (result.blob.size > maxBytes && iterations < 8) {
+                        scale = Math.max(0.2, Math.sqrt(maxBytes / result.blob.size));
+                        const w = Math.max(1, Math.round(widthPx * scale));
+                        const h = Math.max(1, Math.round(heightPx * scale));
+                        const tiny = document.createElement('canvas');
+                        tiny.width = w; tiny.height = h;
+                        const tctx = tiny.getContext('2d');
+                        tctx.fillStyle = '#FFFFFF';
+                        tctx.fillRect(0, 0, w, h);
+                        tctx.imageSmoothingQuality = 'high';
+                        tctx.drawImage(img, 0, 0, w, h);
+                        result = await new Promise((res, rej) =>
+                            tiny.toBlob((b) => (b ? res({ blob: b, w, h }) : rej(new Error('encode failed'))), 'image/jpeg', 0.1));
+                        iterations++;
+                    }
+                    resolve(result);
+                } catch (err) { reject(err); }
+            })();
+        };
+        img.onerror = () => reject(new Error('Could not read the image file'));
+        img.src = URL.createObjectURL(file);
+    });
 
 const examPresets = {
     custom: { label: "Custom Dimensions", width: "", height: "", size: { min: 10, max: 200 } },
@@ -53,6 +134,8 @@ const GovResizer = () => {
     const [height, setHeight] = useState('');
     const [unit, setUnit] = useState('px');
     const [maxSize, setMaxSize] = useState(50);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [error, setError] = useState(null);
 
     // Dropdown state
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -99,6 +182,31 @@ const GovResizer = () => {
 
     const selectedExamLabel = examPresets[selectedExam]?.label || "Select Exam";
 
+    const handleProcess = async () => {
+        if (!file) return;
+        setIsProcessing(true);
+        setError(null);
+        try {
+            const img = await new Promise((resolve, reject) => {
+                const probe = new Image();
+                probe.onload = () => resolve(probe);
+                probe.onerror = () => reject(new Error('Could not read the image file'));
+                probe.src = URL.createObjectURL(file);
+            });
+            const widthPx = unitToPx(width, unit, img.naturalWidth);
+            const heightPx = unitToPx(height, unit, img.naturalHeight);
+            if (!widthPx || !heightPx) throw new Error('Please enter a valid width and height');
+
+            const { blob, w, h } = await processGovPhoto(file, { widthPx, heightPx, maxSizeKB: maxSize });
+            const baseName = file.name.replace(/\.[^.]+$/, '') || 'gov-photo';
+            downloadBlob(blob, `${baseName}-${w}x${h}.jpg`);
+        } catch (e) {
+            setError(e.message);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
     return (
         <div className="min-h-screen pt-24 px-2 md:px-4 pb-12 bg-background text-foreground">
             <div className="max-w-[96rem] mx-auto">
@@ -141,7 +249,7 @@ const GovResizer = () => {
                                 {preview ? (
                                     <div className="relative">
                                         <img src={preview} alt="Preview" className="max-h-48 rounded-lg shadow-md mb-4 object-contain" />
-                                        <button className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600 transition-colors" onClick={(e) => { e.preventDefault(); setFile(null); setPreview(null); }}>
+                                        <button type="button" aria-label="Remove uploaded image" className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full text-white shadow-lg hover:bg-red-600 transition-colors" onClick={(e) => { e.preventDefault(); setFile(null); setPreview(null); }}>
                                             <X className="w-4 h-4" />
                                         </button>
                                     </div>
@@ -173,7 +281,11 @@ const GovResizer = () => {
 
                                 {/* Custom Dropdown Trigger */}
                                 <button
+                                    type="button"
                                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    aria-haspopup="listbox"
+                                    aria-expanded={isDropdownOpen}
+                                    aria-controls="exam-preset-listbox"
                                     className="w-full bg-white/80 border border-gray-200 rounded-xl px-4 py-3 text-left text-gray-900 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all flex justify-between items-center shadow-sm hover:bg-white dark:bg-slate-800/80 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-primary/10 dark:hover:border-primary/30"
                                 >
                                     <span className="truncate mr-2">{selectedExamLabel}</span>
@@ -189,6 +301,9 @@ const GovResizer = () => {
                                         exit={{ opacity: 0, y: -8 }}
                                         transition={{ duration: 0.15 }}
                                         className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-20 dark:bg-slate-800 dark:border-slate-700"
+                                        id="exam-preset-listbox"
+                                        role="listbox"
+                                        aria-label="Exam presets"
                                     >
                                         <div className="p-2 border-b border-gray-50 sticky top-0 bg-white z-10 dark:bg-slate-800 dark:border-slate-700">
                                             <div className="relative">
@@ -208,6 +323,9 @@ const GovResizer = () => {
                                                 filteredPresets.map(([key, preset]) => (
                                                     <button
                                                         key={key}
+                                                        type="button"
+                                                        role="option"
+                                                        aria-selected={selectedExam === key}
                                                         onClick={() => handleExamSelect(key)}
                                                         className={`w-full text-left px-4 py-3 text-sm hover:bg-sky-50 transition-colors flex items-center justify-between dark:hover:bg-sky-900/20 ${selectedExam === key ? 'bg-sky-50 text-sky-700 font-medium dark:bg-sky-900/20 dark:text-sky-400' : 'text-gray-700 dark:text-slate-300'}`}
                                                     >
@@ -233,6 +351,8 @@ const GovResizer = () => {
                                     {['px', 'cm', 'inch'].map((u) => (
                                         <button
                                             key={u}
+                                            type="button"
+                                            aria-pressed={unit === u}
                                             onClick={() => setUnit(u)}
                                             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${unit === u
                                                     ? 'bg-white text-sky-600 shadow-sm ring-1 ring-gray-100 dark:bg-slate-700 dark:ring-slate-600'
@@ -288,15 +408,37 @@ const GovResizer = () => {
                                 </div>
                             </div>
 
+                            {error && (
+                                <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+                                    <AlertCircle className="w-4 h-4 shrink-0" />
+                                    {error}
+                                </div>
+                            )}
+
                             <button
-                                disabled={!file}
-                                className={`w-full py-4 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file
+                                onClick={handleProcess}
+                                disabled={!file || isProcessing}
+                                className={`w-full py-4 rounded-xl font-bold font-lg shadow-lg transition-all flex items-center justify-center ${file && !isProcessing
                                     ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-orange-200 dark:shadow-orange-900/40 hover:shadow-orange-300 dark:hover:shadow-orange-900/60 hover:scale-[1.02]'
                                     : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200 dark:bg-slate-800 dark:border-slate-700'
                                     }`}
                             >
-                                {file ? <Download className="w-5 h-5 mr-2" /> : <Upload className="w-5 h-5 mr-2" />}
-                                {file ? 'Process & Download Image' : 'Upload Image to Start'}
+                                {isProcessing ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                                        Processing…
+                                    </>
+                                ) : file ? (
+                                    <>
+                                        <Download className="w-5 h-5 mr-2" />
+                                        Process & Download Image
+                                    </>
+                                ) : (
+                                    <>
+                                        <Upload className="w-5 h-5 mr-2" />
+                                        Upload Image to Start
+                                    </>
+                                )}
                             </button>
                         </div>
                     </div>

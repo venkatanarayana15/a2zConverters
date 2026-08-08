@@ -45,7 +45,7 @@ const Hero = () => {
                     variants={fadeUp}
                     initial="hidden"
                     animate="visible"
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-serif tracking-tight mb-4 md:mb-6 text-gray-900 w-full dark:text-slate-100"
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-display tracking-tight mb-4 md:mb-6 text-gray-900 w-full dark:text-slate-100"
                 >
                     <span className="block mb-1 md:mb-2">Every PDF & Image tool</span>
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 to-blue-600">

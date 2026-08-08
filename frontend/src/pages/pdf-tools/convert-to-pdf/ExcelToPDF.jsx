@@ -2,26 +2,48 @@ import React, { useState } from 'react';
 import { Upload, FileSpreadsheet, CheckCircle, Download } from 'lucide-react';
 import PhysicsButton from '../../../components/PhysicsButton';
 import BackLink from '../../../components/BackLink';
+import InlineNotice from '../../../components/ui/InlineNotice';
+import { apiPost, dataUrlToBlob } from '../../../lib/api';
+import { downloadBlob } from '../../../lib/pdfUtils';
 
 const ExcelToPDF = () => {
     const [file, setFile] = useState(null);
     const [isConverting, setIsConverting] = useState(false);
     const [isDone, setIsDone] = useState(false);
+    const [error, setError] = useState(null);
+    const [resultName, setResultName] = useState('');
+    const [resultDataUrl, setResultDataUrl] = useState('');
 
     const handleFileChange = (e) => {
         if (e.target.files[0]) {
             setFile(e.target.files[0]);
             setIsDone(false);
+            setError(null);
         }
     };
 
-    const handleConvert = () => {
+    const handleConvert = async () => {
         if (!file) return;
         setIsConverting(true);
-        setTimeout(() => {
-            setIsConverting(false);
+        setError(null);
+        try {
+            const form = new FormData();
+            form.append('file', file);
+            const result = await apiPost('/api/v1/pdf/excel-to-pdf', form);
+            const base = (file.name || 'spreadsheet').replace(/\.[^.]+$/, '');
+            setResultName(`${base}.pdf`);
+            setResultDataUrl(result.dataUrl);
             setIsDone(true);
-        }, 2000);
+        } catch (e) {
+            setError(e.message || 'Conversion failed. Is the backend running?');
+        } finally {
+            setIsConverting(false);
+        }
+    };
+
+    const handleDownload = () => {
+        if (!resultDataUrl) return;
+        downloadBlob(dataUrlToBlob(resultDataUrl), resultName || 'converted.pdf');
     };
 
     return (
@@ -63,6 +85,14 @@ const ExcelToPDF = () => {
                                 <p className="text-sm text-gray-500 dark:text-slate-400">{(file.size / 1024).toFixed(2)} KB</p>
                             </div>
 
+                            {error && (
+                                <div className="mb-6">
+                                    <InlineNotice variant="error" title="Conversion failed">
+                                        {error}
+                                    </InlineNotice>
+                                </div>
+                            )}
+
                             {!isDone ? (
                                 <PhysicsButton onClick={handleConvert} disabled={isConverting} className="px-12 w-full sm:w-auto">
                                     {isConverting ? 'Converting...' : 'Convert to PDF'}
@@ -73,10 +103,10 @@ const ExcelToPDF = () => {
                                         <CheckCircle className="w-6 h-6" />
                                         <span className="font-bold text-lg">Conversion Successful!</span>
                                     </div>
-                                    <PhysicsButton className="bg-gray-900 text-white hover:bg-black dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white px-12 w-full sm:w-auto">
+                                    <PhysicsButton onClick={handleDownload} className="bg-gray-900 text-white hover:bg-black dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white px-12 w-full sm:w-auto">
                                         <Download className="w-4 h-4 mr-2" /> Download PDF
                                     </PhysicsButton>
-                                    <button onClick={() => setFile(null)} className="block mt-4 mx-auto text-sm text-gray-500 hover:text-gray-900 underline dark:text-slate-400 dark:hover:text-slate-100">
+                                    <button onClick={() => { setFile(null); setIsDone(false); setError(null); }} className="block mt-4 mx-auto text-sm text-gray-500 hover:text-gray-900 underline dark:text-slate-400 dark:hover:text-slate-100">
                                         Convert another file
                                     </button>
                                 </div>

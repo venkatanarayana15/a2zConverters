@@ -115,9 +115,11 @@ const ImageEditor = () => {
                                         className="max-w-full max-h-[550px] object-contain transition-all duration-200 shadow-2xl"
                                     />
                                     <button
+                                        type="button"
+                                        aria-label="Replace image"
                                         onClick={() => { setFile(null); setPreview(null); }}
                                         className="absolute top-4 right-4 bg-white/90 p-2 rounded-full shadow-lg hover:bg-red-50 text-gray-600 hover:text-red-500 transition-all z-10 dark:bg-slate-800/90 dark:text-slate-400 dark:hover:bg-red-900/20"
-                                        title="Close Image"
+                                        title="Replace image"
                                     >
                                         <RefreshCw className="w-5 h-5" />
                                     </button>
