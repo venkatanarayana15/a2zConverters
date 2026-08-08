@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import LoadingState from '../components/ui/LoadingState';
 import SuccessState from '../components/ui/SuccessState';
-import BackLink from '../components/BackLink';
+import PageHeader from '../components/PageHeader';
 
 const LoadingDemo = () => {
     const [progress, setProgress] = useState(null);
@@ -47,35 +47,26 @@ const LoadingDemo = () => {
 };
 
 const Loading = () => (
-    <div className="min-h-screen pt-20 sm:pt-24 pb-20 bg-gray-50/50 dark:bg-gray-950/50 relative overflow-hidden">
-        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-teal-200/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-blue-200/20 rounded-full blur-[120px]" />
+    <div className="min-h-screen pt-20 sm:pt-24 pb-20 bg-gray-50/50 dark:bg-slate-950/50 relative overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-teal-200/20 rounded-full blur-[120px] dark:bg-teal-900/15" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-blue-200/20 rounded-full blur-[120px] dark:bg-blue-900/15" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 relative">
-            <div className="mb-3">
-                <BackLink />
-            </div>
-            <div className="text-center max-w-3xl mx-auto mb-10">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mb-4 shadow-sm">
-                    <Sparkles className="w-4 h-4 text-teal-500" />
-                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Design System</span>
-                </div>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight mb-4">
-                    Loading <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-500">Page</span>
-                </h1>
-                <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                    A full-screen loading state you can reuse while tools prepare your workspace.
-                </p>
-            </div>
+            <PageHeader
+                badge={{ icon: Sparkles, label: 'Design System' }}
+                title={<>Loading <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-500">Page</span></>}
+                subtitle="A full-screen loading state you can reuse while tools prepare your workspace."
+                accent="teal"
+            />
 
-            <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between gap-4">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm dark:shadow-black/20 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between gap-4">
                     <div>
-                        <h3 className="font-bold text-gray-900 dark:text-gray-100">Live Preview</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Hit simulate to watch the progress animate.</p>
+                        <h3 className="font-bold text-gray-900 dark:text-slate-100">Live Preview</h3>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">Hit simulate to watch the progress animate.</p>
                     </div>
                 </div>
-                <div className="p-6 bg-gray-50/50 dark:bg-gray-950/40">
+                <div className="p-6 bg-gray-50/50 dark:bg-slate-950/40">
                     <LoadingDemo />
                 </div>
             </div>

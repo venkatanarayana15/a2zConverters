@@ -4,7 +4,7 @@ import { RefreshCw, Home, ArrowLeft, MonitorX } from 'lucide-react';
 import ErrorState from './ui/ErrorState';
 import { isBrowserSupported } from '../lib/browserSupport';
 
-const quietButton = "inline-flex items-center px-6 py-3 rounded-xl font-bold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all";
+const quietButton = "inline-flex items-center px-6 py-3 rounded-xl font-bold text-gray-700 dark:text-slate-200 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-primary/10 dark:hover:text-primary transition-all";
 
 const ErrorFallback = ({ onReset, unsupported }) => {
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ const ErrorFallback = ({ onReset, unsupported }) => {
                 icon={unsupported ? MonitorX : undefined}
                 tone={unsupported ? 'amber' : undefined}
                 action={
-                    <button type="button" onClick={retry} className="inline-flex items-center px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:shadow-lg hover:scale-[1.02] transition-all">
+                    <button type="button" onClick={retry} className="inline-flex items-center px-6 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:shadow-lg dark:bg-none dark:bg-primary dark:text-white hover:scale-[1.02] transition-all">
                         <RefreshCw className="w-4 h-4 mr-2" /> Try Again
                     </button>
                 }

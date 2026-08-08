@@ -10,19 +10,19 @@ import PermissionDeniedState from '../components/ui/PermissionDeniedState';
 import SessionExpiredState from '../components/ui/SessionExpiredState';
 import FormValidationState from '../components/ui/FormValidationState';
 import SuccessState from '../components/ui/SuccessState';
-import BackLink from '../components/BackLink';
+import PageHeader from '../components/PageHeader';
 import DemoToast from '../components/DemoToast';
 
 const PatternCard = ({ name, description, children, reset }) => (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between gap-4">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between gap-4">
             <div>
-                <h3 className="font-bold text-gray-900 dark:text-gray-100">{name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{description}</p>
+                <h3 className="font-bold text-gray-900 dark:text-slate-100">{name}</h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400">{description}</p>
             </div>
             {reset}
         </div>
-        <div className="p-6 bg-gray-50/50 dark:bg-gray-950/40 flex items-center justify-center">
+        <div className="p-6 bg-gray-50/50 dark:bg-slate-950/40 flex items-center justify-center">
             {children}
         </div>
     </div>
@@ -112,7 +112,7 @@ const SlowNetworkDemo = () => {
                     <button
                         type="button"
                         onClick={reset}
-                        className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+                        className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-primary/10 dark:hover:text-primary dark:hover:border-primary/30 transition-all"
                     >
                         Run Again
                     </button>
@@ -147,26 +147,17 @@ const StatePatterns = () => {
     };
 
     return (
-        <div className="min-h-screen pt-20 sm:pt-24 pb-20 bg-gray-50/50 dark:bg-gray-950/50 relative overflow-hidden">
+        <div className="min-h-screen pt-20 sm:pt-24 pb-20 bg-gray-50/50 dark:bg-slate-950/50 relative overflow-hidden">
             <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-teal-200/20 rounded-full blur-[120px]" />
             <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-blue-200/20 rounded-full blur-[120px]" />
 
             <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
-                <div className="mb-3">
-                    <BackLink />
-                </div>
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mb-4 shadow-sm">
-                        <Sparkles className="w-4 h-4 text-teal-500" />
-                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Design System</span>
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight mb-4">
-                        State <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-500">Patterns</span>
-                    </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                        Every state your UI can be in — ready to reuse across tools. Interactive ones can be played with.
-                    </p>
-                </div>
+                <PageHeader
+                    badge={{ icon: Sparkles, label: 'Design System' }}
+                    title={<>State <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-500">Patterns</span></>}
+                    subtitle="Every state your UI can be in — ready to reuse across tools. Interactive ones can be played with."
+                    accent="teal"
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <PatternCard name="Empty State" description="No items to show yet.">

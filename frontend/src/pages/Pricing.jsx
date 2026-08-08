@@ -104,11 +104,11 @@ const Pricing = () => {
     ];
 
     return (
-        <div className="min-h-screen pt-24 pb-20 bg-gray-50/50 dark:bg-gray-950/50 relative overflow-hidden">
+        <div className="min-h-screen pt-24 pb-20 bg-gray-50/50 dark:bg-slate-950/50 relative overflow-hidden">
             {/* Background Gradients */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-200/20 rounded-full blur-3xl" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-200/20 rounded-full blur-3xl" />
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-200/20 rounded-full blur-3xl dark:bg-purple-900/15" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-200/20 rounded-full blur-3xl dark:bg-blue-900/15" />
             </div>
 
             <div className="max-w-[96rem] mx-auto px-4 sm:px-6 lg:px-8">
@@ -117,17 +117,17 @@ const Pricing = () => {
                 </div>
                 {/* Header */}
                 <div className="text-center max-w-3xl mx-auto mb-16 animate-in slide-in-from-bottom-5 duration-700 fade-in">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 mb-6 shadow-sm">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 mb-6 shadow-sm">
                         <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
-                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Unlock Full Potential</span>
+                        <span className="text-sm font-semibold text-gray-700 dark:text-slate-300">Unlock Full Potential</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight mb-6">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-slate-100 tracking-tight mb-6">
                         Simple Pricing. <br className="hidden md:block" />
                         <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-purple-600 to-pink-600">
                             Professional Features.
                         </span>
                     </h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+                    <p className="text-xl text-gray-600 dark:text-slate-400 leading-relaxed">
                         Choose the perfect plan for your needs. Whether it's a quick fix or a long-term project, we have you covered.
                     </p>
                 </div>
@@ -143,10 +143,10 @@ const Pricing = () => {
                             viewport={{ once: true, margin: '-50px' }}
                             transition={{ duration: 0.5, delay: i * 0.15 }}
                             className={cn(
-                                "relative rounded-3xl bg-white dark:bg-gray-900 border transition-[box-shadow] duration-300 flex flex-col",
-                                plan.popular
-                                    ? "border-purple-200 dark:border-purple-800 shadow-2xl shadow-purple-200/50 md:scale-105 z-10"
-                                    : "border-gray-100 dark:border-gray-800 shadow-xl hover:shadow-2xl hover:border-gray-200 dark:hover:border-gray-700"
+                                "relative rounded-3xl bg-white dark:bg-slate-900 border transition-[box-shadow] duration-300 flex flex-col",
+                                    plan.popular
+                                        ? "border-purple-200 dark:border-purple-800 shadow-2xl shadow-purple-200/50 dark:shadow-purple-900/30 md:scale-105 z-10"
+                                    : "border-gray-100 dark:border-slate-800 shadow-xl hover:shadow-2xl hover:border-gray-200 dark:hover:border-slate-700"
                             )}
                         >
                             {plan.popular && (
@@ -158,19 +158,19 @@ const Pricing = () => {
                             <div className="p-8 flex-1">
                                 <div className={cn(
                                     "w-12 h-12 rounded-xl flex items-center justify-center mb-6",
-                                    plan.color === 'blue' && "bg-blue-100 text-blue-600",
-                                    plan.color === 'purple' && "bg-purple-100 text-purple-600",
-                                    plan.color === 'orange' && "bg-orange-100 text-orange-600",
+                                    plan.color === 'blue' && "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+                                    plan.color === 'purple' && "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+                                    plan.color === 'orange' && "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
                                 )}>
                                     <plan.icon className="w-6 h-6" />
                                 </div>
 
-                                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{plan.name}</h3>
-                                <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">{plan.description}</p>
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-slate-100 mb-2">{plan.name}</h3>
+                                <p className="text-gray-500 dark:text-slate-400 mb-6 text-sm">{plan.description}</p>
 
                                 <div className="flex items-baseline mb-6">
-                                    <span className="text-4xl font-extrabold text-gray-900 dark:text-gray-100">{plan.price}</span>
-                                    <span className="text-gray-500 dark:text-gray-400 ml-2">{plan.period}</span>
+                                    <span className="text-4xl font-extrabold text-gray-900 dark:text-slate-100">{plan.price}</span>
+                                    <span className="text-gray-500 dark:text-slate-400 ml-2">{plan.period}</span>
                                 </div>
 
                                 <div className="space-y-4 mb-8">
@@ -179,7 +179,7 @@ const Pricing = () => {
                                             <div className="shrink-0 w-5 h-5 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mt-0.5">
                                                 <Check className="w-3 h-3 text-green-600 dark:text-green-400" />
                                             </div>
-                                            <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">{feature}</span>
+                                            <span className="text-gray-700 dark:text-slate-300 text-sm font-medium">{feature}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -192,7 +192,7 @@ const Pricing = () => {
                                 )}>
                                     Get Started <ArrowRight className="w-4 h-4" />
                                 </button>
-                                <p className="text-center text-xs text-gray-400 dark:text-gray-500 mt-4 font-medium flex items-center justify-center gap-1">
+                                <p className="text-center text-xs text-gray-400 dark:text-slate-400 mt-4 font-medium flex items-center justify-center gap-1">
                                     <Shield className="w-3 h-3" /> Secure Payment
                                 </p>
                             </div>
@@ -201,36 +201,36 @@ const Pricing = () => {
                 </div>
 
                 {/* Feature Comparison Table */}
-                <div className="max-w-5xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-500">
-                    <div className="p-8 md:p-10 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/50 text-center">
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">Compare Plans</h2>
-                        <p className="text-gray-600 dark:text-gray-400">Detailed breakdown of features and limits</p>
+                <div className="max-w-5xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-xl dark:shadow-black/40 border border-gray-100 dark:border-slate-800 overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-500">
+                    <div className="p-8 md:p-10 border-b border-gray-100 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-800/50 text-center">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-4">Compare Plans</h2>
+                        <p className="text-gray-600 dark:text-slate-400">Detailed breakdown of features and limits</p>
                     </div>
 
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-white dark:bg-gray-900">
-                                    <th className="p-6 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-1/3">Features</th>
-                                    <th className="p-6 text-center text-gray-900 dark:text-gray-100 font-bold bg-blue-50/30 dark:bg-blue-900/10 w-1/5">24h Pass</th>
+                                <tr className="bg-white dark:bg-slate-900">
+                                    <th className="p-6 text-sm font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider w-1/3">Features</th>
+                                    <th className="p-6 text-center text-gray-900 dark:text-slate-100 font-bold bg-blue-50/30 dark:bg-blue-900/10 w-1/5">24h Pass</th>
                                     <th className="p-6 text-center text-purple-600 dark:text-purple-400 font-bold bg-purple-50/30 dark:bg-purple-900/10 w-1/5 border-x border-purple-100 dark:border-purple-800 relative">
                                         Week Pro
                                         <div className="absolute top-0 left-0 w-full h-1 bg-purple-500"></div>
                                     </th>
-                                    <th className="p-6 text-center text-gray-900 dark:text-gray-100 font-bold bg-orange-50/30 dark:bg-orange-900/10 w-1/5">Month Elite</th>
+                                    <th className="p-6 text-center text-gray-900 dark:text-slate-100 font-bold bg-orange-50/30 dark:bg-orange-900/10 w-1/5">Month Elite</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                            <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
                                 {comparisonFeatures.map((section, sIdx) => (
                                     <React.Fragment key={sIdx}>
-                                        <tr className="bg-gray-50/80 dark:bg-gray-800/80">
-                                            <td colSpan={4} className="px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        <tr className="bg-gray-50/80 dark:bg-slate-800/80">
+                                            <td colSpan={4} className="px-6 py-3 text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                                                 {section.category}
                                             </td>
                                         </tr>
                                         {section.items.map((item, iIdx) => (
-                                            <tr key={iIdx} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                                                <td className="p-6 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            <tr key={iIdx} className="hover:bg-gray-50 dark:hover:bg-primary/10 transition-colors">
+                                                <td className="p-6 text-sm font-medium text-gray-700 dark:text-slate-300">
                                                     <div className="flex items-center gap-2">
                                                         {item.name}
                                                         {item.name.includes('OCR') && <BadgeCheck className="w-4 h-4 text-blue-500" />}
@@ -262,19 +262,19 @@ const Pricing = () => {
                     transition={{ duration: 0.5 }}
                     className="mt-24 max-w-3xl mx-auto"
                 >
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 text-center mb-12">Frequently Asked Questions</h2>
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 text-center mb-12">Frequently Asked Questions</h2>
                     <div className="space-y-6">
                         {[
                             { q: "Can I cancel my subscription anytime?", a: "Yes! For the monthly plan, you can cancel anytime and you won't be charged for the next cycle. Day and Week passes expire automatically." },
                             { q: "Is my data secure?", a: "Absolutely. We use 256-bit SSL encryption and automatically delete your files from our servers after 1 hour of processing." },
                             { q: "Do you offer refunds?", a: "We offer a 7-day money-back guarantee if you're not satisfied with our service, applicable for the Monthly plan." }
                         ].map((faq, idx) => (
-                            <div key={idx} className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-shadow">
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
-                                    <HelpCircle className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <div key={idx} className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm dark:shadow-black/20 border border-gray-100 dark:border-slate-800 hover:shadow-md dark:hover:shadow-black/40 transition-shadow">
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+                                    <HelpCircle className="w-5 h-5 text-gray-400 dark:text-slate-400" />
                                     {faq.q}
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 ml-7">{faq.a}</p>
+                                <p className="text-gray-600 dark:text-slate-400 ml-7">{faq.a}</p>
                             </div>
                         ))}
                     </div>
@@ -287,9 +287,9 @@ const Pricing = () => {
 // Helper to render check/cross/text
 const renderFeatureValue = (value) => {
     if (value === true) return <Check className="w-5 h-5 text-green-500 dark:text-green-400 mx-auto" />;
-    if (value === false) return <X className="w-5 h-5 text-gray-300 dark:text-gray-600 mx-auto" />;
-    if (value === '-') return <span className="text-gray-300 dark:text-gray-600">-</span>;
-    return <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">{value}</span>;
+    if (value === false) return <X className="w-5 h-5 text-gray-300 dark:text-slate-600 mx-auto" />;
+    if (value === '-') return <span className="text-gray-300 dark:text-slate-600">-</span>;
+    return <span className="text-gray-700 dark:text-slate-300 font-medium text-sm">{value}</span>;
 };
 
 export default Pricing;

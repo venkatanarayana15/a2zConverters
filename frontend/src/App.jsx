@@ -1,5 +1,7 @@
 import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import PageTransition from './components/PageTransition';
 import Navbar from './components/Navbar';
 import BottomNav from './components/BottomNav';
 import Footer from './components/Footer';
@@ -16,6 +18,11 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Help from './pages/Help';
 import FAQ from './pages/FAQ';
+import Security from './pages/Security';
+import Cookies from './pages/Cookies';
+import Status from './pages/Status';
+import Changelog from './pages/Changelog';
+import ToolsIndex from './pages/ToolsIndex';
 import Loading from './pages/Loading';
 import OfflineBanner from './components/OfflineBanner';
 import ScrollToTop from './components/ScrollToTop';
@@ -88,13 +95,89 @@ const FOOTERLESS_PATHS = new Set([
 const KNOWN_PATHS = new Set([
     ...FOOTERLESS_PATHS,
     '/', '/pricing', '/about', '/features', '/contact', '/profile',
-    '/state-patterns', '/privacy', '/terms', '/help', '/faq', '/loading',
+    '/state-patterns', '/privacy', '/terms', '/help', '/faq', '/loading', '/security',
+    '/cookies', '/status', '/changelog', '/pdf-tools', '/image-tools',
 ]);
 
 const FooterSlot = () => {
     const { pathname } = useLocation();
     const hide = FOOTERLESS_PATHS.has(pathname) || !KNOWN_PATHS.has(pathname);
     return hide ? null : <Footer />;
+};
+
+const pt = (node) => <PageTransition>{node}</PageTransition>;
+
+const AnimatedRoutes = () => {
+    const location = useLocation();
+    return (
+        <AnimatePresence mode="wait" initial={false}>
+            <Routes location={location} key={location.pathname}>
+                <Route path="/" element={pt(<Home />)} />
+
+              {/* Image Tools */}
+              <Route path="/gov-resizer" element={pt(<GovResizer />)} />
+              <Route path="/image-resizer" element={pt(<ImageResizer />)} />
+              <Route path="/image-editor" element={pt(<ImageEditor />)} />
+              <Route path="/bg-remover" element={pt(<BackgroundRemover />)} />
+              <Route path="/image-converter" element={pt(<ImageConverter />)} />
+
+              {/* PDF Tools - Built */}
+              <Route path="/jpg-to-pdf" element={pt(<JPGToPDF />)} />
+              <Route path="/word-to-pdf" element={pt(<WordToPDF />)} />
+              <Route path="/excel-to-pdf" element={pt(<ExcelToPDF />)} />
+              <Route path="/pdf-validate" element={pt(<PDFValidate />)} />
+              <Route path="/esign-pdf" element={pt(<ESign />)} />
+              <Route path="/watermark-pdf" element={pt(<WatermarkPDF />)} />
+              <Route path="/html-to-pdf" element={pt(<HTMLToPDF />)} />
+              <Route path="/merge-pdf" element={pt(<MergePDF />)} />
+              <Route path="/split-pdf" element={pt(<SplitPDF />)} />
+              <Route path="/remove-pages" element={pt(<RemovePages />)} />
+              <Route path="/rotate-pdf" element={pt(<RotatePDF />)} />
+              <Route path="/crop-pdf" element={pt(<CropPDF />)} />
+              <Route path="/unlock-pdf" element={pt(<UnlockPDF />)} />
+              <Route path="/protect-pdf" element={pt(<ProtectPDF />)} />
+              <Route path="/redact-pdf" element={pt(<RedactPDF />)} />
+              <Route path="/edit-pdf" element={pt(<EditPDF />)} />
+              <Route path="/pdf-to-jpg" element={pt(<PDFToJPG />)} />
+              <Route path="/pdf-to-word" element={pt(<PDFToWord />)} />
+              <Route path="/pdf-to-excel" element={pt(<PDFToExcel />)} />
+              <Route path="/pdf-to-powerpoint" element={pt(<PDFToPPT />)} />
+              <Route path="/compress-pdf" element={pt(<CompressPDF />)} />
+              <Route path="/extract-pages" element={pt(<ExtractPages />)} />
+              <Route path="/organize-pdf" element={pt(<OrganizePDF />)} />
+              <Route path="/scan-to-pdf" element={pt(<ScanToPDF />)} />
+              <Route path="/repair-pdf" element={pt(<RepairPDF />)} />
+              <Route path="/ocr-pdf" element={pt(<OCRPDF />)} />
+              <Route path="/powerpoint-to-pdf" element={pt(<PowerPointToPDF />)} />
+              <Route path="/pdf-to-pdfa" element={pt(<PDFToPDFA />)} />
+              <Route path="/add-page-numbers" element={pt(<AddPageNumbers />)} />
+              <Route path="/compare-pdf" element={pt(<ComparePDF />)} />
+              <Route path="/translate-pdf" element={pt(<TranslatePDF />)} />
+
+              <Route path="/pricing" element={pt(<Pricing />)} />
+              <Route path="/about" element={pt(<About />)} />
+              <Route path="/features" element={pt(<FeaturesPage />)} />
+              <Route path="/contact" element={pt(<Contact />)} />
+              <Route path="/profile" element={pt(<Profile />)} />
+
+              <Route path="/pdf-tools" element={pt(<ToolsIndex type="pdf" />)} />
+              <Route path="/image-tools" element={pt(<ToolsIndex type="image" />)} />
+
+              <Route path="/state-patterns" element={pt(<StatePatterns />)} />
+              <Route path="/privacy" element={pt(<Privacy />)} />
+              <Route path="/terms" element={pt(<Terms />)} />
+              <Route path="/cookies" element={pt(<Cookies />)} />
+              <Route path="/status" element={pt(<Status />)} />
+              <Route path="/changelog" element={pt(<Changelog />)} />
+              <Route path="/help" element={pt(<Help />)} />
+              <Route path="/faq" element={pt(<FAQ />)} />
+              <Route path="/security" element={pt(<Security />)} />
+              <Route path="/loading" element={pt(<Loading />)} />
+
+              <Route path="*" element={pt(<NotFound />)} />
+            </Routes>
+        </AnimatePresence>
+    );
 };
 
 function App() {
@@ -116,64 +199,7 @@ function App() {
         <FeedbackButton />
         <RouteErrorBoundary>
           <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-
-              {/* Image Tools */}
-              <Route path="/gov-resizer" element={<GovResizer />} />
-              <Route path="/image-resizer" element={<ImageResizer />} />
-              <Route path="/image-editor" element={<ImageEditor />} />
-              <Route path="/bg-remover" element={<BackgroundRemover />} />
-              <Route path="/image-converter" element={<ImageConverter />} />
-
-              {/* PDF Tools - Built */}
-              <Route path="/jpg-to-pdf" element={<JPGToPDF />} />
-              <Route path="/word-to-pdf" element={<WordToPDF />} />
-              <Route path="/excel-to-pdf" element={<ExcelToPDF />} />
-              <Route path="/pdf-validate" element={<PDFValidate />} />
-              <Route path="/esign-pdf" element={<ESign />} />
-              <Route path="/watermark-pdf" element={<WatermarkPDF />} />
-              <Route path="/html-to-pdf" element={<HTMLToPDF />} />
-              <Route path="/merge-pdf" element={<MergePDF />} />
-              <Route path="/split-pdf" element={<SplitPDF />} />
-              <Route path="/remove-pages" element={<RemovePages />} />
-              <Route path="/rotate-pdf" element={<RotatePDF />} />
-              <Route path="/crop-pdf" element={<CropPDF />} />
-              <Route path="/unlock-pdf" element={<UnlockPDF />} />
-              <Route path="/protect-pdf" element={<ProtectPDF />} />
-              <Route path="/redact-pdf" element={<RedactPDF />} />
-              <Route path="/edit-pdf" element={<EditPDF />} />
-              <Route path="/pdf-to-jpg" element={<PDFToJPG />} />
-              <Route path="/pdf-to-word" element={<PDFToWord />} />
-              <Route path="/pdf-to-excel" element={<PDFToExcel />} />
-              <Route path="/pdf-to-powerpoint" element={<PDFToPPT />} />
-              <Route path="/compress-pdf" element={<CompressPDF />} />
-              <Route path="/extract-pages" element={<ExtractPages />} />
-              <Route path="/organize-pdf" element={<OrganizePDF />} />
-              <Route path="/scan-to-pdf" element={<ScanToPDF />} />
-              <Route path="/repair-pdf" element={<RepairPDF />} />
-              <Route path="/ocr-pdf" element={<OCRPDF />} />
-              <Route path="/powerpoint-to-pdf" element={<PowerPointToPDF />} />
-              <Route path="/pdf-to-pdfa" element={<PDFToPDFA />} />
-              <Route path="/add-page-numbers" element={<AddPageNumbers />} />
-              <Route path="/compare-pdf" element={<ComparePDF />} />
-              <Route path="/translate-pdf" element={<TranslatePDF />} />
-
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/features" element={<FeaturesPage />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/profile" element={<Profile />} />
-
-              <Route path="/state-patterns" element={<StatePatterns />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/help" element={<Help />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/loading" element={<Loading />} />
-
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AnimatedRoutes />
           </Suspense>
         </RouteErrorBoundary>
         <FooterSlot />
